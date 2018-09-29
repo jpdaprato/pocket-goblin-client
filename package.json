@@ -39,6 +39,7 @@
     "moment": "2.17.x",
     "plaid": "2.x.x",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "sequelize": "^4.39.0"
   }
 }
