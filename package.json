@@ -1,0 +1,26 @@
+{
+  "name": "pocket-goblin",
+  "version": "1.0.0",
+  "description": "React client for Pocket Goblin",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "format:check": "prettier --list-different \"src/**/*.{js,jsx,css,json}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deduced/pocket-goblin-client.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deduced/pocket-goblin-client/issues"
+  },
+  "homepage": "https://github.com/deduced/pocket-goblin-client#readme",
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^2.7.0"
+  }
+}
