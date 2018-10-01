@@ -5,9 +5,10 @@ import Container from "./components/Container";
 
 class App extends React.Component {
   componentDidMount() {
-    axios.post('http://localhost:8000/graphql', {
-      query: "{ cashFlow totalDebt totalSavings }"
-    })
+    axios
+      .post("http://localhost:8000/graphql", {
+        query: "{ cashFlow totalDebt totalSavings }"
+      })
       .then(response => console.log(response))
       .catch(error => console.log(error));
   }

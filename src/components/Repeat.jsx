@@ -2,23 +2,20 @@ import React from "react";
 
 const Repeat = () => {
   const divStyle = {
-    // border: "5px solid yellow",
+    border: "5px solid yellow",
     padding: "5px",
     marginTop: "5px",
     marginBottom: "15px"
   };
 
+  const pStyle = {
+    marginLeft: "80%"
+  };
+
   return (
     <div style={divStyle}>
-      <div style={{ marginLeft: "45%" }}>
-        Repeat:
-        <select stlye={{ marginLeft: 5 }}>
-          <option value="never">Never</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-      </div>
+      <p>Repeat</p>
+      <p style={pStyle}>Never</p>
     </div>
   );
 };
