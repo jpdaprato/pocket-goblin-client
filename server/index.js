@@ -6,10 +6,7 @@ const moment = require("moment");
 const plaid = require("plaid");
 const dotenv = require("dotenv");
 
-const result = dotenv.config({
-  path:
-    "/Users/jpdaprato/Dropbox/Hack_Reactor/Immersive/pocket-goblin-client/.env"
-});
+const result = dotenv.config();
 
 if (result.error) {
   throw result.error;
