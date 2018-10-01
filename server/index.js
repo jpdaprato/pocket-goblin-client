@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const plaid = require("plaid");
 const dotenv = require("dotenv");
+const graphqlHTTP = require('express-graphql');
+const { buildSchema } = require('graphql');
 
 const result = dotenv.config();
 
@@ -39,6 +41,20 @@ const client = new plaid.Client(
   { version: "2018-05-22" }
 );
 
+// Construct a schema, using GraphQL schema language
+let schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+// The root provides a resolver function for each API endpoint
+let root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+};
+
 const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -48,6 +64,11 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 
 app.get("/", function(request, response, next) {
   response.render("index.ejs", {
