@@ -1,10 +1,8 @@
 import React from "react";
-import { Router, Link } from "@reach/router";
-import FinancialSnapShot from "./FinancialSnapShot";
 
 const Footer = () => {
   const divStyle = {
-    // border: "5px solid #e874d4",
+    border: "5px solid #e874d4",
     padding: "5px",
     marginTop: "5px",
     marginBottom: "15px",
@@ -13,7 +11,7 @@ const Footer = () => {
   };
 
   const buttonStyle = {
-    marginLeft: "45%"
+    marginLeft: "50%"
   };
 
   return (

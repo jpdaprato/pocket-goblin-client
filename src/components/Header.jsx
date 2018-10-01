@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   const divStyle = {
-    // border: "5px solid black",
+    border: "5px solid black",
     padding: "5px",
     marginTop: "5px",
     marginBottom: "15px"
