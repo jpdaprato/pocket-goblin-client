@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import Container from "./components/Container";
 
 class App extends React.Component {
   componentDidMount() {
@@ -14,7 +15,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        App component
+        <Container />
       </div>
     );
   }

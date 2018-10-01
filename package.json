@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/deduced/pocket-goblin-client#readme",
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.14.0",
