@@ -46,14 +46,45 @@ const client = new plaid.Client(
 let schema = buildSchema(`
   type Query {
     hello: String
+    transactions: String
   }
 `);
+
+// Get transactions for the last 30 days
+let asyncTransactions = () => {
+  return new Promise((resolve, reject) => {
+    let startDate = moment()
+      .subtract(30, "days")
+      .format("YYYY-MM-DD");
+    let endDate = moment().format("YYYY-MM-DD");
+    client.getTransactions(
+      ACCESS_TOKEN,
+      startDate,
+      endDate,
+      {
+        count: 250,
+        offset: 0
+      },
+      (error, transactionsResponse) => {
+        if (error != null) {
+          prettyPrintResponse(error);
+          reject(error);
+        } else {
+          prettyPrintResponse(transactionsResponse);
+          resolve(JSON.stringify({ error: null, transactions: transactionsResponse }));
+        }
+      });
+  });
+};
 
 // The root provides a resolver function for each API endpoint
 let root = {
   hello: () => {
     return 'Hello world!';
   },
+  transactions: () => {
+    return asyncTransactions();
+  }
 };
 
 const app = express();
