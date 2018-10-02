@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     subtype: DataTypes.STRING,
     currentBalance: DataTypes.FLOAT,
     plaidAccountId: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     }
   });
 

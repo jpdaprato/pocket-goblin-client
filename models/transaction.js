@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     postDate: DataTypes.DATE,
     plaidAccountId: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     }
   });
 

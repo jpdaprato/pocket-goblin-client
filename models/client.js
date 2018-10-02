@@ -1,14 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
   const Client = sequelize.define("client", {
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
+    },
     plaidClientId: {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4
-      },
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     }
   });
 

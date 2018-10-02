@@ -7,16 +7,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     clientId: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     },
     accessToken: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     },
     plaidAccountId: {
-      type: DataTypes.STRING,
-      unique: true
+      type: DataTypes.STRING
     }
   });
 
