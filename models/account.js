@@ -3,18 +3,17 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     type: DataTypes.STRING,
     subtype: DataTypes.STRING,
-    current_balance: DataTypes.NUMBER,
-    item_id: {
-      type: DataTypes.NUMBER,
-      unique: true
-    },
-    plaid_account_id: {
-      type: DataTypes.NUMBER,
+    currentBalance: DataTypes.FLOAT,
+    plaidAccountId: {
+      type: DataTypes.STRING,
       unique: true
     }
   });
 
-  Account.associate = models => {};
+  Account.associate = models => {
+    Account.belongsTo(models.Item);
+    Account.hasMany(models.Transaction);
+  };
 
   return Account;
 };
