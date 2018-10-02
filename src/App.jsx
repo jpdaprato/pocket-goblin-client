@@ -7,7 +7,7 @@ class App extends React.Component {
     axios.post('http://localhost:8000/graphql', {
       query: "{ hello transactions }"
     })
-      .then(response => console.log(response))
+      .then(response => console.log(JSON.parse(response.data.data.transactions)))
       .catch(error => console.log(error));
   }
 
