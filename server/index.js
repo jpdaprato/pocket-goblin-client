@@ -51,7 +51,7 @@ let schema = buildSchema(`
 `);
 
 // Get transactions for the last 30 days
-let asyncTransactions = () => {
+let asyncGetTransactions = () => {
   return new Promise((resolve, reject) => {
     let startDate = moment()
       .subtract(30, "days")
@@ -83,7 +83,7 @@ let root = {
     return 'Hello world!';
   },
   transactions: () => {
-    return asyncTransactions();
+    return asyncGetTransactions();
   }
 };
 
