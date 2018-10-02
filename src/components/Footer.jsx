@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   const divStyle = {
-    border: "5px solid #e874d4",
+    // border: "5px solid #e874d4",
     padding: "5px",
     marginTop: "5px",
     marginBottom: "15px",
@@ -11,7 +11,7 @@ const Footer = () => {
   };
 
   const buttonStyle = {
-    marginLeft: "50%"
+    marginLeft: "45%"
   };
 
   return (
