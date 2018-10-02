@@ -69,7 +69,6 @@ let asyncGetTransactions = () => {
       (error, transactionsResponse) => {
         if (error != null) {
           prettyPrintResponse(error);
-          reject(error);
         } else {
           prettyPrintResponse(transactionsResponse);
           resolve(JSON.stringify({ error: null, transactions: transactionsResponse }));
