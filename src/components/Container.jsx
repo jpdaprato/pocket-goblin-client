@@ -8,7 +8,7 @@ import Purchase from "./Purchase";
 
 const Container = () => {
   const divStyle = {
-    border: "5px solid gray",
+    // border: "5px solid gray",
     padding: "25px",
     width: "75%",
     margin: "auto"

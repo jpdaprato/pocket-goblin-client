@@ -1,7 +1,7 @@
 import React from "react";
 
 const divStyle = {
-  border: "5px solid #7c160e",
+  // border: "5px solid #7c160e",
   padding: "5px",
   marginTop: "5px",
   marginBottom: "15px"

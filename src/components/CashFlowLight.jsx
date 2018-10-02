@@ -16,8 +16,8 @@ let redCircle = {
   width: "25px",
   backgroundColor: "rgba(255, 0, 0, 0.3)",
   borderRadius: "50%",
-  display: "inline-block",
-  float: "right"
+  display: "inline-block"
+  // float: "right"
 };
 
 let yellowCircle = {
@@ -26,8 +26,8 @@ let yellowCircle = {
   width: "25px",
   backgroundColor: "rgba(255, 255, 0, 0.3)",
   borderRadius: "50%",
-  display: "inline-block",
-  float: "right"
+  display: "inline-block"
+  // float: "right"
 };
 
 let greenCircle = {
@@ -36,15 +36,15 @@ let greenCircle = {
   width: "25px",
   backgroundColor: "rgba(0, 255, 0, 0.3)",
   borderRadius: "50%",
-  display: "inline-block",
-  float: "right"
+  display: "inline-block"
+  // float: "right"
 };
 
 const lights = (
   <div>
-    <span style={greenCircle} />
-    <span style={yellowCircle} />
     <span style={redCircle} />
+    <span style={yellowCircle} />
+    <span style={greenCircle} />
   </div>
 );
 
