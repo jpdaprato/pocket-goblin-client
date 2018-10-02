@@ -4,7 +4,7 @@ const Sequelize = require("sequelize-views-support");
 
 //FIXME:Move these things into environmental variables
 const dbName = process.env.DATABASE_NAME || "pocketgoblin";
-const dbUser = process.env.DATABASE_USER || "charlieastrada";
+const dbUser = process.env.DATABASE_USER || "jpdaprato";
 const dbPassword = process.env.DATABASE_PASSWORD || "";
 const dbHost = process.env.HOST || "localhost";
 
