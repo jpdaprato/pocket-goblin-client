@@ -9,12 +9,7 @@ const Pay = () => {
     marginBottom: "15px"
   };
 
-  return (
-    <div style={divStyle}>
-      <PayCash />
-      <PayCredit />
-    </div>
-  );
+  return <div style={divStyle} />;
 };
 
 export default Pay;

@@ -7,7 +7,7 @@ const PayCredit = () => {
     marginTop: "5px",
     marginBottom: "15px",
     marginLeft: "75%"
-    // float: "right"
+    // float: "up"
   };
 
   return (
