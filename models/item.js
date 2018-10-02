@@ -1,29 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
-  const Item = sequelize.define("item", {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+  const Item = sequelize.define(
+    "item",
+    {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
+      access_token: {
+        type: DataTypes.STRING
+      },
+      plaid_account_id: {
+        type: DataTypes.STRING
+      }
     },
-    clientId: {
-      type: DataTypes.STRING
-    },
-    accessToken: {
-      type: DataTypes.STRING
-    },
-    plaidAccountId: {
-      type: DataTypes.STRING
+    {
+      underscored: true
     }
-  });
+  );
 
   Item.associate = models => {
     Item.hasMany(models.Account, {
-      foreignKey: "itemId",
+      foreignKey: "item_id",
       onDelete: "CASCADE"
     });
     Item.belongsTo(models.Client, {
-      foreignKey: "clientId",
+      foreignKey: "client_id",
       onDelete: "CASCADE"
     });
   };
