@@ -5,7 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Environment.associate = models => {
-    Environment.hasMany(models.Client);
+    Environment.hasMany(models.Client, {
+      foreignKey: "environmentId",
+      onDelete: "CASCADE"
+    });
   };
 
   return Environment;

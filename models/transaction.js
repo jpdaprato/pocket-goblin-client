@@ -18,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Transaction.associate = models => {
-    Transaction.belongsTo(models.Account);
+    Transaction.belongsTo(models.Account),
+      {
+        foreignKey: "accountId",
+        onDelete: "CASCADE"
+      };
   };
 
   return Transaction;

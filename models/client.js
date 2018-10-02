@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Client.associate = models => {
-    Client.belongsTo(models.Environment);
+    Client.belongsTo(models.Environment, {
+      foreignKey: "environmentId",
+      onDelete: "CASCADE"
+    });
   };
 
   return Client;
