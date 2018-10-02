@@ -7,6 +7,7 @@ const plaid = require("plaid");
 const dotenv = require("dotenv");
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
+const cors = require('cors');
 
 const result = dotenv.config();
 
@@ -96,6 +97,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
