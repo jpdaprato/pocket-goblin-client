@@ -4,11 +4,6 @@ import axios from "axios";
 
 class App extends React.Component {
   componentDidMount() {
-    // axios({
-    //   method: 'post',
-    //   url: 'http://localhost:8000/graphql',
-    //   data: { query: "{ hello }" }
-    // })
     axios.post('http://localhost:8000/graphql', {
       query: "{ hello transactions }"
     })
