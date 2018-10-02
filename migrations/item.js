@@ -7,14 +7,28 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
-      clientId: {
-        type: Sequelize.STRING
-      },
       accessToken: {
         type: Sequelize.STRING
       },
       plaidAccountId: {
         type: Sequelize.STRING
+      },
+      //TODO: Look into why the model was not found
+      // clientId: {
+      //   type: Sequelize.UUID,
+      //   onDelete: "CASCADE",
+      //   references: {
+      //     model: "clients",
+      //     key: "id"
+      //   }
+      // },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
     /*

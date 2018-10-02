@@ -14,6 +14,15 @@ module.exports = {
       plaidAccountId: {
         type: Sequelize.STRING
       },
+      //TODO: Look into why the model was not found
+      // itemId: {
+      //   type: Sequelize.UUID,
+      //   onDelete: "CASCADE",
+      //   references: {
+      //     model: "item",
+      //     key: "id"
+      //   }
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

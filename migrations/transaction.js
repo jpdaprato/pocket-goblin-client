@@ -15,6 +15,23 @@ module.exports = {
       postDate: Sequelize.DATE,
       plaidAccountId: {
         type: Sequelize.STRING
+      },
+      //TODO: Look into why the model was not found
+      // accountId: {
+      //   type: Sequelize.UUID,
+      //   onDelete: "CASCADE",
+      //   references: {
+      //     model: "accounts",
+      //     key: "id"
+      //   }
+      // },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
     /*

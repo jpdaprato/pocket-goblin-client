@@ -10,6 +10,15 @@ module.exports = {
       plaidClientId: {
         type: Sequelize.STRING
       },
+      //TODO: Look into why the model was not found
+      // environmentId: {
+      //   type: Sequelize.INTEGER,
+      //   onDelete: "CASCADE",
+      //   references: {
+      //     model: "environments",
+      //     key: "id"
+      //   }
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
