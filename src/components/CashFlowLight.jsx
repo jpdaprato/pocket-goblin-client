@@ -14,7 +14,7 @@ let redCircle = {
   // paddingBottom: "5px",
   height: "25px",
   width: "25px",
-  backgroundColor: "rgba(193, 66, 66, 0.3)",
+  backgroundColor: "rgba(255, 0, 0, 0.3)",
   borderRadius: "50%",
   display: "inline-block",
   float: "right"
@@ -24,7 +24,7 @@ let yellowCircle = {
   // paddingBottom: "5px",
   height: "25px",
   width: "25px",
-  backgroundColor: "rgba(224, 228, 37, 0.3)",
+  backgroundColor: "rgba(255, 255, 0, 0.3)",
   borderRadius: "50%",
   display: "inline-block",
   float: "right"
@@ -34,7 +34,7 @@ let greenCircle = {
   // paddingBottom: "5px",
   height: "25px",
   width: "25px",
-  backgroundColor: "rgba(50, 189, 57, 0.3)",
+  backgroundColor: "rgba(0, 255, 0, 0.3)",
   borderRadius: "50%",
   display: "inline-block",
   float: "right"
@@ -52,21 +52,21 @@ class CashFlowLight extends React.Component {
   constructor() {
     super();
     this.state = {
-      cashFlow: 75
+      cashFlow: 0
     };
   }
 
   stopLight() {
     const { cashFlow } = this.state;
 
-    if (cashFlow < 30) {
-      redCircle.backgroundColor = "rgba(193, 66, 66, 1)";
+    if (cashFlow < 40) {
+      redCircle.backgroundColor = "rgba(255, 0,0, 1)";
       return lights;
-    } else if (cashFlow > 30 && cashFlow < 74) {
-      yellowCircle.backgroundColor = "rgba(224, 228, 37, 1)";
+    } else if (cashFlow < 74) {
+      yellowCircle.backgroundColor = "rgba(255, 255, 0, 1)";
       return lights;
     } else {
-      greenCircle.backgroundColor = "rgba(50, 189, 57, 1)";
+      greenCircle.backgroundColor = "rgba(0, 255, 0, 1)";
       return lights;
     }
   }

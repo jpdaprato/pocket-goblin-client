@@ -5,17 +5,19 @@ const Repeat = () => {
     border: "5px solid yellow",
     padding: "5px",
     marginTop: "5px",
-    marginBottom: "15px"
-  };
-
-  const pStyle = {
-    marginLeft: "80%"
+    marginBottom: "15px",
+    margin: "auto"
   };
 
   return (
     <div style={divStyle}>
-      <p>Repeat</p>
-      <p style={pStyle}>Never</p>
+      Repeat:
+      <select stlye={{ marginLeft: 5 }}>
+        <option value="never">Never</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+      </select>
     </div>
   );
 };
