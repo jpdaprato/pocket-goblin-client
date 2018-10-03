@@ -3,7 +3,7 @@ import PayOff from "./PayOff";
 import InterestPayed from "./InterestPayed";
 import TotalCost from "./TotalCost";
 import DebtMessage from "./DebtMessage";
-import InterestOption from "./InterestOption";
+import InvestOption from "./InvestOption";
 
 const divStyle = {
   // border: "5px solid yellow",
@@ -18,9 +18,9 @@ class DebtCalculation extends React.Component {
     super(props);
 
     this.state = {
-      payOffTime: 0,
-      totalInterest: 0,
-      totalCost: 0
+      payOffTime: 2,
+      totalInterest: 3,
+      totalCost: 4
     };
   }
 
@@ -38,7 +38,7 @@ class DebtCalculation extends React.Component {
           interest={totalInterest}
           cost={totalCost}
         />
-        <InterestOption />
+        <InvestOption />
       </div>
     );
   }

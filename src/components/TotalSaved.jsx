@@ -1,18 +1,18 @@
 import React from "react";
 
-class DebtFreeBy extends React.Component {
+class TotalSaved extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { debtFree } = this.props;
+    const { totalSaved } = this.props;
     return (
       <div style={{ paddingTop: "10px" }}>
-        Be Debt-Free Faster by {debtFree} months
+        Total {`You'll`} save ${totalSaved}
       </div>
     );
   }
 }
 
-export default DebtFreeBy;
+export default TotalSaved;
