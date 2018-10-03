@@ -2,6 +2,9 @@ import React from "react";
 import CashFlow from "./CashFlow";
 import DebtToSavingRatio from "./DebtToSavingRatio";
 import Header from "./Header";
+import Purchase from "./Purchase";
+import Saving from "./Saving";
+import DebtCalculation from "./DebtCalculation";
 
 const divStyle = {
   // border: "5px solid yellow",
@@ -22,10 +25,13 @@ class FinancialSnapShot extends React.Component {
     return (
       <div style={divStyle}>
         <Header />
+        <Purchase />
         <CashFlow />
         <div>
           <DebtToSavingRatio />
         </div>
+        <Saving />
+        <DebtCalculation />
       </div>
     );
   }
