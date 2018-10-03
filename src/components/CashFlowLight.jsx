@@ -52,7 +52,7 @@ class CashFlowLight extends React.Component {
   constructor() {
     super();
     this.state = {
-      cashFlow: 0
+      cashFlow: 73
     };
   }
 

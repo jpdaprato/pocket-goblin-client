@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import Container from "./components/Container";
+import FinancialSnapShot from "./components/FinancialSnapShot";
 
 class App extends React.Component {
   componentDidMount() {
