@@ -84,7 +84,7 @@ app.post("/get_access_token", function(request, response, next) {
 app.get("/transactions", function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
   let startDate = moment()
-    .subtract(30, "days")
+    .subtract(365, "days")
     .format("YYYY-MM-DD");
   let endDate = moment().format("YYYY-MM-DD");
   client.getTransactions(
@@ -162,10 +162,11 @@ app.get("/transactions", function(request, response, next) {
               });
             });
           })
+          .then(() => {
+            prettyPrintResponse(transactionsResponse);
+            response.json({ error: null, transactions: transactionsResponse });
+          })
           .catch(error => console.error(error));
-
-        prettyPrintResponse(transactionsResponse);
-        response.json({ error: null, transactions: transactionsResponse });
       }
     }
   );
