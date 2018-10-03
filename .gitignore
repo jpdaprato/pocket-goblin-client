@@ -1,6 +1,7 @@
 
 dist/
 .cache
+config/
 
 # Logs
 logs
