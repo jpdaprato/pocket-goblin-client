@@ -25,6 +25,7 @@ class FinancialSnapShot extends React.Component {
     return (
       <div style={divStyle}>
         <Header />
+        <Purchase />
         <CashFlow />
         <div>
           <DebtToSavingRatio />
