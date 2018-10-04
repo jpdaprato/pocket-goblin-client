@@ -20,7 +20,8 @@ const models = {
   Item: sequelize.import("./item"),
   Transaction: sequelize.import("./transaction"),
   Snapshot: sequelize.import("./snapshot"),
-  Cashflow: sequelize.import("./cashflow")
+  Cashflow: sequelize.import("./cashflow"),
+  TopSpending: sequelize.import("./topSpending")
 };
 
 Object.keys(models).forEach(model => {
