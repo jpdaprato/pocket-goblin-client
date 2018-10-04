@@ -2,11 +2,6 @@ module.exports = (sequelize, DataTypes) => {
   const Cashflow = sequelize.define(
     "cashflow",
     {
-      id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
-      },
       client_id: DataTypes.UUID,
       account_type: DataTypes.STRING,
       year: DataTypes.INTEGER,
