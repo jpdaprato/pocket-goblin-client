@@ -1,4 +1,6 @@
-const Sequelize = require("sequelize");
+//In order to get views support with model sync, we use this library
+const Sequelize = require("sequelize-views-support");
+// const Sequelize = require("sequelize");
 
 //FIXME:Move these things into environmental variables
 const dbName = process.env.DATABASE_NAME || "pocketgoblin";
@@ -16,7 +18,9 @@ const models = {
   Client: sequelize.import("./client"),
   Environment: sequelize.import("./environment"),
   Item: sequelize.import("./item"),
-  Transaction: sequelize.import("./transaction")
+  Transaction: sequelize.import("./transaction"),
+  Snapshot: sequelize.import("./snapshot"),
+  Cashflow: sequelize.import("./cashflow")
 };
 
 Object.keys(models).forEach(model => {
