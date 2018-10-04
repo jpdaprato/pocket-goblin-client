@@ -87,6 +87,28 @@ app.get("/api/snapshot", (request, response) => {
     .catch(error => console.error(error));
 });
 
+app.get("/api/topspending", (request, response) => {
+  models.TopSpending.findAll({
+    attributes: ["client_id", "category", "sum"],
+    where: {
+      [models.Sequelize.Op.and]: [
+        {
+          client_id: {
+            [models.Sequelize.Op.ne]: null
+          }
+        },
+        {
+          category: {
+            [models.Sequelize.Op.ne]: null
+          }
+        }
+      ]
+    }
+  })
+    .then(spending => response.json(spending))
+    .catch(error => console.error(error));
+});
+
 //PLAID
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
