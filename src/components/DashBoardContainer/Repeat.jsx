@@ -1,18 +1,21 @@
 import React from "react";
 
-const Repeat = () => {
-  const divStyle = {
-    // border: "5px solid yellow",
-    padding: "5px",
-    marginTop: "5px",
-    marginBottom: "15px"
-  };
+const divStyle = {
+  padding: "5px",
+  marginTop: "5px",
+  marginBottom: "15px"
+};
 
+const div2Style = {
+  marginLeft: "45%"
+};
+
+const Repeat = () => {
   return (
     <div style={divStyle}>
-      <div style={{ marginLeft: "45%" }}>
+      <div style={div2Style}>
         Repeat:
-        <select stlye={{ marginLeft: 5 }}>
+        <select>
           <option value="never">Never</option>
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>

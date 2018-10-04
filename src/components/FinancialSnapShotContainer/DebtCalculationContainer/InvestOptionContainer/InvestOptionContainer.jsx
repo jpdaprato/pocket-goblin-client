@@ -49,7 +49,7 @@ class InvestOption extends React.Component {
           <TotalSaved totalSaved={totalSaved} />
           <PayDebtMessage
             purchase={purchase}
-            saved={totalSaved}
+            totalSaved={totalSaved}
             debtFree={debtFree}
           />
         </div>
@@ -63,7 +63,7 @@ class InvestOption extends React.Component {
   render() {
     return (
       <div>
-        <h3>Or, what you if you instead...</h3>
+        <h3>Or, what you if instead...</h3>
         <button onClick={this.setDebt}>Pay Debt</button>
         <button onClick={this.setInvest}>Invest it</button>
         {this.viewSwitch()}

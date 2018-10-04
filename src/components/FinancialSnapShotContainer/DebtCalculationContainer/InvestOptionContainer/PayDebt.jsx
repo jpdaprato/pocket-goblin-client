@@ -1,5 +1,9 @@
 import React from "react";
 
+const divStyle = {
+  paddingTop: "10px"
+};
+
 class DebtFreeBy extends React.Component {
   constructor(props) {
     super(props);
@@ -7,11 +11,7 @@ class DebtFreeBy extends React.Component {
 
   render() {
     const { debtFree } = this.props;
-    return (
-      <div style={{ paddingTop: "10px" }}>
-        Be Debt-Free Faster by {debtFree} months
-      </div>
-    );
+    return <div style={divStyle}>Be Debt-Free Faster by {debtFree} months</div>;
   }
 }
 

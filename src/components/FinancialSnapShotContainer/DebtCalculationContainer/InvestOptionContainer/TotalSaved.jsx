@@ -1,5 +1,9 @@
 import React from "react";
 
+const divStyle = {
+  paddingTop: "10px"
+};
+
 class TotalSaved extends React.Component {
   constructor(props) {
     super(props);
@@ -8,7 +12,7 @@ class TotalSaved extends React.Component {
   render() {
     const { totalSaved } = this.props;
     return (
-      <div style={{ paddingTop: "10px" }}>
+      <div style={divStyle}>
         Total {`You'll`} save ${totalSaved}
       </div>
     );
