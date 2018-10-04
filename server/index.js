@@ -61,15 +61,15 @@ app.get("/api/cashflow/", (request, response) => {
   models.Cashflow.findAll({
     attributes: ["client_id", "account_type", "year", "month", "sum"],
     where: {
-      [models.Sequelize.Op.and]: [
+      $and: [
         {
           client_id: {
-            [models.Sequelize.Op.ne]: null
+            $ne: null
           }
         },
         {
           account_type: {
-            [models.Sequelize.Op.ne]: null
+            $ne: null
           }
         }
       ]
@@ -91,15 +91,15 @@ app.get("/api/topspending", (request, response) => {
   models.TopSpending.findAll({
     attributes: ["client_id", "category", "sum"],
     where: {
-      [models.Sequelize.Op.and]: [
+      $and: [
         {
           client_id: {
-            [models.Sequelize.Op.ne]: null
+            $ne: null
           }
         },
         {
           category: {
-            [models.Sequelize.Op.ne]: null
+            $ne: null
           }
         }
       ]
