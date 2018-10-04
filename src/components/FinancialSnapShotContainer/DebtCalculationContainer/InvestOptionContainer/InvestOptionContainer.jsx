@@ -1,10 +1,8 @@
 import React from "react";
-import PayDebt from "./PayDebt";
-import SavedInterest from "./SavedInterest";
-import TotalSaved from "./TotalSaved";
-import PayDebtMessage from "./PayDebtMessage";
+import InvestOption from "./InvestOption";
+import PayDebtContainer from "./PayDebtContainer/PayDebtContainer";
 
-class InvestOption extends React.Component {
+class InvestOptionContainer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -44,14 +42,7 @@ class InvestOption extends React.Component {
     } else if (button === "debt") {
       return (
         <div>
-          <PayDebt debtFree={debtFree} />
-          <SavedInterest interestSaved={interestSaved} />
-          <TotalSaved totalSaved={totalSaved} />
-          <PayDebtMessage
-            purchase={purchase}
-            totalSaved={totalSaved}
-            debtFree={debtFree}
-          />
+          <PayDebtContainer />
         </div>
       );
     } else if (button === "invest") {
@@ -61,15 +52,15 @@ class InvestOption extends React.Component {
   }
 
   render() {
+    const { setDebt, setInvest, viewSwitch } = this;
     return (
-      <div>
-        <h3>Or, what you if instead...</h3>
-        <button onClick={this.setDebt}>Pay Debt</button>
-        <button onClick={this.setInvest}>Invest it</button>
-        {this.viewSwitch()}
-      </div>
+      <InvestOption
+        setDebt={setDebt}
+        setInvest={setInvest}
+        viewSwitch={viewSwitch}
+      />
     );
   }
 }
 
-export default InvestOption;
+export default InvestOptionContainer;

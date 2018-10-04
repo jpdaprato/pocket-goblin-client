@@ -1,18 +1,26 @@
 import React from "react";
+import DebtFreeBy from "./PayDebtContainer/DebtFreeBy";
+import SavedInterest from "./SavedInterest";
+import TotalSaved from "./TotalSaved";
+import PayDebtMessage from "./PayDebtMessage";
 
 const divStyle = {
   paddingTop: "10px"
 };
 
-class DebtFreeBy extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const PayDebt = ({ purchase, totalSaved, debtFree, interestSaved }) => {
+  return (
+    <div style={divStyle}>
+      <DebtFreeBy debtFree={debtFree} />
+      <SavedInterest interestSaved={interestSaved} />
+      <TotalSaved totalSaved={totalSaved} />
+      <PayDebtMessage
+        purchase={purchase}
+        totalSaved={totalSaved}
+        debtFree={debtFree}
+      />
+    </div>
+  );
+};
 
-  render() {
-    const { debtFree } = this.props;
-    return <div style={divStyle}>Be Debt-Free Faster by {debtFree} months</div>;
-  }
-}
-
-export default DebtFreeBy;
+export default PayDebt;

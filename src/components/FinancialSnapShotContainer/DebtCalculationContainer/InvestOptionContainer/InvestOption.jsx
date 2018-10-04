@@ -1,16 +1,12 @@
 import React from "react";
-import PayDebt from "./PayDebt";
-import SavedInterest from "./SavedInterest";
-import TotalSaved from "./TotalSaved";
-import PayDebtMessage from "./PayDebtMessage";
 
-const InvestOption = () => {
+const InvestOption = ({ setDebt, setInvest, viewSwitch }) => {
   return (
     <div>
       <h3>Or, what you if instead...</h3>
-      <button onClick={this.setDebt}>Pay Debt</button>
-      <button onClick={this.setInvest}>Invest it</button>
-      {this.viewSwitch()}
+      <button onClick={setDebt}>Pay Debt</button>
+      <button onClick={setInvest}>Invest it</button>
+      {viewSwitch()}
     </div>
   );
 };
