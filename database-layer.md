@@ -6,4 +6,4 @@
 
 ## Uninstall all packages related to database layer
 
-npm uninstall sequelize pg
+npm uninstall sequelize pg sequelize-views-support

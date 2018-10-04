@@ -56,6 +56,60 @@ app.get("/", function(request, response, next) {
   });
 });
 
+//PocketGoblin Queries
+app.get("/api/cashflow/", (request, response) => {
+  models.Cashflow.findAll({
+    attributes: ["client_id", "account_type", "year", "month", "sum"],
+    where: {
+      $and: [
+        {
+          client_id: {
+            $ne: null
+          }
+        },
+        {
+          account_type: {
+            $ne: null
+          }
+        }
+      ]
+    }
+  })
+    .then(cashflow => response.json(cashflow))
+    .catch(error => console.error(error));
+});
+
+app.get("/api/snapshot", (request, response) => {
+  models.Snapshot.findAll({
+    attributes: ["client_id", "total_debt", "total_savings"]
+  })
+    .then(snapshot => response.json(snapshot))
+    .catch(error => console.error(error));
+});
+
+app.get("/api/topspending", (request, response) => {
+  models.TopSpending.findAll({
+    attributes: ["client_id", "category", "sum"],
+    where: {
+      $and: [
+        {
+          client_id: {
+            $ne: null
+          }
+        },
+        {
+          category: {
+            $ne: null
+          }
+        }
+      ]
+    }
+  })
+    .then(spending => response.json(spending))
+    .catch(error => console.error(error));
+});
+
+//PLAID
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
 // https://plaid.com/docs/#exchange-token-flow
@@ -162,10 +216,11 @@ app.get("/transactions", function(request, response, next) {
               });
             });
           })
+          .then(() => {
+            prettyPrintResponse(transactionsResponse);
+            response.json({ error: null, transactions: transactionsResponse });
+          })
           .catch(error => console.error(error));
-
-        prettyPrintResponse(transactionsResponse);
-        response.json({ error: null, transactions: transactionsResponse });
       }
     }
   );
