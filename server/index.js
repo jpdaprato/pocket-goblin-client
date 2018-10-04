@@ -56,6 +56,38 @@ app.get("/", function(request, response, next) {
   });
 });
 
+//PocketGoblin Queries
+app.get("/api/cashflow/", (request, response) => {
+  models.Cashflow.findAll({
+    attributes: ["client_id", "account_type", "year", "month", "sum"],
+    where: {
+      [models.Sequelize.Op.and]: [
+        {
+          client_id: {
+            [models.Sequelize.Op.ne]: null
+          }
+        },
+        {
+          account_type: {
+            [models.Sequelize.Op.ne]: null
+          }
+        }
+      ]
+    }
+  })
+    .then(cashflow => response.json(cashflow))
+    .catch(error => console.error(error));
+});
+
+app.get("/api/snapshot", (request, response) => {
+  models.Snapshot.findAll({
+    attributes: ["client_id", "total_debt", "total_savings"]
+  })
+    .then(snapshot => response.json(snapshot))
+    .catch(error => console.error(error));
+});
+
+//PLAID
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
 // https://plaid.com/docs/#exchange-token-flow
@@ -84,7 +116,7 @@ app.post("/get_access_token", function(request, response, next) {
 app.get("/transactions", function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
   let startDate = moment()
-    .subtract(365, "days")
+    .subtract(30, "days")
     .format("YYYY-MM-DD");
   let endDate = moment().format("YYYY-MM-DD");
   client.getTransactions(
