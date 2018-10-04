@@ -5,9 +5,9 @@ import axios from "axios";
 class App extends React.Component {
   componentDidMount() {
     axios.post('http://localhost:8000/graphql', {
-      query: "{ hello transactions }"
+      query: "{ hello transactions cashflow }"
     })
-      .then(response => console.log(JSON.parse(response.data.data.transactions)))
+      .then(response => console.log(response, JSON.parse(response.data.data.transactions)))
       .catch(error => console.log(error));
   }
 
@@ -15,7 +15,7 @@ class App extends React.Component {
     return (
       <div>
         App component
-        </div>
+      </div>
     );
   }
 }
