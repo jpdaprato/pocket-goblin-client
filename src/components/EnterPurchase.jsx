@@ -9,7 +9,8 @@ class EnterPurchase extends React.Component {
       currentCashFlowAmount,
       potentialPurchaseFrequency,
       handlePotentialPurchaseFrequencyChange,
-      potentialPurchasePaymentType
+      potentialPurchasePaymentType,
+      handlePotentialPaymentType
     } = this.props;
     return (
       <div>
@@ -30,15 +31,15 @@ class EnterPurchase extends React.Component {
           <input
             name="paymentType"
             type="radio"
-            value="cash"
-            checked={potentialPurchasePaymentType === "cash"}
+            value="cash" // checked={potentialPurchasePaymentType === "cash"}
+            onChange={handlePotentialPaymentType}
           />
           Pay in Cash
           <input
             name="paymentType"
             type="radio"
-            value="credit"
-            checked={potentialPurchasePaymentType === "credit"}
+            value="credit" // checked={potentialPurchasePaymentType === "credit"}
+            onChange={handlePotentialPaymentType}
           />
           Pay with Credit
         </div>
