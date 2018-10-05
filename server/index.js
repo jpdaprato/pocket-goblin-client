@@ -81,13 +81,13 @@ const calculateCashFlow = (cashFlowData) => {
   let creditTotal;
 
   for (let elem of cashFlowData) {
-    let isAnnualData = elem.year === null;
+    let isTotalData = elem.year === null;
     let isDepository = elem.account_type === 'depository';
     let isCredit = elem.account_type === 'credit';
 
-    if (isAnnualData && isDepository) {
+    if (isTotalData && isDepository) {
       depositoryTotal = elem.sum;
-    } else if (isAnnualData && isCredit) {
+    } else if (isTotalData && isCredit) {
       creditTotal = elem.sum;
     }
   }
