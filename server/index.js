@@ -48,11 +48,84 @@ let schema = buildSchema(`
   type Query {
     hello: String
     transactions: String
-    cashflow: Float
+    cashFlow: Float
+    totalDebt: Float
+    totalSavings: Float
   }
 `);
 
-// Get transactions for the last 30 days
+
+// RESOLVER FUNCTIONS
+
+// Cash Flow
+const asyncGetCashFlow = () => {
+  return new Promise((resolve, reject) => {
+    models.Cashflow.findAll({
+      attributes: ["client_id", "account_type", "year", "month", "sum"],
+      where: {
+        $and: [
+          {
+            client_id: {
+              $ne: null
+            }
+          },
+          {
+            account_type: {
+              $ne: null
+            }
+          }
+        ]
+      }
+    })
+      .then(cashFlowData => resolve(calculateCashFlow(cashFlowData)))
+      .catch(error => reject(error));
+  });
+};
+
+const calculateCashFlow = (cashFlowData) => {
+  let depositoryTotal;
+  let creditTotal;
+
+  for (let elem of cashFlowData) {
+    let isAnnualData = elem.year === null;
+    let isDepository = elem.account_type === 'depository';
+    let isCredit = elem.account_type === 'credit';
+
+    if (isAnnualData && isDepository) {
+      depositoryTotal = elem.sum;
+    } else if (isAnnualData && isCredit) {
+      creditTotal = elem.sum;
+    }
+  }
+
+  let cashFlow = depositoryTotal - creditTotal;
+
+  return cashFlow;
+};
+
+// Total Debt
+const asyncGetTotalDebt = () => {
+  return new Promise((resolve, reject) => {
+    models.Snapshot.findAll({
+      attributes: ["client_id", "total_debt", "total_savings"]
+    })
+      .then(snapshotData => resolve(snapshotData[0].total_debt))
+      .catch(error => reject(error));
+  });
+};
+
+// Total Savings
+const asyncGetTotalSavings = () => {
+  return new Promise((resolve, reject) => {
+    models.Snapshot.findAll({
+      attributes: ["client_id", "total_debt", "total_savings"]
+    })
+      .then(snapshotData => resolve(snapshotData[0].total_savings))
+      .catch(error => reject(error));
+  });
+};
+
+// Transactions
 const asyncGetTransactions = () => {
   return new Promise((resolve, reject) => {
     let startDate = moment()
@@ -79,50 +152,6 @@ const asyncGetTransactions = () => {
   });
 };
 
-const calculateCashFlow = (cashFlowData) => {
-  let depositoryTotal;
-  let creditTotal;
-
-  for (let elem of cashFlowData) {
-    let isAnnualData = elem.year === null;
-    let isDepository = elem.account_type === 'depository';
-    let isCredit = elem.account_type === 'credit';
-
-    if (isAnnualData && isDepository) {
-      depositoryTotal = elem.sum;
-    } else if (isAnnualData && isCredit) {
-      creditTotal = elem.sum;
-    }
-  }
-
-  let cashFlow = depositoryTotal - creditTotal;
-
-  return cashFlow;
-};
-
-const asyncGetCashFlow = () => {
-  return new Promise((resolve, reject) => {
-    models.Cashflow.findAll({
-      attributes: ["client_id", "account_type", "year", "month", "sum"],
-      where: {
-        $and: [
-          {
-            client_id: {
-              $ne: null
-            }
-          },
-          {
-            account_type: {
-              $ne: null
-            }
-          }
-        ]
-      }
-    })
-      .then(cashFlowData => resolve(calculateCashFlow(cashFlowData)))
-      .catch(error => reject(error));
-  });
-};
 // The root provides a resolver function for each API endpoint
 let root = {
   hello: () => {
@@ -131,8 +160,14 @@ let root = {
   transactions: () => {
     return asyncGetTransactions();
   },
-  cashflow: () => {
+  cashFlow: () => {
     return asyncGetCashFlow();
+  },
+  totalDebt: () => {
+    return asyncGetTotalDebt();
+  },
+  totalSavings: () => {
+    return asyncGetTotalSavings();
   }
 };
 
