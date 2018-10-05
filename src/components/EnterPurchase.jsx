@@ -47,6 +47,7 @@ class EnterPurchase extends React.Component {
           />
           Pay with Credit
         </div>
+        <button>Start the Goblin!</button>
       </div>
     );
   }
