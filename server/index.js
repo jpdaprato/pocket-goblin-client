@@ -1,13 +1,14 @@
 const util = require("util");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const moment = require("moment");
 const plaid = require("plaid");
 const dotenv = require("dotenv");
+const graphqlHTTP = require('express-graphql');
+const { buildSchema } = require('graphql');
+const cors = require('cors');
 
 const result = dotenv.config();
-
 if (result.error) {
   throw result.error;
 }
@@ -15,7 +16,7 @@ if (result.error) {
 //data models
 const models = require("../models/index");
 
-//variables
+// PLAID API
 const APP_PORT = process.env.APP_PORT;
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
@@ -24,10 +25,9 @@ const PLAID_ENV = process.env.PLAID_ENV;
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
-//FIXME:Do we need to pass in env variables for access_toen and item_id?
-let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+let ACCESS_TOKEN = null;
 let PUBLIC_TOKEN = null;
-let ITEM_ID = process.env.ITEM_ID;
+let ITEM_ID = null;
 
 // Initialize the Plaid client
 // Find your API keys in the Dashboard (https://dashboard.plaid.com/account/keys)
@@ -39,7 +39,131 @@ const client = new plaid.Client(
   { version: "2018-05-22" }
 );
 
+// GRAPHQL API
+// Construct a schema, using GraphQL schema language
+let schema = buildSchema(`
+  type Query {
+    transactions: String
+    cashFlow: Float
+    totalDebt: Float
+    totalSavings: Float
+  }
+`);
+
+// RESOLVER FUNCTIONS
+// Cash Flow
+const asyncGetCashFlow = () => {
+  return new Promise((resolve, reject) => {
+    models.Cashflow.findAll({
+      attributes: ["client_id", "account_type", "year", "month", "sum"],
+      where: {
+        $and: [
+          {
+            client_id: {
+              $ne: null
+            }
+          },
+          {
+            account_type: {
+              $ne: null
+            }
+          }
+        ]
+      }
+    })
+      .then(cashFlowData => resolve(calculateCashFlow(cashFlowData)))
+      .catch(error => reject(error));
+  });
+};
+
+const calculateCashFlow = (cashFlowData) => {
+  let depositoryTotal;
+  let creditTotal;
+
+  for (let elem of cashFlowData) {
+    let isAnnualData = elem.year === null;
+    let isDepository = elem.account_type === 'depository';
+    let isCredit = elem.account_type === 'credit';
+
+    if (isAnnualData && isDepository) {
+      depositoryTotal = elem.sum;
+    } else if (isAnnualData && isCredit) {
+      creditTotal = elem.sum;
+    }
+  }
+
+  let cashFlow = depositoryTotal - creditTotal;
+
+  return cashFlow;
+};
+
+// Total Debt
+const asyncGetTotalDebt = () => {
+  return new Promise((resolve, reject) => {
+    models.Snapshot.findAll({
+      attributes: ["client_id", "total_debt", "total_savings"]
+    })
+      .then(snapshotData => resolve(snapshotData[0].total_debt))
+      .catch(error => reject(error));
+  });
+};
+
+// Total Savings
+const asyncGetTotalSavings = () => {
+  return new Promise((resolve, reject) => {
+    models.Snapshot.findAll({
+      attributes: ["client_id", "total_debt", "total_savings"]
+    })
+      .then(snapshotData => resolve(snapshotData[0].total_savings))
+      .catch(error => reject(error));
+  });
+};
+
+// Transactions
+const asyncGetTransactions = () => {
+  return new Promise((resolve, reject) => {
+    let startDate = moment()
+      .subtract(30, "days")
+      .format("YYYY-MM-DD");
+    let endDate = moment().format("YYYY-MM-DD");
+    client.getTransactions(
+      ACCESS_TOKEN,
+      startDate,
+      endDate,
+      {
+        count: 250,
+        offset: 0
+      },
+      (error, transactionsResponse) => {
+        if (error != null) {
+          prettyPrintResponse(error);
+          reject(error);
+        } else {
+          prettyPrintResponse(transactionsResponse);
+          resolve(JSON.stringify({ error: null, transactions: transactionsResponse }));
+        }
+      });
+  });
+};
+
+// The root provides a resolver function for each API endpoint
+let root = {
+  transactions: () => {
+    return asyncGetTransactions();
+  },
+  cashFlow: () => {
+    return asyncGetCashFlow();
+  },
+  totalDebt: () => {
+    return asyncGetTotalDebt();
+  },
+  totalSavings: () => {
+    return asyncGetTotalSavings();
+  }
+};
+
 const app = express();
+
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(
@@ -48,13 +172,12 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-
-app.get("/", function(request, response, next) {
-  response.render("index.ejs", {
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV
-  });
-});
+app.use(cors());
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 
 //PocketGoblin Queries
 app.get("/api/cashflow/", (request, response) => {
@@ -109,13 +232,13 @@ app.get("/api/topspending", (request, response) => {
     .catch(error => console.error(error));
 });
 
-//PLAID
+//PLAID EXPRESS SERVER ENDPOINTS
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
 // https://plaid.com/docs/#exchange-token-flow
-app.post("/get_access_token", function(request, response, next) {
+app.post("/get_access_token", function (request, response, next) {
   PUBLIC_TOKEN = request.body.public_token;
-  client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
+  client.exchangePublicToken(PUBLIC_TOKEN, function (error, tokenResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -133,9 +256,106 @@ app.post("/get_access_token", function(request, response, next) {
   });
 });
 
+// Retrieve Identity for an Item
+// https://plaid.com/docs/#identity
+app.get("/identity", function (request, response, next) {
+  client.getIdentity(ACCESS_TOKEN, function (error, identityResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    prettyPrintResponse(identityResponse);
+    response.json({ error: null, identity: identityResponse });
+  });
+});
+
+// Retrieve real-time Balances for each of an Item's accounts
+// https://plaid.com/docs/#balance
+app.get("/balance", function (request, response, next) {
+  client.getBalance(ACCESS_TOKEN, function (error, balanceResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    prettyPrintResponse(balanceResponse);
+    response.json({ error: null, balance: balanceResponse });
+  });
+});
+
+// Retrieve an Item's accounts
+// https://plaid.com/docs/#accounts
+app.get("/accounts", function (request, response, next) {
+  client.getAccounts(ACCESS_TOKEN, function (error, accountsResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    prettyPrintResponse(accountsResponse);
+    response.json({ error: null, accounts: accountsResponse });
+  });
+});
+
+// Retrieve ACH or ETF Auth data for an Item's accounts
+// https://plaid.com/docs/#auth
+app.get("/auth", function (request, response, next) {
+  client.getAuth(ACCESS_TOKEN, function (error, authResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    prettyPrintResponse(authResponse);
+    response.json({ error: null, auth: authResponse });
+  });
+});
+
+// Retrieve information about an Item
+// https://plaid.com/docs/#retrieve-item
+app.get("/item", function (request, response, next) {
+  // Pull the Item - this includes information about available products,
+  // billed products, webhook information, and more.
+  client.getItem(ACCESS_TOKEN, function (error, itemResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    // Also pull information about the institution
+    client.getInstitutionById(itemResponse.item.institution_id, function (
+      err,
+      instRes
+    ) {
+      if (err != null) {
+        const msg =
+          "Unable to pull institution information from the Plaid API.";
+        console.log(msg + "\n" + JSON.stringify(error));
+        return response.json({
+          error: msg
+        });
+      } else {
+        prettyPrintResponse(itemResponse);
+        response.json({
+          item: itemResponse.item,
+          institution: instRes.institution
+        });
+      }
+    });
+  });
+});
+
+
 // Retrieve Transactions for an Item
 // https://plaid.com/docs/#transactions
-app.get("/transactions", function(request, response, next) {
+// NOTE: modified and used to seed database with plaid sandbox data 
+app.get("/transactions", function (request, response, next) {
   // Pull transactions for the Item for the last 30 days
   let startDate = moment()
     .subtract(30, "days")
@@ -149,7 +369,7 @@ app.get("/transactions", function(request, response, next) {
       count: 250,
       offset: 0
     },
-    function(error, transactionsResponse) {
+    function (error, transactionsResponse) {
       if (error != null) {
         prettyPrintResponse(error);
         return response.json({
@@ -226,113 +446,20 @@ app.get("/transactions", function(request, response, next) {
   );
 });
 
-// Retrieve Identity for an Item
-// https://plaid.com/docs/#identity
-app.get("/identity", function(request, response, next) {
-  client.getIdentity(ACCESS_TOKEN, function(error, identityResponse) {
-    if (error != null) {
-      prettyPrintResponse(error);
-      return response.json({
-        error: error
-      });
-    }
-    prettyPrintResponse(identityResponse);
-    response.json({ error: null, identity: identityResponse });
-  });
-});
-
-// Retrieve real-time Balances for each of an Item's accounts
-// https://plaid.com/docs/#balance
-app.get("/balance", function(request, response, next) {
-  client.getBalance(ACCESS_TOKEN, function(error, balanceResponse) {
-    if (error != null) {
-      prettyPrintResponse(error);
-      return response.json({
-        error: error
-      });
-    }
-    prettyPrintResponse(balanceResponse);
-    response.json({ error: null, balance: balanceResponse });
-  });
-});
-
-// Retrieve an Item's accounts
-// https://plaid.com/docs/#accounts
-app.get("/accounts", function(request, response, next) {
-  client.getAccounts(ACCESS_TOKEN, function(error, accountsResponse) {
-    if (error != null) {
-      prettyPrintResponse(error);
-      return response.json({
-        error: error
-      });
-    }
-    prettyPrintResponse(accountsResponse);
-    response.json({ error: null, accounts: accountsResponse });
-  });
-});
-
-// Retrieve ACH or ETF Auth data for an Item's accounts
-// https://plaid.com/docs/#auth
-app.get("/auth", function(request, response, next) {
-  client.getAuth(ACCESS_TOKEN, function(error, authResponse) {
-    if (error != null) {
-      prettyPrintResponse(error);
-      return response.json({
-        error: error
-      });
-    }
-    prettyPrintResponse(authResponse);
-    response.json({ error: null, auth: authResponse });
-  });
-});
-
-// Retrieve information about an Item
-// https://plaid.com/docs/#retrieve-item
-app.get("/item", function(request, response, next) {
-  // Pull the Item - this includes information about available products,
-  // billed products, webhook information, and more.
-  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
-    if (error != null) {
-      prettyPrintResponse(error);
-      return response.json({
-        error: error
-      });
-    }
-    // Also pull information about the institution
-    client.getInstitutionById(itemResponse.item.institution_id, function(
-      err,
-      instRes
-    ) {
-      if (err != null) {
-        const msg =
-          "Unable to pull institution information from the Plaid API.";
-        console.log(msg + "\n" + JSON.stringify(error));
-        return response.json({
-          error: msg
-        });
-      } else {
-        prettyPrintResponse(itemResponse);
-        response.json({
-          item: itemResponse.item,
-          institution: instRes.institution
-        });
-      }
-    });
-  });
-});
-
-const server = app.listen(APP_PORT, function() {
+// Create server
+app.listen(APP_PORT, function () {
   console.log("PocketGoblin server listening on port " + APP_PORT);
 });
 
+// Helper function
 const prettyPrintResponse = response => {
   console.log(util.inspect(response, { colors: true, depth: 4 }));
 };
 
-// TODO: Consider removing this function (necessary for development environment)
-app.post("/set_access_token", function(request, response, next) {
+// TODO: Consider removing this function (necessary for development environment?)
+app.post("/set_access_token", function (request, response, next) {
   ACCESS_TOKEN = request.body.access_token;
-  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
+  client.getItem(ACCESS_TOKEN, function (error, itemResponse) {
     response.json({
       item_id: itemResponse.item.item_id,
       error: false
