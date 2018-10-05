@@ -10,7 +10,7 @@ class EnterPurchase extends React.Component {
       potentialPurchaseFrequency,
       handlePotentialPurchaseFrequencyChange,
       potentialPurchasePaymentType,
-      handlePotentialPaymentType
+      handlePotentialPaymentTypeChange
     } = this.props;
     return (
       <div>
@@ -22,24 +22,28 @@ class EnterPurchase extends React.Component {
         Repeat:
         <select
           value={potentialPurchaseFrequency}
-          onChange={handlePotentialPurchaseFrequencyChange}
+          onBlur={handlePotentialPurchaseFrequencyChange}
+          // onChange={handlePotentialPurchaseFrequencyChange}
         >
           <option value="never">Never</option>
           <option value="weekly">Weekly</option>
         </select>
         <div>
+          {/* https://techblog.commercetools.com/seven-patterns-by-example-the-many-ways-to-type-radio-in-react-bfe14322bb6f */}
           <input
             name="paymentType"
             type="radio"
-            value="cash" // checked={potentialPurchasePaymentType === "cash"}
-            onChange={handlePotentialPaymentType}
+            value="cash"
+            checked={potentialPurchasePaymentType === "cash"}
+            onChange={handlePotentialPaymentTypeChange}
           />
           Pay in Cash
           <input
             name="paymentType"
             type="radio"
-            value="credit" // checked={potentialPurchasePaymentType === "credit"}
-            onChange={handlePotentialPaymentType}
+            value="credit"
+            checked={potentialPurchasePaymentType === "credit"}
+            onChange={handlePotentialPaymentTypeChange}
           />
           Pay with Credit
         </div>

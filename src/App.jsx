@@ -20,7 +20,7 @@ class App extends React.Component {
     this.handlePotentialPurchaseFrequencyChange = this.handlePotentialPurchaseFrequencyChange.bind(
       this
     );
-    this.handlePotentialPaymentType = this.handlePotentialPaymentType.bind(
+    this.handlePotentialPaymentTypeChange = this.handlePotentialPaymentTypeChange.bind(
       this
     );
   }
@@ -44,7 +44,7 @@ class App extends React.Component {
     this.setState({ potentialPurchaseFrequency: e.target.value });
   }
 
-  handlePotentialPaymentType(e) {
+  handlePotentialPaymentTypeChange(e) {
     this.setState({ potentialPurchasePaymentType: e.target.value });
   }
 
@@ -52,7 +52,7 @@ class App extends React.Component {
     const {
       handlePotentialPurchaseInput,
       handlePotentialPurchaseFrequencyChange,
-      handlePotentialPaymentType
+      handlePotentialPaymentTypeChange
     } = this;
     const {
       currentCashFlowAmount,
@@ -73,7 +73,7 @@ class App extends React.Component {
               handlePotentialPurchaseFrequencyChange
             }
             potentialPurchasePaymentType={potentialPurchasePaymentType}
-            handlePotentialPaymentType={handlePotentialPaymentType}
+            handlePotentialPaymentTypeChange={handlePotentialPaymentTypeChange}
           />
         </Router>
       </div>
