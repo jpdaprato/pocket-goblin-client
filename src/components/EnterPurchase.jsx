@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 import InputAmount from "./InputAmount.jsx";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 
@@ -23,7 +24,7 @@ class EnterPurchase extends React.Component {
         <select
           value={potentialPurchaseFrequency}
           onBlur={handlePotentialPurchaseFrequencyChange}
-          // onChange={handlePotentialPurchaseFrequencyChange}
+          onChange={handlePotentialPurchaseFrequencyChange}
         >
           <option value="never">Never</option>
           <option value="weekly">Weekly</option>
@@ -47,7 +48,9 @@ class EnterPurchase extends React.Component {
           />
           Pay with Credit
         </div>
-        <button>Start the Goblin!</button>
+        <Link to="/what-if-results">
+          <button>Start the Goblin!</button>
+        </Link>
       </div>
     );
   }

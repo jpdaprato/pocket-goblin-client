@@ -46,12 +46,7 @@ const CashFlowMeter = props => {
     }
   };
 
-  return (
-    <div>
-      {`currentCashFlowAmount ${props.currentCashFlowAmount}`}
-      {stopLight(props.currentCashFlowAmount)}
-    </div>
-  );
+  return <div>{stopLight(props.currentCashFlowAmount)}</div>;
 };
 
 export default CashFlowMeter;

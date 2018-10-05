@@ -4,15 +4,21 @@ import axios from "axios";
 import Header from "./components/Header.jsx";
 import { Router, Link } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
+import SnapshotResults from "./components/SnapshotResults.jsx";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      potentialPurchaseAmount: 0,
-      currentCashFlowAmount: 100,
+      currentCashFlowAmount: 44,
+      potentialPurchaseAmount: 1,
       potentialPurchaseFrequency: "never",
-      potentialPurchasePaymentType: "cash"
+      potentialPurchasePaymentType: "cash",
+      totalDebtAmount: 2,
+      totalSavingAmount: 3,
+      totalYearlyPaymentAmount: 5664,
+      totalYearlyInterestAmount: 782,
+      totalYearlyCostAmount: 6446
     };
     this.handlePotentialPurchaseInput = this.handlePotentialPurchaseInput.bind(
       this
@@ -57,7 +63,13 @@ class App extends React.Component {
     const {
       currentCashFlowAmount,
       potentialPurchaseFrequency,
-      potentialPurchasePaymentType
+      potentialPurchasePaymentType,
+      totalDebtAmount,
+      totalSavingAmount,
+      totalYearlyPaymentAmount,
+      totalYearlyInterestAmount,
+      totalYearlyCostAmount,
+      potentialPurchaseAmount
     } = this.state;
 
     return (
@@ -74,6 +86,17 @@ class App extends React.Component {
             }
             potentialPurchasePaymentType={potentialPurchasePaymentType}
             handlePotentialPaymentTypeChange={handlePotentialPaymentTypeChange}
+          />
+          <SnapshotResults
+            path="/what-if-results"
+            handlePotentialPurchaseInput={handlePotentialPurchaseInput}
+            currentCashFlowAmount={currentCashFlowAmount}
+            totalDebtAmount={totalDebtAmount}
+            totalSavingAmount={totalSavingAmount}
+            totalYearlyPaymentAmount={totalYearlyPaymentAmount}
+            totalYearlyInterestAmount={totalYearlyInterestAmount}
+            totalYearlyCostAmount={totalYearlyCostAmount}
+            potentialPurchaseAmount={potentialPurchaseAmount}
           />
         </Router>
       </div>
