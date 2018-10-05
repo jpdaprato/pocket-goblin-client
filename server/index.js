@@ -1,5 +1,4 @@
 const util = require("util");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const moment = require("moment");
@@ -10,7 +9,6 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 
 const result = dotenv.config();
-
 if (result.error) {
   throw result.error;
 }
@@ -27,10 +25,9 @@ const PLAID_ENV = process.env.PLAID_ENV;
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
-//FIXME:Do we need to pass in env variables for access_toen and item_id?
-let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+let ACCESS_TOKEN = null;
 let PUBLIC_TOKEN = null;
-let ITEM_ID = process.env.ITEM_ID;
+let ITEM_ID = null;
 
 // Initialize the Plaid client
 // Find your API keys in the Dashboard (https://dashboard.plaid.com/account/keys)
@@ -46,7 +43,6 @@ const client = new plaid.Client(
 // Construct a schema, using GraphQL schema language
 let schema = buildSchema(`
   type Query {
-    hello: String
     transactions: String
     cashFlow: Float
     totalDebt: Float
@@ -54,9 +50,7 @@ let schema = buildSchema(`
   }
 `);
 
-
 // RESOLVER FUNCTIONS
-
 // Cash Flow
 const asyncGetCashFlow = () => {
   return new Promise((resolve, reject) => {
@@ -154,9 +148,6 @@ const asyncGetTransactions = () => {
 
 // The root provides a resolver function for each API endpoint
 let root = {
-  hello: () => {
-    return 'Hello world!';
-  },
   transactions: () => {
     return asyncGetTransactions();
   },
@@ -187,13 +178,6 @@ app.use('/graphql', graphqlHTTP({
   rootValue: root,
   graphiql: true,
 }));
-
-// app.get("/", function (request, response, next) {
-//   response.render("index.ejs", {
-//     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-//     PLAID_ENV: PLAID_ENV
-//   });
-// });
 
 //PocketGoblin Queries
 app.get("/api/cashflow/", (request, response) => {
@@ -248,7 +232,7 @@ app.get("/api/topspending", (request, response) => {
     .catch(error => console.error(error));
 });
 
-//PLAID
+//PLAID EXPRESS SERVER ENDPOINTS
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
 // https://plaid.com/docs/#exchange-token-flow
@@ -270,99 +254,6 @@ app.post("/get_access_token", function (request, response, next) {
       error: null
     });
   });
-});
-
-// Retrieve Transactions for an Item
-// https://plaid.com/docs/#transactions
-app.get("/transactions", function (request, response, next) {
-  // Pull transactions for the Item for the last 30 days
-  let startDate = moment()
-    .subtract(30, "days")
-    .format("YYYY-MM-DD");
-  let endDate = moment().format("YYYY-MM-DD");
-  client.getTransactions(
-    ACCESS_TOKEN,
-    startDate,
-    endDate,
-    {
-      count: 250,
-      offset: 0
-    },
-    function (error, transactionsResponse) {
-      if (error != null) {
-        prettyPrintResponse(error);
-        return response.json({
-          error: error
-        });
-      } else {
-        //store response in lower char variable for ease-of-use
-        const txns = transactionsResponse;
-
-        //Create structure and import txns
-        models.Environment.create({
-          type: process.env.PLAID_ENV,
-          secret: process.env.PLAID_SECRET
-        })
-          .then(environment => {
-            return models.Client.create({
-              plaid_client_id: process.env.PLAID_CLIENT_ID,
-              environment_id: environment.dataValues.id
-            });
-          })
-          .then(client => {
-            return models.Item.create({
-              access_token: process.env.ACCESS_TOKEN,
-              plaid_account_id: process.env.PLAID_CLIENT_ID,
-              plaid_item_id: txns.item.item_id,
-              client_id: client.dataValues.id
-            });
-          })
-          .then(item => {
-            var promises = [];
-            txns.accounts.forEach(account => {
-              promises.push(
-                models.Account.create({
-                  name: account.name,
-                  type: account.type,
-                  subtype: account.subtype,
-                  current_balance: account.balances.available
-                    ? account.balances.available
-                    : account.balances.current,
-                  plaid_account_id: account.account_id,
-                  item_id: item.dataValues.id
-                })
-              );
-            });
-            return Promise.all(promises);
-          })
-          .then(() => {
-            txns.transactions.forEach(txn => {
-              models.Account.findOne({
-                where: { plaid_account_id: txn.account_id },
-                attributes: ["id"]
-              }).then(acctId => {
-                models.Transaction.create({
-                  name: txn.name,
-                  amount: txn.amount,
-                  category: txn.category,
-                  category_id: txn.category_id,
-                  type: txn.transaction_type,
-                  post_date: txn.date,
-                  plaid_account_id: txn.account_id,
-                  plaid_transaction_id: txn.transaction_id,
-                  account_id: acctId.dataValues.id
-                });
-              });
-            });
-          })
-          .then(() => {
-            prettyPrintResponse(transactionsResponse);
-            response.json({ error: null, transactions: transactionsResponse });
-          })
-          .catch(error => console.error(error));
-      }
-    }
-  );
 });
 
 // Retrieve Identity for an Item
@@ -460,15 +351,112 @@ app.get("/item", function (request, response, next) {
   });
 });
 
-const server = app.listen(APP_PORT, function () {
+
+// Retrieve Transactions for an Item
+// https://plaid.com/docs/#transactions
+// NOTE: modified and used to seed database with plaid sandbox data 
+app.get("/transactions", function (request, response, next) {
+  // Pull transactions for the Item for the last 30 days
+  let startDate = moment()
+    .subtract(30, "days")
+    .format("YYYY-MM-DD");
+  let endDate = moment().format("YYYY-MM-DD");
+  client.getTransactions(
+    ACCESS_TOKEN,
+    startDate,
+    endDate,
+    {
+      count: 250,
+      offset: 0
+    },
+    function (error, transactionsResponse) {
+      if (error != null) {
+        prettyPrintResponse(error);
+        return response.json({
+          error: error
+        });
+      } else {
+        //store response in lower char variable for ease-of-use
+        const txns = transactionsResponse;
+
+        //Create structure and import txns
+        models.Environment.create({
+          type: process.env.PLAID_ENV,
+          secret: process.env.PLAID_SECRET
+        })
+          .then(environment => {
+            return models.Client.create({
+              plaid_client_id: process.env.PLAID_CLIENT_ID,
+              environment_id: environment.dataValues.id
+            });
+          })
+          .then(client => {
+            return models.Item.create({
+              access_token: process.env.ACCESS_TOKEN,
+              plaid_account_id: process.env.PLAID_CLIENT_ID,
+              plaid_item_id: txns.item.item_id,
+              client_id: client.dataValues.id
+            });
+          })
+          .then(item => {
+            var promises = [];
+            txns.accounts.forEach(account => {
+              promises.push(
+                models.Account.create({
+                  name: account.name,
+                  type: account.type,
+                  subtype: account.subtype,
+                  current_balance: account.balances.available
+                    ? account.balances.available
+                    : account.balances.current,
+                  plaid_account_id: account.account_id,
+                  item_id: item.dataValues.id
+                })
+              );
+            });
+            return Promise.all(promises);
+          })
+          .then(() => {
+            txns.transactions.forEach(txn => {
+              models.Account.findOne({
+                where: { plaid_account_id: txn.account_id },
+                attributes: ["id"]
+              }).then(acctId => {
+                models.Transaction.create({
+                  name: txn.name,
+                  amount: txn.amount,
+                  category: txn.category,
+                  category_id: txn.category_id,
+                  type: txn.transaction_type,
+                  post_date: txn.date,
+                  plaid_account_id: txn.account_id,
+                  plaid_transaction_id: txn.transaction_id,
+                  account_id: acctId.dataValues.id
+                });
+              });
+            });
+          })
+          .then(() => {
+            prettyPrintResponse(transactionsResponse);
+            response.json({ error: null, transactions: transactionsResponse });
+          })
+          .catch(error => console.error(error));
+      }
+    }
+  );
+});
+
+// Create server
+app.listen(APP_PORT, function () {
   console.log("PocketGoblin server listening on port " + APP_PORT);
 });
 
+// Helper function
 const prettyPrintResponse = response => {
   console.log(util.inspect(response, { colors: true, depth: 4 }));
 };
 
-// TODO: Consider removing this function (necessary for development environment)
+// TODO: Consider removing this function (necessary for development environment?)
 app.post("/set_access_token", function (request, response, next) {
   ACCESS_TOKEN = request.body.access_token;
   client.getItem(ACCESS_TOKEN, function (error, itemResponse) {
