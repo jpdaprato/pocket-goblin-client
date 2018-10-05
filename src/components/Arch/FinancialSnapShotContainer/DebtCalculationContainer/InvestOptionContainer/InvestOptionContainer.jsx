@@ -1,6 +1,7 @@
 import React from "react";
 import InvestOption from "./InvestOption";
 import PayDebtContainer from "./PayDebtContainer/PayDebtContainer";
+import InvestInfoContainer from "../InvestInfoContainer/InvestInfoContainer";
 
 class InvestOptionContainer extends React.Component {
   constructor(props) {
@@ -30,13 +31,7 @@ class InvestOptionContainer extends React.Component {
   }
 
   viewSwitch() {
-    const {
-      button,
-      purchase,
-      totalSaved,
-      debtFree,
-      interestSaved
-    } = this.state;
+    const { button } = this.state;
     if (button === "") {
       return;
     } else if (button === "debt") {
@@ -46,7 +41,7 @@ class InvestOptionContainer extends React.Component {
         </div>
       );
     } else if (button === "invest") {
-      return <h1>invest your money</h1>;
+      return <InvestInfoContainer />;
     }
     return;
   }

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Header = () => {
+const Header = props => {
   const divStyle = {
     // border: "5px solid black",
     padding: "5px",
@@ -14,7 +14,7 @@ const Header = () => {
 
   return (
     <div style={divStyle}>
-      <h3 style={hStyle}>What if?</h3>
+      <h3 style={hStyle}>{props.title}</h3>
     </div>
   );
 };

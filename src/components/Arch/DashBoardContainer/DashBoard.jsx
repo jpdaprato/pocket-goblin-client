@@ -6,7 +6,6 @@ import CashFlow from "./CashFlow";
 const DashBoard = ({ viewSwitcher }) => {
   return (
     <div>
-      <Header />
       <Purchase />
       <CashFlow />
       {viewSwitcher()}
