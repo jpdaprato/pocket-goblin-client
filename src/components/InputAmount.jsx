@@ -25,7 +25,7 @@ class InputAmount extends React.Component {
         <p>
           $
           <input
-            onChange={this.props.handlePotentialPurchaseInput}
+            onChange={this.props.handlePurchaseInput}
             type="number"
             placeholder="Purchase amount"
           />
