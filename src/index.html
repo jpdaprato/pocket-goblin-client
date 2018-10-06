@@ -39,8 +39,14 @@
           // The metadata object contains info about the institution the
           // user selected and the account ID or IDs, if the
           // Select Account view is enabled.
-          $.post('/get_access_token', {
+          $.post('http://localhost:8000/get_access_token', {
             public_token: public_token,
+          }, (error, response) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('This is the response received from the server: ', response);
+            }
           });
         },
         onExit: function (err, metadata) {

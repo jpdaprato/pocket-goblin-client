@@ -251,14 +251,13 @@ app.post("/get_access_token", function(request, response, next) {
         error: error
       });
     }
+    // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
     ACCESS_TOKEN = tokenResponse.access_token;
     ITEM_ID = tokenResponse.item_id;
     prettyPrintResponse(tokenResponse);
-    response.json({
-      access_token: ACCESS_TOKEN,
-      item_id: ITEM_ID,
-      error: null
-    });
+    response.json(
+      "Item successfully created: access_token and item_id have been received by the server"
+    );
   });
 });
 
