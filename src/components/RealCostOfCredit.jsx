@@ -14,11 +14,14 @@ class RealCostOfCredit extends React.Component {
   }
 
   render() {
-    const { potentialPurchaseFrequency, potentialPurchaseAmount } = this.props;
+    const {
+      potentialPurchaseFrequency,
+      potentialPurchaseAmount,
+      debtFreeFasterBy
+    } = this.props;
 
     const {
       monthsToPayOff,
-      debtFreeFasterBy,
       interestYoullPay,
       totalRecurringYearlyPaymentAmount,
       totalRecurringYearlyInterestAmount,
