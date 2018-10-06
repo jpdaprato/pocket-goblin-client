@@ -14,11 +14,7 @@ class RealCostOfCredit extends React.Component {
   }
 
   render() {
-    const {
-      potentialPurchaseFrequency,
-      potentialPurchaseAmount,
-      debtFreeFasterBy
-    } = this.props;
+    const { purchaseFrequency, purchaseAmount, debtFreeFasterBy } = this.props;
 
     const {
       monthsToPayOff,
@@ -30,20 +26,19 @@ class RealCostOfCredit extends React.Component {
 
     const title = <h3>The Real Cost of Putting it on Credit</h3>;
 
-    if (potentialPurchaseFrequency === "never") {
+    if (purchaseFrequency === "never") {
       return (
         <div>
           {title}
           <h4>{`Time to Pay Off ${monthsToPayOff} months`}</h4>
           <h4>{`Interest You'll Pay $${interestYoullPay}`}</h4>
           <h4>
-            Total Cost after Paying it off $
-            {potentialPurchaseAmount + interestYoullPay}
+            Total Cost after Paying it off ${purchaseAmount + interestYoullPay}
           </h4>
           <p>
             {`Based on your current spending pattern, you should pay this off after ${monthsToPayOff}. 
             You will pay $${interestYoullPay} in interest alone! The total cost of making this purchase 
-            for you will be $${potentialPurchaseAmount + interestYoullPay}`}
+            for you will be $${purchaseAmount + interestYoullPay}`}
           </p>
         </div>
       );

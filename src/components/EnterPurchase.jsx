@@ -6,28 +6,26 @@ import CashFlowMeter from "./CashFlowMeter.jsx";
 class EnterPurchase extends React.Component {
   render() {
     const {
-      handlePotentialPurchaseInput,
+      handlePurchaseInput,
       currentCashFlowAmount,
-      potentialPurchaseFrequency,
-      handlePotentialPurchaseFrequencyChange,
-      potentialPurchasePaymentType,
-      handlePotentialPaymentTypeChange
+      purchaseFrequency,
+      handlePurchaseFrequencyChange,
+      purchasePaymentType,
+      handlePaymentTypeChange
     } = this.props;
     return (
       <div>
         <h1>Enter potential purchase</h1>
-        <InputAmount
-          handlePotentialPurchaseInput={handlePotentialPurchaseInput}
-        />
+        <InputAmount handlePurchaseInput={handlePurchaseInput} />
         <div>
           <h3>Cash Flow</h3>
           <CashFlowMeter currentCashFlowAmount={currentCashFlowAmount} />
         </div>
         Repeat:
         <select
-          value={potentialPurchaseFrequency}
-          onBlur={handlePotentialPurchaseFrequencyChange}
-          onChange={handlePotentialPurchaseFrequencyChange}
+          value={purchaseFrequency}
+          onBlur={handlePurchaseFrequencyChange}
+          onChange={handlePurchaseFrequencyChange}
         >
           <option value="never">Never</option>
           <option value="monthly">Monthly</option>
@@ -38,16 +36,16 @@ class EnterPurchase extends React.Component {
             name="paymentType"
             type="radio"
             value="cash"
-            checked={potentialPurchasePaymentType === "cash"}
-            onChange={handlePotentialPaymentTypeChange}
+            checked={purchasePaymentType === "cash"}
+            onChange={handlePaymentTypeChange}
           />
           Pay in Cash
           <input
             name="paymentType"
             type="radio"
             value="credit"
-            checked={potentialPurchasePaymentType === "credit"}
-            onChange={handlePotentialPaymentTypeChange}
+            checked={purchasePaymentType === "credit"}
+            onChange={handlePaymentTypeChange}
           />
           Pay with Credit
         </div>
