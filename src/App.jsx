@@ -1,23 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import Header from "./components/DashBoardContainer/Header.jsx";
-import { Router, Link } from "@reach/router";
+import Header from "./components/Header.jsx";
+import { Router } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
+import SnapshotResults from "./components/SnapshotResults.jsx";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      potentialPurchaseAmount: 0,
-      currentCashFlowAmount: 100,
+      currentCashFlowAmount: 44,
+      potentialPurchaseAmount: 472,
       potentialPurchaseFrequency: "never",
-      potentialPurchasePaymentType: "cash"
+      potentialPurchasePaymentType: "cash",
+      totalDebtAmount: 18,
+      totalSavingAmount: 21
     };
     this.handlePotentialPurchaseInput = this.handlePotentialPurchaseInput.bind(
       this
     );
     this.handlePotentialPurchaseFrequencyChange = this.handlePotentialPurchaseFrequencyChange.bind(
+      this
+    );
+    this.handlePotentialPaymentTypeChange = this.handlePotentialPaymentTypeChange.bind(
       this
     );
   }
@@ -37,25 +43,32 @@ class App extends React.Component {
     });
   }
 
-  handlePotentialPurchaseFrequencyChange(event) {
-    console.log(event.target.value);
-    this.setState({ potentialPurchaseFrequency: event.target.value });
+  handlePotentialPurchaseFrequencyChange(e) {
+    this.setState({ potentialPurchaseFrequency: e.target.value });
+  }
+
+  handlePotentialPaymentTypeChange(e) {
+    this.setState({ potentialPurchasePaymentType: e.target.value });
   }
 
   render() {
     const {
       handlePotentialPurchaseInput,
-      handlePotentialPurchaseFrequencyChange
+      handlePotentialPurchaseFrequencyChange,
+      handlePotentialPaymentTypeChange
     } = this;
     const {
       currentCashFlowAmount,
       potentialPurchaseFrequency,
-      potentialPurchasePaymentType
+      potentialPurchasePaymentType,
+      totalDebtAmount,
+      totalSavingAmount,
+      potentialPurchaseAmount
     } = this.state;
 
     return (
       <div>
-        <Header title={"test title"} />
+        <Header title={"Pocket Goblin"} />
         <Router>
           <EnterPurchase
             path="/"
@@ -65,6 +78,17 @@ class App extends React.Component {
             handlePotentialPurchaseFrequencyChange={
               handlePotentialPurchaseFrequencyChange
             }
+            potentialPurchasePaymentType={potentialPurchasePaymentType}
+            handlePotentialPaymentTypeChange={handlePotentialPaymentTypeChange}
+          />
+          <SnapshotResults
+            path="/what-if-results"
+            handlePotentialPurchaseInput={handlePotentialPurchaseInput}
+            currentCashFlowAmount={currentCashFlowAmount}
+            totalDebtAmount={totalDebtAmount}
+            totalSavingAmount={totalSavingAmount}
+            potentialPurchaseAmount={potentialPurchaseAmount}
+            potentialPurchaseFrequency={potentialPurchaseFrequency}
             potentialPurchasePaymentType={potentialPurchasePaymentType}
           />
         </Router>
