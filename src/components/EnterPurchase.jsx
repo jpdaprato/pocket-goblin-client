@@ -19,7 +19,10 @@ class EnterPurchase extends React.Component {
         <InputAmount
           handlePotentialPurchaseInput={handlePotentialPurchaseInput}
         />
-        <CashFlowMeter currentCashFlowAmount={currentCashFlowAmount} />
+        <div>
+          <h3>Cash Flow</h3>
+          <CashFlowMeter currentCashFlowAmount={currentCashFlowAmount} />
+        </div>
         Repeat:
         <select
           value={potentialPurchaseFrequency}
@@ -27,7 +30,7 @@ class EnterPurchase extends React.Component {
           onChange={handlePotentialPurchaseFrequencyChange}
         >
           <option value="never">Never</option>
-          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
         </select>
         <div>
           {/* https://techblog.commercetools.com/seven-patterns-by-example-the-many-ways-to-type-radio-in-react-bfe14322bb6f */}

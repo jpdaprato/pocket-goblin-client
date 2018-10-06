@@ -11,14 +11,11 @@ class App extends React.Component {
     super(props);
     this.state = {
       currentCashFlowAmount: 44,
-      potentialPurchaseAmount: 1,
+      potentialPurchaseAmount: 472,
       potentialPurchaseFrequency: "never",
       potentialPurchasePaymentType: "cash",
-      totalDebtAmount: 2,
-      totalSavingAmount: 3,
-      totalYearlyPaymentAmount: 5664,
-      totalYearlyInterestAmount: 782,
-      totalYearlyCostAmount: 6446
+      totalDebtAmount: 18,
+      totalSavingAmount: 21
     };
     this.handlePotentialPurchaseInput = this.handlePotentialPurchaseInput.bind(
       this
@@ -66,15 +63,12 @@ class App extends React.Component {
       potentialPurchasePaymentType,
       totalDebtAmount,
       totalSavingAmount,
-      totalYearlyPaymentAmount,
-      totalYearlyInterestAmount,
-      totalYearlyCostAmount,
       potentialPurchaseAmount
     } = this.state;
 
     return (
       <div>
-        <Header title={"test title"} />
+        <Header title={"Pocket Goblin"} />
         <Router>
           <EnterPurchase
             path="/"
@@ -93,10 +87,8 @@ class App extends React.Component {
             currentCashFlowAmount={currentCashFlowAmount}
             totalDebtAmount={totalDebtAmount}
             totalSavingAmount={totalSavingAmount}
-            totalYearlyPaymentAmount={totalYearlyPaymentAmount}
-            totalYearlyInterestAmount={totalYearlyInterestAmount}
-            totalYearlyCostAmount={totalYearlyCostAmount}
             potentialPurchaseAmount={potentialPurchaseAmount}
+            potentialPurchaseFrequency={potentialPurchaseFrequency}
           />
         </Router>
       </div>

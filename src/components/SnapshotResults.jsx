@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "@reach/router";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
+import RealCostOfCredit from "./RealCostOfCredit";
 
 class SnapshotResults extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      button: "",
+      payDebtOrInvestItButton: "",
       debtFreeFasterBy: 3,
       interestSavedAmount: 408,
       totalSavedAmount: 880
@@ -23,40 +24,63 @@ class SnapshotResults extends React.Component {
   }
 
   handlePayDebtButtonClick() {
-    this.setState({ button: "debt" });
+    this.setState({ payDebtOrInvestItButton: "debt" });
   }
 
   handlePayInvestButtonClick() {
-    this.setState({ button: "invest" });
+    this.setState({ payDebtOrInvestItButton: "invest" });
   }
 
   renderPayDebtOrInvestItInfo() {
+    const { potentialPurchaseAmount } = this.props;
+
     const {
-      button,
+      payDebtOrInvestItButton,
       debtFreeFasterBy,
       interestSavedAmount,
       totalSavedAmount
     } = this.state;
-    if (button === "") {
+
+    const potentialInterestEarn = potentialPurchaseAmount * 0.1 * 20;
+
+    if (payDebtOrInvestItButton === "") {
       return;
-    } else if (button === "debt") {
+    } else if (payDebtOrInvestItButton === "debt") {
       return (
         <div>
           <h4>Be Debt-Free Faster by {debtFreeFasterBy} months</h4>
           <h4>Save interest of ${interestSavedAmount}</h4>
-          <h4>Total You&apos;ll Save ${totalSavedAmount}</h4>
-          <span>
-            If you chooses to pay down debt with the $
-            {this.props.potentialPurchaseAmount} rather than spend it today, you
-            cound save ${interestSavedAmount} in interest payments and reduce
-            the time it would take you to get out of debt by {debtFreeFasterBy}
-            months. So the question you should ask yourself is that: Is spending
-            ${this.props.potentialPurchaseAmount} today worth it?
-          </span>
+          <h4>{`Total You'll Save $${totalSavedAmount}`}</h4>
+          <p>
+            If you chooses to pay down debt with the ${potentialPurchaseAmount}{" "}
+            rather than spend it today, you cound save ${interestSavedAmount} in
+            interest payments and reduce the time it would take you to get out
+            of debt by {debtFreeFasterBy} months. So the question you should ask
+            yourself is that: Is spending ${potentialPurchaseAmount} today worth
+            it?
+          </p>
         </div>
       );
-    } else if (button === "invest") {
-      return <div>invest</div>;
+    } else if (payDebtOrInvestItButton === "invest") {
+      return (
+        <div>
+          <h4>Investment Timeline 20 Years</h4>
+          <h4>Interest You Would Earn ${potentialInterestEarn}</h4>
+          <h4>
+            Real Cost of Spending Today $
+            {potentialInterestEarn + potentialPurchaseAmount}
+          </h4>
+          <p>
+            {`If you choose to invest the $${potentialPurchaseAmount} rather than
+            spend it today, you could earn $${potentialInterestEarn} in interest.
+            This would bring the real opportunity cost of what you are spending
+            your money on to $${potentialInterestEarn + potentialPurchaseAmount}
+            after 20 years.So the question you should ask yourself is this: Is
+            spending $${potentialPurchaseAmount} today worth the $
+            ${potentialInterestEarn} interest earning that I would pass up?`}
+          </p>
+        </div>
+      );
     }
     return;
   }
@@ -67,9 +91,8 @@ class SnapshotResults extends React.Component {
       currentCashFlowAmount,
       totalSavingAmount,
       totalDebtAmount,
-      totalYearlyPaymentAmount,
-      totalYearlyInterestAmount,
-      totalYearlyCostAmount
+      potentialPurchaseFrequency,
+      potentialPurchaseAmount
     } = this.props;
     return (
       <div>
@@ -91,25 +114,12 @@ class SnapshotResults extends React.Component {
           <span>{totalSavingAmount}</span>
         </div>
         <div>
-          <h3>The Real Cost of Putting it on Creit</h3>
+          <h3>The Real Cost of Putting it on Credit</h3>
           <div>
-            <h4>
-              Total Amount of Payments per year{" "}
-              {` $${totalYearlyPaymentAmount}`}
-            </h4>
-            <h4>
-              Interest You&apos;ll Pay Per Year{" "}
-              {` $${totalYearlyInterestAmount}`}
-            </h4>
-            <h4>
-              Total Amount of Payments per year {` $${totalYearlyCostAmount}`}
-            </h4>
-            <span>
-              Based on your current spending pattern, it will take you {"X "}
-              months to pay off every payment you put on credit.You will pay $
-              {totalYearlyPaymentAmount} in interest alone every single year!
-              Thats&apos;s a big chunk of change to pay out in interest!
-            </span>
+            <RealCostOfCredit
+              potentialPurchaseFrequency={potentialPurchaseFrequency}
+              potentialPurchaseAmount={potentialPurchaseAmount}
+            />
             <div>
               <h2>Or, what if you instead...</h2>
               <button onClick={this.handlePayDebtButtonClick}>Pay Debt</button>
