@@ -25,7 +25,7 @@ class LinkItems extends React.Component {
     return (
       <PlaidLink
         clientName="cygnustechnologies"
-        env="sandbox"
+        env="development"
         product={["auth", "transactions"]}
         publicKey="88a038c0956987b0027438f7596d9e"
         onExit={this.handleOnExit}
