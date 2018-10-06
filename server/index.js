@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const plaid = require("plaid");
 const dotenv = require("dotenv");
-const graphqlHTTP = require('express-graphql');
-const { buildSchema } = require('graphql');
-const cors = require('cors');
+const graphqlHTTP = require("express-graphql");
+const { buildSchema } = require("graphql");
+const cors = require("cors");
 
 const result = dotenv.config();
 if (result.error) {
@@ -76,14 +76,14 @@ const asyncGetCashFlow = () => {
   });
 };
 
-const calculateCashFlow = (cashFlowData) => {
+const calculateCashFlow = cashFlowData => {
   let depositoryTotal;
   let creditTotal;
 
   for (let elem of cashFlowData) {
     let isTotalData = elem.year === null;
-    let isDepository = elem.account_type === 'depository';
-    let isCredit = elem.account_type === 'credit';
+    let isDepository = elem.account_type === "depository";
+    let isCredit = elem.account_type === "credit";
 
     if (isTotalData && isDepository) {
       depositoryTotal = elem.sum;
@@ -140,9 +140,12 @@ const asyncGetTransactions = () => {
           reject(error);
         } else {
           prettyPrintResponse(transactionsResponse);
-          resolve(JSON.stringify({ error: null, transactions: transactionsResponse }));
+          resolve(
+            JSON.stringify({ error: null, transactions: transactionsResponse })
+          );
         }
-      });
+      }
+    );
   });
 };
 
@@ -173,11 +176,14 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true,
-}));
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true
+  })
+);
 
 //PocketGoblin Queries
 app.get("/api/cashflow/", (request, response) => {
@@ -236,9 +242,9 @@ app.get("/api/topspending", (request, response) => {
 // Exchange token flow - exchange a Link public_token for
 // an API access_token
 // https://plaid.com/docs/#exchange-token-flow
-app.post("/get_access_token", function (request, response, next) {
+app.post("/get_access_token", function(request, response, next) {
   PUBLIC_TOKEN = request.body.public_token;
-  client.exchangePublicToken(PUBLIC_TOKEN, function (error, tokenResponse) {
+  client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -258,8 +264,8 @@ app.post("/get_access_token", function (request, response, next) {
 
 // Retrieve Identity for an Item
 // https://plaid.com/docs/#identity
-app.get("/identity", function (request, response, next) {
-  client.getIdentity(ACCESS_TOKEN, function (error, identityResponse) {
+app.get("/identity", function(request, response, next) {
+  client.getIdentity(ACCESS_TOKEN, function(error, identityResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -273,8 +279,8 @@ app.get("/identity", function (request, response, next) {
 
 // Retrieve real-time Balances for each of an Item's accounts
 // https://plaid.com/docs/#balance
-app.get("/balance", function (request, response, next) {
-  client.getBalance(ACCESS_TOKEN, function (error, balanceResponse) {
+app.get("/balance", function(request, response, next) {
+  client.getBalance(ACCESS_TOKEN, function(error, balanceResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -288,8 +294,8 @@ app.get("/balance", function (request, response, next) {
 
 // Retrieve an Item's accounts
 // https://plaid.com/docs/#accounts
-app.get("/accounts", function (request, response, next) {
-  client.getAccounts(ACCESS_TOKEN, function (error, accountsResponse) {
+app.get("/accounts", function(request, response, next) {
+  client.getAccounts(ACCESS_TOKEN, function(error, accountsResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -303,8 +309,8 @@ app.get("/accounts", function (request, response, next) {
 
 // Retrieve ACH or ETF Auth data for an Item's accounts
 // https://plaid.com/docs/#auth
-app.get("/auth", function (request, response, next) {
-  client.getAuth(ACCESS_TOKEN, function (error, authResponse) {
+app.get("/auth", function(request, response, next) {
+  client.getAuth(ACCESS_TOKEN, function(error, authResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -318,10 +324,10 @@ app.get("/auth", function (request, response, next) {
 
 // Retrieve information about an Item
 // https://plaid.com/docs/#retrieve-item
-app.get("/item", function (request, response, next) {
+app.get("/item", function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  client.getItem(ACCESS_TOKEN, function (error, itemResponse) {
+  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
     if (error != null) {
       prettyPrintResponse(error);
       return response.json({
@@ -329,7 +335,7 @@ app.get("/item", function (request, response, next) {
       });
     }
     // Also pull information about the institution
-    client.getInstitutionById(itemResponse.item.institution_id, function (
+    client.getInstitutionById(itemResponse.item.institution_id, function(
       err,
       instRes
     ) {
@@ -351,11 +357,10 @@ app.get("/item", function (request, response, next) {
   });
 });
 
-
 // Retrieve Transactions for an Item
 // https://plaid.com/docs/#transactions
-// NOTE: modified and used to seed database with plaid sandbox data 
-app.get("/transactions", function (request, response, next) {
+// NOTE: modified and used to seed database with plaid sandbox data
+app.get("/transactions", function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
   let startDate = moment()
     .subtract(30, "days")
@@ -369,7 +374,7 @@ app.get("/transactions", function (request, response, next) {
       count: 250,
       offset: 0
     },
-    function (error, transactionsResponse) {
+    function(error, transactionsResponse) {
       if (error != null) {
         prettyPrintResponse(error);
         return response.json({
@@ -447,7 +452,7 @@ app.get("/transactions", function (request, response, next) {
 });
 
 // Create server
-app.listen(APP_PORT, function () {
+app.listen(APP_PORT, function() {
   console.log("PocketGoblin server listening on port " + APP_PORT);
 });
 
@@ -457,9 +462,9 @@ const prettyPrintResponse = response => {
 };
 
 // TODO: Consider removing this function (necessary for development environment?)
-app.post("/set_access_token", function (request, response, next) {
+app.post("/set_access_token", function(request, response, next) {
   ACCESS_TOKEN = request.body.access_token;
-  client.getItem(ACCESS_TOKEN, function (error, itemResponse) {
+  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
     response.json({
       item_id: itemResponse.item.item_id,
       error: false
