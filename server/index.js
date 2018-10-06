@@ -54,7 +54,7 @@ let schema = buildSchema(`
 // RESOLVER FUNCTIONS
 
 // Create Item
-const asyncCreateItem = ({ publicToken }) => {
+const asyncCreateItem = publicToken => {
   return new Promise((resolve, reject) => {
     client.exchangePublicToken(publicToken, function(error, tokenResponse) {
       if (error != null) {
@@ -171,8 +171,8 @@ const asyncGetTransactions = () => {
 
 // The root provides a resolver function for each API endpoint
 let root = {
-  createItem: () => {
-    return asyncCreateItem();
+  createItem: ({ publicToken }) => {
+    return asyncCreateItem(publicToken);
   },
   cashFlow: () => {
     return asyncGetCashFlow();

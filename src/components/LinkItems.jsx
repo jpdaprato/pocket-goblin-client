@@ -11,11 +11,7 @@ class LinkItems extends React.Component {
     );
     axios
       .post("http://localhost:8000/graphql", {
-        // Code from App.jsx that works: solely for testing purposes
-        query: "{ cashFlow totalDebt totalSavings }"
-        // Untested code to make a call to graphql to create an item
-        // query: `{ createItem(publicToken: $public_token) }`,
-        // variables: { public_token }
+        query: `{ createItem(publicToken: ${token}) }`
       })
       .then(response => console.log(response))
       .catch(error => console.log(error));
