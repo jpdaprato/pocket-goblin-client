@@ -53,11 +53,12 @@ class SnapshotResults extends React.Component {
           <h4>Save interest of ${interestSavedAmount}</h4>
           <h4>{`Total You'll Save $${totalSavedAmount}`}</h4>
           <p>
-            If you chooses to pay down debt with the ${purchaseAmount} rather
-            than spend it today, you cound save ${interestSavedAmount} in
+            {`If you chooses to pay down debt with the $${purchaseAmount}
+            rather than spend it today, you cound save $${interestSavedAmount} in
             interest payments and reduce the time it would take you to get out
-            of debt by {debtFreeFasterBy} months. So the question you should ask
-            yourself is that: Is spending ${purchaseAmount} today worth it?
+            of debt by ${debtFreeFasterBy} months. So the question you should ask
+            yourself is that: Is spending $${purchaseAmount} today worth
+            it?`}
           </p>
         </div>
       );
@@ -129,7 +130,7 @@ class SnapshotResults extends React.Component {
             </div>
           </div>
         </div>
-        <Link to="/what-if-results">
+        <Link to="/goblin-advise">
           <button>What Would the Goblin Do?</button>
         </Link>
       </div>

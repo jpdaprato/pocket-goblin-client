@@ -16,8 +16,8 @@ class GoblinAdvice extends React.Component {
           every dollar of debt, if you can. I hate parting with money as it is,
           so think very carefully of how important this purchase is to you
           before making it!
-          <p>{`I have a better idea! Lets's...`} </p>
         </p>
+        <p>{`I have a better idea! Lets's...`} </p>
         <button>Find Ways to save!</button>
       </div>
     );

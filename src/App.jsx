@@ -87,6 +87,7 @@ class App extends React.Component {
             purchaseFrequency={purchaseFrequency}
             purchasePaymentType={purchasePaymentType}
           />
+          <GoblinAdvice path="/goblin-advise" />
         </Router>
         <LinkItems />
       </div>
