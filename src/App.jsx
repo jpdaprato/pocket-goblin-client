@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import Header from "./components/Header.jsx";
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
 import SnapshotResults from "./components/SnapshotResults.jsx";
 
