@@ -11,7 +11,7 @@ class LinkItems extends React.Component {
     );
     axios
       .post("http://localhost:8000/graphql", {
-        query: `{ createItem(publicToken: ${token}) }`
+        query: `{ createItem(publicToken: "${token}") }`
       })
       .then(response => console.log(response))
       .catch(error => console.log(error));
@@ -27,7 +27,6 @@ class LinkItems extends React.Component {
         clientName="cygnustechnologies"
         env="sandbox"
         product={["auth", "transactions"]}
-        // FIXME: should not be hardcoded; figure out how to import from .env
         publicKey="88a038c0956987b0027438f7596d9e"
         onExit={this.handleOnExit}
         onSuccess={this.handleOnSuccess}
