@@ -5,6 +5,7 @@ import Header from "./components/Header.jsx";
 import { Router } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
 import SnapshotResults from "./components/SnapshotResults.jsx";
+import LinkItems from "./components/LinkItems.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -92,6 +93,7 @@ class App extends React.Component {
             potentialPurchasePaymentType={potentialPurchasePaymentType}
           />
         </Router>
+        <LinkItems />
       </div>
     );
   }

@@ -43,6 +43,7 @@ const client = new plaid.Client(
 // Construct a schema, using GraphQL schema language
 let schema = buildSchema(`
   type Query {
+    createItem(publicToken: String!): String
     transactions: String
     cashFlow: Float
     totalDebt: Float
@@ -51,6 +52,25 @@ let schema = buildSchema(`
 `);
 
 // RESOLVER FUNCTIONS
+
+// Create Item
+const asyncCreateItem = ({ publicToken }) => {
+  return new Promise((resolve, reject) => {
+    client.exchangePublicToken(publicToken, function(error, tokenResponse) {
+      if (error != null) {
+        prettyPrintResponse(error);
+        reject(error);
+      }
+      // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
+      ACCESS_TOKEN = tokenResponse.access_token;
+      ITEM_ID = tokenResponse.item_id;
+      prettyPrintResponse(tokenResponse);
+      resolve(
+        "Item successfully created: access_token and item_id have been received by the server"
+      );
+    });
+  });
+};
 // Cash Flow
 const asyncGetCashFlow = () => {
   return new Promise((resolve, reject) => {
@@ -151,8 +171,8 @@ const asyncGetTransactions = () => {
 
 // The root provides a resolver function for each API endpoint
 let root = {
-  transactions: () => {
-    return asyncGetTransactions();
+  createItem: () => {
+    return asyncCreateItem();
   },
   cashFlow: () => {
     return asyncGetCashFlow();
@@ -162,6 +182,9 @@ let root = {
   },
   totalSavings: () => {
     return asyncGetTotalSavings();
+  },
+  transactions: () => {
+    return asyncGetTransactions();
   }
 };
 
