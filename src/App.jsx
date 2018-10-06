@@ -89,6 +89,7 @@ class App extends React.Component {
             totalSavingAmount={totalSavingAmount}
             potentialPurchaseAmount={potentialPurchaseAmount}
             potentialPurchaseFrequency={potentialPurchaseFrequency}
+            potentialPurchasePaymentType={potentialPurchasePaymentType}
           />
         </Router>
       </div>

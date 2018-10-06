@@ -15,6 +15,7 @@ class RealCostOfCredit extends React.Component {
 
   render() {
     const { potentialPurchaseFrequency, potentialPurchaseAmount } = this.props;
+
     const {
       monthsToPayOff,
       debtFreeFasterBy,
@@ -24,9 +25,12 @@ class RealCostOfCredit extends React.Component {
       totalRecurringYearlyCostAmount
     } = this.state;
 
+    const title = <h3>The Real Cost of Putting it on Credit</h3>;
+
     if (potentialPurchaseFrequency === "never") {
       return (
         <div>
+          {title}
           <h4>{`Time to Pay Off ${monthsToPayOff} months`}</h4>
           <h4>{`Interest You'll Pay $${interestYoullPay}`}</h4>
           <h4>
@@ -43,6 +47,7 @@ class RealCostOfCredit extends React.Component {
     } else {
       return (
         <div>
+          {title}
           <h4>
             Total Amount of Payments per year $
             {totalRecurringYearlyPaymentAmount}

@@ -2,17 +2,19 @@ import React from "react";
 import { Link } from "@reach/router";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
-import RealCostOfCredit from "./RealCostOfCredit";
+import RealCostOfCredit from "./RealCostOfCredit.jsx";
 
 class SnapshotResults extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      payDebtOrInvestItButton: "",
+      payDebtOrInvestItButton: "debt",
       debtFreeFasterBy: 3,
       interestSavedAmount: 408,
-      totalSavedAmount: 880
+      totalSavedAmount: 880,
+      rateOfReturn: 0.1,
+      investmentTimeline: 20
     };
     this.handlePayDebtButtonClick = this.handlePayDebtButtonClick.bind(this);
     this.handlePayInvestButtonClick = this.handlePayInvestButtonClick.bind(
@@ -38,14 +40,15 @@ class SnapshotResults extends React.Component {
       payDebtOrInvestItButton,
       debtFreeFasterBy,
       interestSavedAmount,
-      totalSavedAmount
+      totalSavedAmount,
+      rateOfReturn,
+      investmentTimeline
     } = this.state;
 
-    const potentialInterestEarn = potentialPurchaseAmount * 0.1 * 20;
+    const potentialInterestEarned =
+      potentialPurchaseAmount * rateOfReturn * investmentTimeline;
 
-    if (payDebtOrInvestItButton === "") {
-      return;
-    } else if (payDebtOrInvestItButton === "debt") {
+    if (payDebtOrInvestItButton === "debt") {
       return (
         <div>
           <h4>Be Debt-Free Faster by {debtFreeFasterBy} months</h4>
@@ -65,19 +68,20 @@ class SnapshotResults extends React.Component {
       return (
         <div>
           <h4>Investment Timeline 20 Years</h4>
-          <h4>Interest You Would Earn ${potentialInterestEarn}</h4>
+          <h4>Interest You Would Earn ${potentialInterestEarned}</h4>
           <h4>
             Real Cost of Spending Today $
-            {potentialInterestEarn + potentialPurchaseAmount}
+            {potentialInterestEarned + potentialPurchaseAmount}
           </h4>
           <p>
             {`If you choose to invest the $${potentialPurchaseAmount} rather than
-            spend it today, you could earn $${potentialInterestEarn} in interest.
+            spend it today, you could earn $${potentialInterestEarned} in interest.
             This would bring the real opportunity cost of what you are spending
-            your money on to $${potentialInterestEarn + potentialPurchaseAmount}
+            your money on to $${potentialInterestEarned +
+              potentialPurchaseAmount}
             after 20 years.So the question you should ask yourself is this: Is
             spending $${potentialPurchaseAmount} today worth the $
-            ${potentialInterestEarn} interest earning that I would pass up?`}
+            ${potentialInterestEarned} interest earning that I would pass up?`}
           </p>
         </div>
       );
@@ -92,8 +96,10 @@ class SnapshotResults extends React.Component {
       totalSavingAmount,
       totalDebtAmount,
       potentialPurchaseFrequency,
-      potentialPurchaseAmount
+      potentialPurchaseAmount,
+      potentialPurchasePaymentType
     } = this.props;
+
     return (
       <div>
         <h1>Tap to Modify</h1>
@@ -114,12 +120,13 @@ class SnapshotResults extends React.Component {
           <span>{totalSavingAmount}</span>
         </div>
         <div>
-          <h3>The Real Cost of Putting it on Credit</h3>
           <div>
-            <RealCostOfCredit
-              potentialPurchaseFrequency={potentialPurchaseFrequency}
-              potentialPurchaseAmount={potentialPurchaseAmount}
-            />
+            {potentialPurchasePaymentType === "credit" ? (
+              <RealCostOfCredit
+                potentialPurchaseFrequency={potentialPurchaseFrequency}
+                potentialPurchaseAmount={potentialPurchaseAmount}
+              />
+            ) : null}
             <div>
               <h2>Or, what if you instead...</h2>
               <button onClick={this.handlePayDebtButtonClick}>Pay Debt</button>
