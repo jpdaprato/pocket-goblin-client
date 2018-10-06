@@ -54,6 +54,7 @@ class App extends React.Component {
       handlePurchaseFrequencyChange,
       handlePaymentTypeChange
     } = this;
+
     const {
       currentCashFlowAmount,
       purchaseFrequency,
