@@ -9,35 +9,33 @@ class SnapshotResults extends React.Component {
     super(props);
 
     this.state = {
-      payDebtOrInvestItButton: "debt",
+      payDebtOrInvestItSelection: "debt",
       debtFreeFasterBy: 3,
       interestSavedAmount: 408,
       totalSavedAmount: 880,
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };
-    this.handlePayDebtButtonClick = this.handlePayDebtButtonClick.bind(this);
-    this.handlePayInvestButtonClick = this.handlePayInvestButtonClick.bind(
-      this
-    );
+    this.handlePayDebtSelection = this.handlePayDebtSelection.bind(this);
+    this.handleInvestSelection = this.handleInvestSelection.bind(this);
     this.renderPayDebtOrInvestItInfo = this.renderPayDebtOrInvestItInfo.bind(
       this
     );
   }
 
-  handlePayDebtButtonClick() {
-    this.setState({ payDebtOrInvestItButton: "debt" });
+  handlePayDebtSelection() {
+    this.setState({ payDebtOrInvestItSelection: "debt" });
   }
 
-  handlePayInvestButtonClick() {
-    this.setState({ payDebtOrInvestItButton: "invest" });
+  handleInvestSelection() {
+    this.setState({ payDebtOrInvestItSelection: "invest" });
   }
 
   renderPayDebtOrInvestItInfo() {
     const { purchaseAmount } = this.props;
 
     const {
-      payDebtOrInvestItButton,
+      payDebtOrInvestItSelection,
       debtFreeFasterBy,
       interestSavedAmount,
       totalSavedAmount,
@@ -48,7 +46,7 @@ class SnapshotResults extends React.Component {
     const potentialInterestEarned =
       purchaseAmount * rateOfReturn * investmentTimeline;
 
-    if (payDebtOrInvestItButton === "debt") {
+    if (payDebtOrInvestItSelection === "debt") {
       return (
         <div>
           <h4>Be Debt-Free Faster by {debtFreeFasterBy} months</h4>
@@ -63,10 +61,10 @@ class SnapshotResults extends React.Component {
           </p>
         </div>
       );
-    } else if (payDebtOrInvestItButton === "invest") {
+    } else if (payDebtOrInvestItSelection === "invest") {
       return (
         <div>
-          <h4>Investment Timeline 20 Years</h4>
+          <h4>Investment Timeline {investmentTimeline} Years</h4>
           <h4>Interest You Would Earn ${potentialInterestEarned}</h4>
           <h4>
             Real Cost of Spending Today $
@@ -125,10 +123,8 @@ class SnapshotResults extends React.Component {
             ) : null}
             <div>
               <h2>Or, what if you instead...</h2>
-              <button onClick={this.handlePayDebtButtonClick}>Pay Debt</button>
-              <button onClick={this.handlePayInvestButtonClick}>
-                Invest it
-              </button>
+              <button onClick={this.handlePayDebtSelection}>Pay Debt</button>
+              <button onClick={this.handleInvestSelection}>Invest it</button>
               {this.renderPayDebtOrInvestItInfo()}
             </div>
           </div>
