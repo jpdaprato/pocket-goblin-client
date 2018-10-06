@@ -16,6 +16,62 @@
 <body>
   <div id="root">not rendered</div>
   <script src="App.jsx"></script>
+  <!-- Link code -->
+  <button id="link-button">Link Account</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+  <script type="text/javascript">
+    (function ($) {
+      var handler = Plaid.create({
+        clientName: 'cygnustechnologies',
+        env: 'sandbox', // removed: <%= PLAID_ENV %>
+        key: '88a038c0956987b0027438f7596d9e', // removed: <%= PLAID_PUBLIC_KEY %>
+        product: ['transactions'],
+        // Optional – use webhooks to get transaction and error updates
+        webhook: 'https://requestb.in',
+        onLoad: function () {
+          console.log('Link has loaded');
+          // Optional, called when Link loads
+        },
+        onSuccess: function (public_token, metadata) {
+          console.log('This is the public_token returned by plaid: ', public_token);
+          // Send the public_token to your app server.
+          // The metadata object contains info about the institution the
+          // user selected and the account ID or IDs, if the
+          // Select Account view is enabled.
+          $.post('/get_access_token', {
+            public_token: public_token,
+          });
+        },
+        onExit: function (err, metadata) {
+          // The user exited the Link flow.
+          if (err != null) {
+            console.log(err);
+            // The user encountered a Plaid API error prior to exiting.
+          }
+          // metadata contains information about the institution
+          // that the user selected and the most recent API request IDs.
+          // Storing this information can be helpful for support.
+        },
+        onEvent: function (eventName, metadata) {
+          // Optionally capture Link flow events, streamed through
+          // this callback as your users connect an Item to Plaid.
+          // For example:
+          // eventName = "TRANSITION_VIEW"
+          // metadata  = {
+          //   link_session_id: "123-abc",
+          //   mfa_type:        "questions",
+          //   timestamp:       "2017-09-14T14:42:19.350Z",
+          //   view_name:       "MFA",
+          // }
+        }
+      });
+
+      $('#link-button').on('click', function (e) {
+        handler.open();
+      });
+    })(jQuery);
+  </script>
 </body>
 
 </html>
