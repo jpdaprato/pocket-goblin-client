@@ -34,7 +34,7 @@ class SnapshotResults extends React.Component {
   }
 
   renderPayDebtOrInvestItInfo() {
-    const { potentialPurchaseAmount } = this.props;
+    const { purchaseAmount } = this.props;
 
     const {
       payDebtOrInvestItButton,
@@ -46,7 +46,7 @@ class SnapshotResults extends React.Component {
     } = this.state;
 
     const potentialInterestEarned =
-      potentialPurchaseAmount * rateOfReturn * investmentTimeline;
+      purchaseAmount * rateOfReturn * investmentTimeline;
 
     if (payDebtOrInvestItButton === "debt") {
       return (
@@ -55,12 +55,11 @@ class SnapshotResults extends React.Component {
           <h4>Save interest of ${interestSavedAmount}</h4>
           <h4>{`Total You'll Save $${totalSavedAmount}`}</h4>
           <p>
-            If you chooses to pay down debt with the ${potentialPurchaseAmount}{" "}
-            rather than spend it today, you cound save ${interestSavedAmount} in
+            If you chooses to pay down debt with the ${purchaseAmount} rather
+            than spend it today, you cound save ${interestSavedAmount} in
             interest payments and reduce the time it would take you to get out
             of debt by {debtFreeFasterBy} months. So the question you should ask
-            yourself is that: Is spending ${potentialPurchaseAmount} today worth
-            it?
+            yourself is that: Is spending ${purchaseAmount} today worth it?
           </p>
         </div>
       );
@@ -71,16 +70,15 @@ class SnapshotResults extends React.Component {
           <h4>Interest You Would Earn ${potentialInterestEarned}</h4>
           <h4>
             Real Cost of Spending Today $
-            {potentialInterestEarned + potentialPurchaseAmount}
+            {potentialInterestEarned + purchaseAmount}
           </h4>
           <p>
-            {`If you choose to invest the $${potentialPurchaseAmount} rather than
+            {`If you choose to invest the $${purchaseAmount} rather than
             spend it today, you could earn $${potentialInterestEarned} in interest.
             This would bring the real opportunity cost of what you are spending
-            your money on to $${potentialInterestEarned +
-              potentialPurchaseAmount}
+            your money on to $${potentialInterestEarned + purchaseAmount}
             after 20 years.So the question you should ask yourself is this: Is
-            spending $${potentialPurchaseAmount} today worth the $
+            spending $${purchaseAmount} today worth the $
             ${potentialInterestEarned} that I'm passing up?`}
           </p>
         </div>
@@ -91,21 +89,19 @@ class SnapshotResults extends React.Component {
 
   render() {
     const {
-      handlePotentialPurchaseInput,
+      handlePurchaseInput,
       currentCashFlowAmount,
       totalSavingAmount,
       totalDebtAmount,
-      potentialPurchaseFrequency,
-      potentialPurchaseAmount,
-      potentialPurchasePaymentType
+      purchaseFrequency,
+      purchaseAmount,
+      purchasePaymentType
     } = this.props;
 
     return (
       <div>
         <h1>Tap to Modify</h1>
-        <InputAmount
-          handlePotentialPurchaseInput={handlePotentialPurchaseInput}
-        />
+        <InputAmount handlePurchaseInput={handlePurchaseInput} />
         <h2>What if you spend the money...</h2>
         <div>
           <h3>Cash Flow</h3>
@@ -121,10 +117,10 @@ class SnapshotResults extends React.Component {
         </div>
         <div>
           <div>
-            {potentialPurchasePaymentType === "credit" ? (
+            {purchasePaymentType === "credit" ? (
               <RealCostOfCredit
-                potentialPurchaseFrequency={potentialPurchaseFrequency}
-                potentialPurchaseAmount={potentialPurchaseAmount}
+                purchaseFrequency={purchaseFrequency}
+                purchaseAmount={purchaseAmount}
               />
             ) : null}
             <div>
