@@ -81,7 +81,7 @@ class SnapshotResults extends React.Component {
               potentialPurchaseAmount}
             after 20 years.So the question you should ask yourself is this: Is
             spending $${potentialPurchaseAmount} today worth the $
-            ${potentialInterestEarned} interest earning that I would pass up?`}
+            ${potentialInterestEarned} that I'm passing up?`}
           </p>
         </div>
       );
