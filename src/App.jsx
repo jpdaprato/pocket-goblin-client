@@ -12,21 +12,17 @@ class App extends React.Component {
     super(props);
     this.state = {
       currentCashFlowAmount: 44,
-      potentialPurchaseAmount: 472,
-      potentialPurchaseFrequency: "never",
-      potentialPurchasePaymentType: "cash",
+      purchaseAmount: 472,
+      purchaseFrequency: "never",
+      purchasePaymentType: "cash",
       totalDebtAmount: 18,
       totalSavingAmount: 21
     };
-    this.handlePotentialPurchaseInput = this.handlePotentialPurchaseInput.bind(
+    this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
+    this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
       this
     );
-    this.handlePotentialPurchaseFrequencyChange = this.handlePotentialPurchaseFrequencyChange.bind(
-      this
-    );
-    this.handlePotentialPaymentTypeChange = this.handlePotentialPaymentTypeChange.bind(
-      this
-    );
+    this.handlePaymentTypeChange = this.handlePaymentTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -38,33 +34,33 @@ class App extends React.Component {
       .catch(error => console.log(error));
   }
 
-  handlePotentialPurchaseInput(e) {
+  handlePurchaseInput(e) {
     this.setState({
-      potentialPurchaseAmount: e.target.value
+      purchaseAmount: e.target.value
     });
   }
 
-  handlePotentialPurchaseFrequencyChange(e) {
-    this.setState({ potentialPurchaseFrequency: e.target.value });
+  handlePurchaseFrequencyChange(e) {
+    this.setState({ purchaseFrequency: e.target.value });
   }
 
-  handlePotentialPaymentTypeChange(e) {
-    this.setState({ potentialPurchasePaymentType: e.target.value });
+  handlePaymentTypeChange(e) {
+    this.setState({ purchasePaymentType: e.target.value });
   }
 
   render() {
     const {
-      handlePotentialPurchaseInput,
-      handlePotentialPurchaseFrequencyChange,
-      handlePotentialPaymentTypeChange
+      handlePurchaseInput,
+      handlePurchaseFrequencyChange,
+      handlePaymentTypeChange
     } = this;
     const {
       currentCashFlowAmount,
-      potentialPurchaseFrequency,
-      potentialPurchasePaymentType,
+      purchaseFrequency,
+      purchasePaymentType,
       totalDebtAmount,
       totalSavingAmount,
-      potentialPurchaseAmount
+      purchaseAmount
     } = this.state;
 
     return (
@@ -73,24 +69,22 @@ class App extends React.Component {
         <Router>
           <EnterPurchase
             path="/"
-            handlePotentialPurchaseInput={handlePotentialPurchaseInput}
+            handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
-            potentialPurchaseFrequency={potentialPurchaseFrequency}
-            handlePotentialPurchaseFrequencyChange={
-              handlePotentialPurchaseFrequencyChange
-            }
-            potentialPurchasePaymentType={potentialPurchasePaymentType}
-            handlePotentialPaymentTypeChange={handlePotentialPaymentTypeChange}
+            purchaseFrequency={purchaseFrequency}
+            handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
+            purchasePaymentType={purchasePaymentType}
+            handlePaymentTypeChange={handlePaymentTypeChange}
           />
           <SnapshotResults
             path="/what-if-results"
-            handlePotentialPurchaseInput={handlePotentialPurchaseInput}
+            handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             totalDebtAmount={totalDebtAmount}
             totalSavingAmount={totalSavingAmount}
-            potentialPurchaseAmount={potentialPurchaseAmount}
-            potentialPurchaseFrequency={potentialPurchaseFrequency}
-            potentialPurchasePaymentType={potentialPurchasePaymentType}
+            purchaseAmount={purchaseAmount}
+            purchaseFrequency={purchaseFrequency}
+            purchasePaymentType={purchasePaymentType}
           />
         </Router>
         <LinkItems />
