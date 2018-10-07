@@ -6,6 +6,7 @@ import { Router } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
 import SnapshotResults from "./components/SnapshotResults.jsx";
 import LinkItems from "./components/LinkItems.jsx";
+import GoblinAdvice from "./components/GoblinAdvice.jsx";
 
 class App extends React.Component {
   constructor(props) {
