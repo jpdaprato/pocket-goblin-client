@@ -130,7 +130,7 @@ class SnapshotResults extends React.Component {
             </div>
           </div>
         </div>
-        <Link to="/goblin-advise">
+        <Link to="/goblin-advice">
           <button>What Would the Goblin Do?</button>
         </Link>
       </div>
