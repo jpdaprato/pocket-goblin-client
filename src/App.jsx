@@ -54,6 +54,7 @@ class App extends React.Component {
       handlePurchaseFrequencyChange,
       handlePaymentTypeChange
     } = this;
+
     const {
       currentCashFlowAmount,
       purchaseFrequency,
@@ -86,6 +87,7 @@ class App extends React.Component {
             purchaseFrequency={purchaseFrequency}
             purchasePaymentType={purchasePaymentType}
           />
+          <GoblinAdvice path="/goblin-advice" />
         </Router>
         <LinkItems />
       </div>
