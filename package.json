@@ -4,6 +4,7 @@
   "description": "React client for Pocket Goblin",
   "main": "index.js",
   "scripts": {
+    "copy:media": "cp -R src/images dist/",
     "dev": "parcel src/index.html",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,css,json}\"",

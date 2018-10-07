@@ -2,10 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import Header from "./components/Header.jsx";
-import { Router } from "@reach/router";
+import { Router, Link } from "@reach/router";
 import EnterPurchase from "./components/EnterPurchase.jsx";
 import SnapshotResults from "./components/SnapshotResults.jsx";
 import LinkItems from "./components/LinkItems.jsx";
+import GoblinAdvice from "./components/GoblinAdvice.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -66,7 +67,9 @@ class App extends React.Component {
 
     return (
       <div>
-        <Header title={"Pocket Goblin"} />
+        <Link to="/">
+          <Header title={"Pocket Goblin"} />
+        </Link>
         <Router>
           <EnterPurchase
             path="/"
