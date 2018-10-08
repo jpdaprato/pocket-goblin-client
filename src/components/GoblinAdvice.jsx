@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 
 class GoblinAdvice extends React.Component {
   constructor(props) {
@@ -18,7 +19,9 @@ class GoblinAdvice extends React.Component {
           before making it!
         </p>
         <p>{`I have a better idea! Lets's...`} </p>
-        <button>Find Ways to save!</button>
+        <Link to="/top-spending">
+          <button>Find Ways to save!</button>
+        </Link>
       </div>
     );
   }
