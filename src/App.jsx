@@ -7,6 +7,10 @@ import EnterPurchase from "./components/EnterPurchase.jsx";
 import SnapshotResults from "./components/SnapshotResults.jsx";
 import LinkItems from "./components/LinkItems.jsx";
 import GoblinAdvice from "./components/GoblinAdvice.jsx";
+import Auth from "./Auth/Auth.js";
+
+const auth = new Auth();
+auth.login();
 
 class App extends React.Component {
   constructor(props) {
