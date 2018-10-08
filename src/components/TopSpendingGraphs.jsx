@@ -52,9 +52,36 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
 
   return (
     <div style={{ height: "50%", width: "50%" }}>
+      <h1>Top Recurring </h1>
+      <select>
+        <option value="mounthly">Mounthly</option>
+      </select>
       <HorizontalBar data={recurringGraph} />
+      <p>
+        Recurring expenses add up! Click on one to analyze how reducting it
+        would help imporve your financial health
+      </p>
+      <h1>Top Categories </h1>
+      <select>
+        <option value="mounthly">Mounthly</option>
+      </select>
       <HorizontalBar data={categoriesGraph} />
+      <p>
+        Category spending shows you genral trends. Most people can save tons of
+        money be reducing the amount of money they spend at bars and
+        restaurants.
+      </p>
+      <h1>Top Shop </h1>
+      <select>
+        <option value="mounthly">Mounthly</option>
+      </select>
       <HorizontalBar data={shopGraph} />
+      <p>
+        Watch out! That daily latte or impulsive Amazon purchase adds up! if you
+        used that money ti pay down debt or top up savings, you will be in far
+        better shape! And lets be honest, ill bet you wouldnt miss that shiny
+        new gadget after a few months
+      </p>
     </div>
   );
 };
