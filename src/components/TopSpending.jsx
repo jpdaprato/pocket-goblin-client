@@ -25,7 +25,7 @@ class TopSpending extends React.Component {
 
     return (
       <div>
-        <h2>Tap an item to Analze</h2>
+        <h2>Tap an item to Analyze</h2>
         <TopSpendingGraphs
           recurring={recurring}
           categories={categories}
