@@ -16,20 +16,15 @@ class SnapshotResults extends React.Component {
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };
-    this.handlePayDebtSelection = this.handlePayDebtSelection.bind(this);
-    this.handleInvestSelection = this.handleInvestSelection.bind(this);
+
     this.renderPayDebtOrInvestItInfo = this.renderPayDebtOrInvestItInfo.bind(
       this
     );
   }
 
-  handlePayDebtSelection() {
-    this.setState({ payDebtOrInvestItSelection: "debt" });
-  }
-
-  handleInvestSelection() {
-    this.setState({ payDebtOrInvestItSelection: "invest" });
-  }
+  handlePayDebtOrInvestSelection = event => {
+    this.setState({ payDebtOrInvestItSelection: event.target.value });
+  };
 
   renderPayDebtOrInvestItInfo() {
     const { purchaseAmount } = this.props;
@@ -124,8 +119,18 @@ class SnapshotResults extends React.Component {
             ) : null}
             <div>
               <h2>Or, what if you instead...</h2>
-              <button onClick={this.handlePayDebtSelection}>Pay Debt</button>
-              <button onClick={this.handleInvestSelection}>Invest it</button>
+              <button
+                value="debt"
+                onClick={this.handlePayDebtOrInvestSelection}
+              >
+                Pay Debt
+              </button>
+              <button
+                value="invest"
+                onClick={this.handlePayDebtOrInvestSelection}
+              >
+                Invest it
+              </button>
               {this.renderPayDebtOrInvestItInfo()}
             </div>
           </div>
