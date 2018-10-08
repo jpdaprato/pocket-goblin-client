@@ -31,7 +31,9 @@ class App extends React.Component {
       .post("http://localhost:8000/graphql", {
         query: "{ cashFlow totalDebt totalSavings }"
       })
+      /* eslint-disable-next-line */
       .then(response => console.log(response))
+      /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
 
