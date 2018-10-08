@@ -12,12 +12,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCashFlowAmount: 44,
-      purchaseAmount: 472,
+      currentCashFlowAmount: 0,
+      purchaseAmount: 0,
       purchaseFrequency: "never",
       purchasePaymentType: "cash",
-      totalDebtAmount: 18,
-      totalSavingAmount: 21
+      totalDebtAmount: 0,
+      totalSavingAmount: 0
     };
     this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
     this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
@@ -27,12 +27,23 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.getUserData();
+  }
+
+  getUserData() {
     axios
       .post("http://localhost:8000/graphql", {
         query: "{ cashFlow totalDebt totalSavings }"
       })
       /* eslint-disable-next-line */
-      .then(response => console.log(response))
+      .then(({ data: { data } }) => {
+        this.setState({
+          currentCashFlowAmount: data.cashFlow,
+          totalDebtAmount: data.totalDebt,
+          totalSavingAmount: data.totalSavings
+        });
+      })
+      .then(() => console.log(this.state))
       /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
