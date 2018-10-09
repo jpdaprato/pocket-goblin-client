@@ -13,7 +13,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       currentCashFlowAmount: 0,
-      purchaseAmount: 0,
+      purchaseAmount: 100,
       purchaseFrequency: "never",
       purchasePaymentType: "cash",
       totalDebtAmount: 0,
@@ -50,7 +50,7 @@ class App extends React.Component {
 
   handlePurchaseInput(e) {
     this.setState({
-      purchaseAmount: e.target.value
+      purchaseAmount: Number(e.target.value)
     });
   }
 
