@@ -7,13 +7,13 @@ class App extends Component {
     this.props.history.replace(`/${route}`);
 =======
 import GoblinAdvice from "./components/GoblinAdvice.jsx";
-import TopSpending from "./components/TopSpending";
+import TopSpending from "./components/TopSpending.jsx";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCashFlowAmount: 0,
+      currentCashFlowAmount: 1000,
       purchaseAmount: 100,
       purchaseFrequency: "never",
       purchasePaymentType: "cash",

@@ -1,5 +1,6 @@
 import React from "react";
-import { HorizontalBar } from "react-chartjs-2";
+// import { HorizontalBar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 const TopSpendingGraphs = ({ recurring, categories, shop }) => {
   const recurringGraph = {
@@ -16,6 +17,18 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
         data: recurring.data
       }
     ]
+  };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      ]
+    }
   };
 
   const categoriesGraph = {
@@ -54,18 +67,18 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
     <div style={{ height: "50%", width: "50%" }}>
       <h1>Top Recurring </h1>
       <select>
-        <option value="mounthly">Mounthly</option>
+        <option value="monthly">Monthly</option>
       </select>
-      <HorizontalBar data={recurringGraph} />
+      <Bar data={recurringGraph} options={options} />
       <p>
         Recurring expenses add up! Click on one to analyze how reducting it
         would help imporve your financial health
       </p>
       <h1>Top Categories </h1>
       <select>
-        <option value="mounthly">Mounthly</option>
+        <option value="monthly">Monthly</option>
       </select>
-      <HorizontalBar data={categoriesGraph} />
+      <Bar data={categoriesGraph} options={options} />
       <p>
         Category spending shows you genral trends. Most people can save tons of
         money be reducing the amount of money they spend at bars and
@@ -73,9 +86,9 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       </p>
       <h1>Top Shop </h1>
       <select>
-        <option value="mounthly">Mounthly</option>
+        <option value="monthly">Monthly</option>
       </select>
-      <HorizontalBar data={shopGraph} />
+      <Bar data={shopGraph} options={options} />
       <p>
         Watch out! That daily latte or impulsive Amazon purchase adds up! if you
         used that money ti pay down debt or top up savings, you will be in far
