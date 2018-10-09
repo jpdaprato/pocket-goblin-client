@@ -43,8 +43,6 @@ class App extends React.Component {
           totalSavingAmount: data.totalSavings
         });
       })
-      .then(() => console.log(this.state))
-      /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
 
