@@ -12,9 +12,9 @@ class SnapshotResults extends React.Component {
 
     this.state = {
       payDebtOrInvestItSelection: "debt",
-      debtFreeFasterBy: 3,
-      interestSavedAmount: 408,
-      totalSavedAmount: 880,
+      debtFreeFasterBy: 0,
+      interestSavedAmount: 0,
+      totalSavedAmount: 0,
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };
