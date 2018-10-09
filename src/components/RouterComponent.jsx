@@ -1,7 +1,5 @@
 import React from "react";
-//import ReactDOM from "react-dom";
 import axios from "axios";
-import Header from "./Header.jsx";
 import { Router, Link } from "@reach/router";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
@@ -77,12 +75,11 @@ class RouterComponent extends React.Component {
 
     return (
       <div>
-        <Link to="/">
-          <Header title={"Pocket Goblin"} />
-        </Link>
+        {/* TODO: Remove this header */}
+        <h1>This is the Router Component</h1>
         <Router>
           <EnterPurchase
-            path="/home"
+            path="/enter-purchase"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseFrequency={purchaseFrequency}

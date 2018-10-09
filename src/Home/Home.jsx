@@ -5,6 +5,7 @@ class Home extends Component {
   login() {
     this.props.auth.login();
   }
+
   render() {
     const { isAuthenticated } = this.props.auth;
     return (

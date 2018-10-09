@@ -31,7 +31,7 @@ class LinkItems extends React.Component {
         onExit={this.handleOnExit}
         onSuccess={this.handleOnSuccess}
       >
-        Open Link and connect your bank!
+        Connect Accounts
       </PlaidLink>
     );
   }

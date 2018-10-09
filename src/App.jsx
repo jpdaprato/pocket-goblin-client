@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, Button } from "react-bootstrap";
 import LinkItems from "./components/LinkItems.jsx";
-
 class App extends Component {
   goTo(route) {
     this.props.history.replace(`/${route}`);
@@ -53,8 +52,8 @@ class App extends Component {
               </Button>
             )}
           </Navbar.Header>
+          <LinkItems />
         </Navbar>
-        <LinkItems />
       </div>
     );
   }
