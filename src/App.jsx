@@ -35,7 +35,6 @@ class App extends React.Component {
       .post("http://localhost:8000/graphql", {
         query: "{ cashFlow totalDebt totalSavings }"
       })
-      /* eslint-disable-next-line */
       .then(({ data: { data } }) => {
         this.setState({
           currentCashFlowAmount: data.cashFlow,
@@ -43,6 +42,7 @@ class App extends React.Component {
           totalSavingAmount: data.totalSavings
         });
       })
+      /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
 
