@@ -2,10 +2,7 @@ import React from "react";
 import { calculateCompoundInterest } from "../helpers/finance";
 
 const InvestItNonRecurring = props => {
-  {
-    console.log(props);
-  }
-
+  //Calculate using helper for a non-recurring amount
   const compoundInterestObject = calculateCompoundInterest(
     props.purchaseAmount,
     1 + props.rateOfReturn,

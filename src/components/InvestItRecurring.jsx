@@ -2,15 +2,18 @@ import React from "react";
 import { calculateCompoundInterest } from "../helpers/finance";
 
 const InvestItRecurring = props => {
+  //Since amounts recur monthly, currently, we need to make periods monthly
   const monthlyInterestRate = 1 + props.rateOfReturn / 12;
   const timelineInMonths = props.investmentTimeline * 12;
 
+  //Calculate compound interest using helper with recurring amount set to true
   const compoundInterestObject = calculateCompoundInterest(
     props.purchaseAmount,
     monthlyInterestRate,
     timelineInMonths,
     true
   );
+
   //Total spend for MONTHLY expense over investment timeline
   const totalSpend = Number(compoundInterestObject.amountInvested.toFixed(2));
 
@@ -20,10 +23,6 @@ const InvestItRecurring = props => {
   );
 
   const totalEarnedIfInvested = Number(compoundInterestObject.total.toFixed(2));
-
-  {
-    console.log(compoundInterestObject);
-  }
 
   return (
     <div>
