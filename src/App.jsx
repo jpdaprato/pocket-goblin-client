@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, Button } from "react-bootstrap";
+import LinkItems from "./components/LinkItems.jsx";
 
 class App extends Component {
   goTo(route) {
@@ -22,7 +23,7 @@ class App extends Component {
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#">Auth0 - React</a>
+              <a href="#">Pocket Goblin</a>
             </Navbar.Brand>
             <Button
               bsStyle="primary"
@@ -53,6 +54,7 @@ class App extends Component {
             )}
           </Navbar.Header>
         </Navbar>
+        <LinkItems />
       </div>
     );
   }

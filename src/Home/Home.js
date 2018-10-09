@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import RouterComponent from "../components/RouterComponent.jsx";
 
 class Home extends Component {
   login() {
@@ -8,7 +9,7 @@ class Home extends Component {
     const { isAuthenticated } = this.props.auth;
     return (
       <div className="container">
-        {isAuthenticated() && <h4>You are logged in!</h4>}
+        {isAuthenticated() && <RouterComponent />}
         {!isAuthenticated() && (
           <h4>
             You are not logged in! Please{" "}
