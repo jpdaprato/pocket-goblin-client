@@ -1,20 +1,22 @@
+import history from "../history.js";
 import auth0 from "auth0-js";
+import { AUTH_CONFIG } from "./auth0-variables.js";
 
 export default class Auth {
+  auth0 = new auth0.WebAuth({
+    domain: AUTH_CONFIG.domain,
+    clientID: AUTH_CONFIG.clientId,
+    redirectUri: AUTH_CONFIG.callbackUrl,
+    responseType: "token id_token",
+    scope: "openid"
+  });
+
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
   }
-
-  auth0 = new auth0.WebAuth({
-    domain: "pocketgoblin.auth0.com",
-    clientID: "czaH6MGiqMmlNgJ8f1ipL2IZnlkusAgK",
-    redirectUri: "http://localhost:1234/callback",
-    responseType: "token id_token",
-    scope: "openid"
-  });
 
   login() {
     this.auth0.authorize();
@@ -28,12 +30,13 @@ export default class Auth {
       } else if (err) {
         history.replace("/home");
         console.log(err);
+        alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
   }
 
   setSession(authResult) {
-    // Set the time that the Access Token will expire at
+    // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
     );
@@ -45,7 +48,7 @@ export default class Auth {
   }
 
   logout() {
-    // Clear Access Token and ID Token from local storage
+    // Clear access token and ID token from local storage
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
@@ -55,11 +58,8 @@ export default class Auth {
 
   isAuthenticated() {
     // Check whether the current time is past the
-    // Access Token's expiry time
+    // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
   }
 }
-
-const auth = new Auth();
-auth.login();

@@ -1,120 +1,61 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
-import Header from "./components/Header.jsx";
-import { Router, Link } from "@reach/router";
-import EnterPurchase from "./components/EnterPurchase.jsx";
-import SnapshotResults from "./components/SnapshotResults.jsx";
-import LinkItems from "./components/LinkItems.jsx";
-import GoblinAdvice from "./components/GoblinAdvice.jsx";
-import Auth from "./Auth/Auth.js";
+import React, { Component } from "react";
+import { Navbar, Button } from "react-bootstrap";
 
-// Render Auth0 login modal
-// const auth = new Auth();
-// auth.login();
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCashFlowAmount: 0,
-      purchaseAmount: 100,
-      purchaseFrequency: "never",
-      purchasePaymentType: "cash",
-      totalDebtAmount: 0,
-      totalSavingAmount: 0
-    };
-    this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
-    this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
-      this
-    );
-    this.handlePaymentTypeChange = this.handlePaymentTypeChange.bind(this);
+class App extends Component {
+  goTo(route) {
+    this.props.history.replace(`/${route}`);
   }
 
-  componentDidMount() {
-    this.getUserData();
+  login() {
+    this.props.auth.login();
   }
 
-  getUserData() {
-    axios
-      .post("http://localhost:8000/graphql", {
-        query: "{ cashFlow totalDebt totalSavings }"
-      })
-      .then(({ data: { data } }) => {
-        this.setState({
-          currentCashFlowAmount: data.cashFlow,
-          totalDebtAmount: data.totalDebt,
-          totalSavingAmount: data.totalSavings
-        });
-      })
-      /* eslint-disable-next-line */
-      .catch(error => console.log(error));
-  }
-
-  handlePurchaseInput(e) {
-    this.setState({
-      purchaseAmount: Number(e.target.value)
-    });
-  }
-
-  handlePurchaseFrequencyChange(e) {
-    this.setState({ purchaseFrequency: e.target.value });
-  }
-
-  handlePaymentTypeChange(e) {
-    this.setState({ purchasePaymentType: e.target.value });
+  logout() {
+    this.props.auth.logout();
   }
 
   render() {
-    const {
-      handlePurchaseInput,
-      handlePurchaseFrequencyChange,
-      handlePaymentTypeChange
-    } = this;
-
-    const {
-      currentCashFlowAmount,
-      purchaseFrequency,
-      purchasePaymentType,
-      totalDebtAmount,
-      totalSavingAmount,
-      purchaseAmount
-    } = this.state;
+    const { isAuthenticated } = this.props.auth;
 
     return (
       <div>
-        <Link to="/">
-          <Header title={"Pocket Goblin"} />
-        </Link>
-        <Router>
-          <Auth path="/home" />
-          <EnterPurchase
-            path="/enter-purchase"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            purchaseFrequency={purchaseFrequency}
-            handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
-            purchasePaymentType={purchasePaymentType}
-            handlePaymentTypeChange={handlePaymentTypeChange}
-            purchaseAmount={purchaseAmount}
-          />
-          <SnapshotResults
-            path="/what-if-results"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            totalDebtAmount={totalDebtAmount}
-            totalSavingAmount={totalSavingAmount}
-            purchaseAmount={purchaseAmount}
-            purchaseFrequency={purchaseFrequency}
-            purchasePaymentType={purchasePaymentType}
-          />
-          <GoblinAdvice path="/goblin-advice" />
-        </Router>
-        {/* Plaid Link component */}
-        <LinkItems />
+        <Navbar fluid>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">Auth0 - React</a>
+            </Navbar.Brand>
+            <Button
+              bsStyle="primary"
+              className="btn-margin"
+              onClick={this.goTo.bind(this, "home")}
+            >
+              Home
+            </Button>
+            {!isAuthenticated() && (
+              <Button
+                id="qsLoginBtn"
+                bsStyle="primary"
+                className="btn-margin"
+                onClick={this.login.bind(this)}
+              >
+                Log In
+              </Button>
+            )}
+            {isAuthenticated() && (
+              <Button
+                id="qsLogoutBtn"
+                bsStyle="primary"
+                className="btn-margin"
+                onClick={this.logout.bind(this)}
+              >
+                Log Out
+              </Button>
+            )}
+          </Navbar.Header>
+        </Navbar>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+export default App;
