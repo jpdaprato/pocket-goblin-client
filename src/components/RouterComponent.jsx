@@ -24,10 +24,10 @@ class RouterComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserData();
+    this.getItemData();
   }
 
-  getUserData() {
+  getItemData() {
     axios
       .post("http://localhost:8000/graphql", {
         query: "{ cashFlow totalDebt totalSavings }"
