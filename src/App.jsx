@@ -9,6 +9,7 @@ import LinkItems from "./components/LinkItems.jsx";
 import GoblinAdvice from "./components/GoblinAdvice.jsx";
 import Auth from "./Auth/Auth.js";
 
+// Render Auth0 login modal
 const auth = new Auth();
 auth.login();
 
