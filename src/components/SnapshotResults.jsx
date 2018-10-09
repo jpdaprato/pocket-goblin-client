@@ -42,7 +42,10 @@ class SnapshotResults extends React.Component {
         <h2>What if you spend the money...</h2>
         <div>
           <h3>Cash Flow</h3>
-          <CashFlowMeter currentCashFlowAmount={currentCashFlowAmount} />
+          <CashFlowMeter
+            currentCashFlowAmount={currentCashFlowAmount}
+            purchaseAmount={purchaseAmount}
+          />
         </div>
         <div>
           <h3>Debt to Savings</h3>
