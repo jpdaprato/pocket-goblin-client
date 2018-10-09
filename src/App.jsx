@@ -10,8 +10,8 @@ import GoblinAdvice from "./components/GoblinAdvice.jsx";
 import Auth from "./Auth/Auth.js";
 
 // Render Auth0 login modal
-const auth = new Auth();
-auth.login();
+// const auth = new Auth();
+// auth.login();
 
 class App extends React.Component {
   constructor(props) {
@@ -87,8 +87,9 @@ class App extends React.Component {
           <Header title={"Pocket Goblin"} />
         </Link>
         <Router>
+          <Auth path="/" />
           <EnterPurchase
-            path="/"
+            path="/enter-purchase"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseFrequency={purchaseFrequency}

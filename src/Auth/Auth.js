@@ -15,3 +15,6 @@ export default class Auth {
     this.auth0.authorize();
   }
 }
+
+const auth = new Auth();
+auth.login();
