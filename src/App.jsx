@@ -87,7 +87,7 @@ class App extends React.Component {
           <Header title={"Pocket Goblin"} />
         </Link>
         <Router>
-          <Auth path="/" />
+          <Auth path="/home" />
           <EnterPurchase
             path="/enter-purchase"
             handlePurchaseInput={handlePurchaseInput}
