@@ -5,24 +5,34 @@ class RealCostOfCredit extends React.Component {
     super(props);
 
     this.state = {
-      totalRecurringYearlyPaymentAmount: 5664,
-      totalRecurringYearlyInterestAmount: 782,
-      totalRecurringYearlyCostAmount: 6446,
-      monthsToPayOff: 7,
-      interestYoullPay: 65.14
+      monthsToPayOff: 6,
+      APR: 0.235
     };
   }
 
-  render() {
-    const { purchaseFrequency, purchaseAmount, debtFreeFasterBy } = this.props;
+  calculateNonRecurringInterest = () => {
+    const monthlyInterest = this.state.APR / 12;
+    const interest =
+      monthlyInterest * this.props.purchaseAmount * this.state.monthsToPayOff;
 
-    const {
-      monthsToPayOff,
-      interestYoullPay,
-      totalRecurringYearlyPaymentAmount,
-      totalRecurringYearlyInterestAmount,
-      totalRecurringYearlyCostAmount
-    } = this.state;
+    return Number(interest.toFixed(2));
+  };
+
+  render() {
+    const { purchaseFrequency, purchaseAmount } = this.props;
+
+    const { monthsToPayOff } = this.state;
+
+    //Non-Recurring Amounts Calculations
+    const nonRecurringInterest = this.calculateNonRecurringInterest();
+    const totalCostOfDebt = Number(
+      (purchaseAmount + nonRecurringInterest).toFixed(2)
+    );
+
+    //Recurring Amounts Calculations
+    const totalYearlyPayments = purchaseAmount * 12;
+    const totalYearlyInterest = purchaseAmount * this.state.APR * 12;
+    const totalYearlyCost = totalYearlyPayments + totalYearlyInterest;
 
     const title = <h3>The Real Cost of Putting it on Credit</h3>;
 
@@ -31,14 +41,12 @@ class RealCostOfCredit extends React.Component {
         <div>
           {title}
           <h4>{`Time to Pay Off ${monthsToPayOff} months`}</h4>
-          <h4>{`Interest You'll Pay $${interestYoullPay}`}</h4>
-          <h4>
-            Total Cost after Paying it off ${purchaseAmount + interestYoullPay}
-          </h4>
+          <h4>{`Interest You'll Pay $${nonRecurringInterest}`}</h4>
+          <h4>Total Cost after Paying it off ${totalCostOfDebt}</h4>
           <p>
-            {`Based on your current spending pattern, you should pay this off after ${monthsToPayOff}. 
-            You will pay $${interestYoullPay} in interest alone! The total cost of making this purchase 
-            for you will be $${purchaseAmount + interestYoullPay}`}
+            {`Based on your current spending pattern, you should pay this off after ${monthsToPayOff} months. 
+            You will pay $${nonRecurringInterest} in interest alone! The total cost of making this purchase 
+            for you will be $${totalCostOfDebt}. Are you sure you want to pay an extra $${nonRecurringInterest} for the benefit of purchasing now rather than waiting ${monthsToPayOff} more months?`}
           </p>
         </div>
       );
@@ -46,22 +54,17 @@ class RealCostOfCredit extends React.Component {
       return (
         <div>
           {title}
-          <h4>
-            Total Amount of Payments per year $
-            {totalRecurringYearlyPaymentAmount}
-          </h4>
+          <h4>Total Amount of Payments per year ${totalYearlyPayments}</h4>
           <h4>
             {`Interest You'll Pay Per Year $
-      ${totalRecurringYearlyInterestAmount}`}
+      ${totalYearlyInterest}`}
           </h4>
-          <h4>
-            Total Amount of Payments per year ${totalRecurringYearlyCostAmount}
-          </h4>
+          <h4>Total Amount you will pay per year ${totalYearlyCost}</h4>
           <p>
             {`Based on your current spending pattern, it will take you
-            ${debtFreeFasterBy} months to pay off every payment you
-            put on credit.You will pay $${totalRecurringYearlyPaymentAmount} in interest 
-            alone every single year! Thats's a big chunk of change to pay out in interest!`}
+            ${monthsToPayOff} months to pay off every payment you
+            put on credit. You will pay $${totalYearlyInterest} in interest 
+            alone every single year! That's a lot of hard-earned money!`}
           </p>
         </div>
       );
