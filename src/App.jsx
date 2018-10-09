@@ -90,6 +90,7 @@ class App extends React.Component {
             handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
             purchasePaymentType={purchasePaymentType}
             handlePaymentTypeChange={handlePaymentTypeChange}
+            purchaseAmount={purchaseAmount}
           />
           <SnapshotResults
             path="/what-if-results"

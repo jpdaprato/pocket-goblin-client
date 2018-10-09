@@ -11,15 +11,20 @@ class EnterPurchase extends React.Component {
       purchaseFrequency,
       handlePurchaseFrequencyChange,
       purchasePaymentType,
+      purchaseAmount,
       handlePaymentTypeChange
     } = this.props;
+
     return (
       <div>
         <h1>Enter potential purchase</h1>
         <InputAmount handlePurchaseInput={handlePurchaseInput} />
         <div>
           <h3>Cash Flow</h3>
-          <CashFlowMeter currentCashFlowAmount={currentCashFlowAmount} />
+          <CashFlowMeter
+            currentCashFlowAmount={currentCashFlowAmount}
+            purchaseAmount={purchaseAmount}
+          />
         </div>
         Repeat:
         <select

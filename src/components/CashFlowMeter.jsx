@@ -34,6 +34,7 @@ const CashFlowMeter = props => {
   );
 
   const stopLight = amount => {
+    console.log(amount);
     if (amount < 40) {
       redCircle.backgroundColor = "rgba(255, 0,0, 1)";
       return lights;
@@ -46,7 +47,9 @@ const CashFlowMeter = props => {
     }
   };
 
-  return <div>{stopLight(props.currentCashFlowAmount)}</div>;
+  return (
+    <div>{stopLight(props.currentCashFlowAmount - props.purchaseAmount)}</div>
+  );
 };
 
 export default CashFlowMeter;
