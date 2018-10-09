@@ -7,16 +7,15 @@ const PayDebtNonRecurring = props => {
       <h4>Save interest of ${props.interestSavedAmount}</h4>
       <h4>{`Total You'll Save $${props.totalSavedAmount}`}</h4>
       <p>
-        {`If you chooses to pay down debt with the $${props.purchaseAmount}
-            rather than spend it today, you cound save $${
+        {`If you choose to pay down debt with the $${props.purchaseAmount}
+            rather than spend it today, you could save $${
               props.interestSavedAmount
-            } in
-            interest payments and reduce the time it would take you to get out
+            } in interest payments and reduce the time it would take you to get out
             of debt by ${
               props.debtFreeFasterBy
             } months. So the question you should ask
-            yourself is that: Is spending $${props.purchaseAmount} today worth
-            it?`}
+            yourself is: Is spending $${props.purchaseAmount} today worth
+            giving up ${props.totalSavedAmount} tomorrow?`}
       </p>
     </div>
   );

@@ -28,9 +28,9 @@ const InvestItNonRecurring = props => {
         spend it today, you could earn $${interestEarned} in interest!
         This would bring the real opportunity cost of what you are spending
         your money on to $${totalEarnedIfInvested}
-        after 20 years. So the question you should ask yourself is this: Is
+        after 20 years. So the question you should ask yourself is this: "Is
         spending $${props.purchaseAmount} today worth the $
-        ${interestEarned} that you're passing up?`}
+        ${interestEarned} that you're passing up?"`}
       </p>
     </div>
   );

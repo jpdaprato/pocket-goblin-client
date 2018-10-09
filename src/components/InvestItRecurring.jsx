@@ -36,9 +36,9 @@ const InvestItRecurring = props => {
         } every month rather than spend it, you could earn $${interestEarned} in interest!
         This would bring the real opportunity cost of what you are spending
         your money on to $${totalEarnedIfInvested}
-        after 20 years! That's a lot of dough! So the question you should ask yourself is this: Is
+        after 20 years! That's a lot of dough! So the question you should ask yourself is this: "Is
         spending $${props.purchaseAmount} every month worth the $
-        ${interestEarned} that you're passing up?`}
+        ${interestEarned} that you're passing up?"`}
       </p>
     </div>
   );
