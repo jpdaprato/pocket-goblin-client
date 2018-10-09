@@ -12,12 +12,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCashFlowAmount: 44,
-      purchaseAmount: 472,
+      currentCashFlowAmount: 0,
+      purchaseAmount: 100,
       purchaseFrequency: "never",
       purchasePaymentType: "cash",
-      totalDebtAmount: 18,
-      totalSavingAmount: 21
+      totalDebtAmount: 0,
+      totalSavingAmount: 0
     };
     this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
     this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
@@ -27,17 +27,28 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.getUserData();
+  }
+
+  getUserData() {
     axios
       .post("http://localhost:8000/graphql", {
         query: "{ cashFlow totalDebt totalSavings }"
       })
-      .then(response => console.log(response))
+      .then(({ data: { data } }) => {
+        this.setState({
+          currentCashFlowAmount: data.cashFlow,
+          totalDebtAmount: data.totalDebt,
+          totalSavingAmount: data.totalSavings
+        });
+      })
+      /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
 
   handlePurchaseInput(e) {
     this.setState({
-      purchaseAmount: e.target.value
+      purchaseAmount: Number(e.target.value)
     });
   }
 
@@ -79,6 +90,7 @@ class App extends React.Component {
             handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
             purchasePaymentType={purchasePaymentType}
             handlePaymentTypeChange={handlePaymentTypeChange}
+            purchaseAmount={purchaseAmount}
           />
           <SnapshotResults
             path="/what-if-results"

@@ -3,6 +3,8 @@ import { Link } from "@reach/router";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
+// import PayDebtNonRecurring from "./PayDebtNonRecurring.jsx";
+import PayDebtOrInvestIt from "./PayDebtOrInvestIt.jsx";
 
 class SnapshotResults extends React.Component {
   constructor(props) {
@@ -10,81 +12,17 @@ class SnapshotResults extends React.Component {
 
     this.state = {
       payDebtOrInvestItSelection: "debt",
-      debtFreeFasterBy: 3,
-      interestSavedAmount: 408,
-      totalSavedAmount: 880,
+      debtFreeFasterBy: 0,
+      interestSavedAmount: 0,
+      totalSavedAmount: 0,
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };
-    this.handlePayDebtSelection = this.handlePayDebtSelection.bind(this);
-    this.handleInvestSelection = this.handleInvestSelection.bind(this);
-    this.renderPayDebtOrInvestItInfo = this.renderPayDebtOrInvestItInfo.bind(
-      this
-    );
   }
 
-  handlePayDebtSelection() {
-    this.setState({ payDebtOrInvestItSelection: "debt" });
-  }
-
-  handleInvestSelection() {
-    this.setState({ payDebtOrInvestItSelection: "invest" });
-  }
-
-  renderPayDebtOrInvestItInfo() {
-    const { purchaseAmount } = this.props;
-
-    const {
-      payDebtOrInvestItSelection,
-      debtFreeFasterBy,
-      interestSavedAmount,
-      totalSavedAmount,
-      rateOfReturn,
-      investmentTimeline
-    } = this.state;
-
-    const potentialInterestEarned =
-      purchaseAmount * rateOfReturn * investmentTimeline;
-
-    if (payDebtOrInvestItSelection === "debt") {
-      return (
-        <div>
-          <h4>Be Debt-Free Faster by {debtFreeFasterBy} months</h4>
-          <h4>Save interest of ${interestSavedAmount}</h4>
-          <h4>{`Total You'll Save $${totalSavedAmount}`}</h4>
-          <p>
-            {`If you chooses to pay down debt with the $${purchaseAmount}
-            rather than spend it today, you cound save $${interestSavedAmount} in
-            interest payments and reduce the time it would take you to get out
-            of debt by ${debtFreeFasterBy} months. So the question you should ask
-            yourself is that: Is spending $${purchaseAmount} today worth
-            it?`}
-          </p>
-        </div>
-      );
-    } else if (payDebtOrInvestItSelection === "invest") {
-      return (
-        <div>
-          <h4>Investment Timeline {investmentTimeline} Years</h4>
-          <h4>Interest You Would Earn ${potentialInterestEarned}</h4>
-          <h4>
-            Real Cost of Spending Today $
-            {potentialInterestEarned + purchaseAmount}
-          </h4>
-          <p>
-            {`If you choose to invest the $${purchaseAmount} rather than
-            spend it today, you could earn $${potentialInterestEarned} in interest.
-            This would bring the real opportunity cost of what you are spending
-            your money on to $${potentialInterestEarned + purchaseAmount}
-            after 20 years.So the question you should ask yourself is this: Is
-            spending $${purchaseAmount} today worth the $
-            ${potentialInterestEarned} that I'm passing up?`}
-          </p>
-        </div>
-      );
-    }
-    return;
-  }
+  handlePayDebtOrInvestSelection = event => {
+    this.setState({ payDebtOrInvestItSelection: event.target.value });
+  };
 
   render() {
     const {
@@ -124,9 +62,32 @@ class SnapshotResults extends React.Component {
             ) : null}
             <div>
               <h2>Or, what if you instead...</h2>
-              <button onClick={this.handlePayDebtSelection}>Pay Debt</button>
-              <button onClick={this.handleInvestSelection}>Invest it</button>
-              {this.renderPayDebtOrInvestItInfo()}
+              <button
+                value="debt"
+                onClick={this.handlePayDebtOrInvestSelection}
+              >
+                Pay Debt
+              </button>
+              <button
+                value="invest"
+                onClick={this.handlePayDebtOrInvestSelection}
+              >
+                Invest it
+              </button>
+              {/* {this.renderPayDebtOrInvestItInfo()} */}
+
+              <PayDebtOrInvestIt
+                debtFreeFasterBy={this.state.debtFreeFasterBy}
+                interestSavedAmount={this.state.interestSavedAmount}
+                totalSavedAmount={this.state.totalSavedAmount}
+                purchaseAmount={this.props.purchaseAmount}
+                purchaseFrequency={this.props.purchaseFrequency}
+                payDebtOrInvestItSelection={
+                  this.state.payDebtOrInvestItSelection
+                }
+                investmentTimeline={this.state.investmentTimeline}
+                rateOfReturn={this.state.rateOfReturn}
+              />
             </div>
           </div>
         </div>
