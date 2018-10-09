@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 import TopSpendingGraphs from "./TopSpendingGraphs.jsx";
 
 class TopSpending extends React.Component {
@@ -6,7 +7,7 @@ class TopSpending extends React.Component {
     super(props);
     this.state = {
       recurring: {
-        labels: ["Gym Membershit", "Wine Culb", "Cool Magazing", "Netflix"],
+        labels: ["Gym Membership", "Wine Culb", "Cool Magazing", "Netflix"],
         data: [58, 42, 29, 20, 0]
       },
       categories: {
@@ -31,7 +32,9 @@ class TopSpending extends React.Component {
           categories={categories}
           shop={shop}
         />
-        <button>Start the Goblin without selection</button>
+        <Link path to="/">
+          <button>Start the Goblin without selection</button>
+        </Link>
       </div>
     );
   }

@@ -11,7 +11,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
           "rgb(146, 66, 244)",
           "rgb(65, 86, 244)",
           "rgb(235, 244, 65)",
-          "rgb(244, 65, 184"
+          "rgb(244, 65, 184)"
         ],
         data: recurring.data
       }
@@ -27,7 +27,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
           "rgb(146, 66, 244)",
           "rgb(65, 86, 244)",
           "rgb(235, 244, 65)",
-          "rgb(244, 65, 184"
+          "rgb(244, 65, 184)"
         ],
         data: categories.data
       }
@@ -43,7 +43,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
           "rgb(146, 66, 244)",
           "rgb(65, 86, 244)",
           "rgb(235, 244, 65)",
-          "rgb(244, 65, 184"
+          "rgb(244, 65, 184)"
         ],
         data: shop.data
       }
