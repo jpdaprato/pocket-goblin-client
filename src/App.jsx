@@ -109,6 +109,7 @@ class App extends React.Component {
           />
           <GoblinAdvice path="/goblin-advice" />
         </Router>
+        {/* Plaid Link component */}
         <LinkItems />
       </div>
     );
