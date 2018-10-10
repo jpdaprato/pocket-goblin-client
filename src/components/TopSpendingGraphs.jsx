@@ -72,7 +72,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       <Bar data={recurringGraph} options={options} />
       <p>
         Recurring expenses add up! Click on one to analyze how reducting it
-        would help imporve your financial health
+        would help imporve your financial health.
       </p>
       <h1>Top Categories </h1>
       <select>
@@ -90,10 +90,10 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       </select>
       <Bar data={shopGraph} options={options} />
       <p>
-        Watch out! That daily latte or impulsive Amazon purchase adds up! if you
-        used that money ti pay down debt or top up savings, you will be in far
-        better shape! And lets be honest, ill bet you wouldnt miss that shiny
-        new gadget after a few months
+        {`Watch out! That daily latte or impulsive Amazon purchase adds up! If you
+        used that money to pay down debt or top up savings, you will be in far
+        better shape! And let's be honest, I'll bet you wouldnt miss that shiny
+        new gadget after a few months.`}
       </p>
     </div>
   );
