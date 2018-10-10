@@ -1,6 +1,7 @@
 import history from "../history.js";
 import auth0 from "auth0-js";
 import { AUTH_CONFIG } from "./auth0-variables.js";
+import axios from "axios";
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -24,10 +25,6 @@ export default class Auth {
 
   handleAuthentication() {
     this.auth0.parseHash((err, authResult) => {
-      console.log(
-        "This is the authResult from the handleAuthentication method in Auth.js: ",
-        authResult
-      );
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         history.replace("/home");
@@ -73,7 +70,12 @@ export default class Auth {
       // This method will make a request to the /userinfo endpoint
       // and return the user object, which contains the user's information,
       // similar to the response below.
-      console.log("This is the user info returned from Auth0: ", user);
+      axios
+        .post("http://localhost:8000/graphql", {
+          query: `{ getUserInfo(userId: "${user.sub}") }`
+        })
+        .then(response => console.log(response.data.data.getUserInfo))
+        .catch(error => console.log(error));
     });
   }
 }
