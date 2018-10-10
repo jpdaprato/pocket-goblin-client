@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
@@ -89,7 +89,7 @@ class RouterComponent extends React.Component {
             purchaseAmount={purchaseAmount}
           />
           <SnapshotResults
-            path="home/what-if-results"
+            path="/what-if-results"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             totalDebtAmount={totalDebtAmount}
