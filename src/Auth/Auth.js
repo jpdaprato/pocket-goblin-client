@@ -24,9 +24,14 @@ export default class Auth {
 
   handleAuthentication() {
     this.auth0.parseHash((err, authResult) => {
+      console.log(
+        "This is the authResult from the handleAuthentication method in Auth.js: ",
+        authResult
+      );
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         history.replace("/home");
+        this.getUserInfo(authResult, this.auth0);
       } else if (err) {
         history.replace("/home");
         console.log(err);
@@ -61,5 +66,14 @@ export default class Auth {
     // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
+  }
+
+  getUserInfo(authResult, auth0) {
+    auth0.client.userInfo(authResult.accessToken, function(err, user) {
+      // This method will make a request to the /userinfo endpoint
+      // and return the user object, which contains the user's information,
+      // similar to the response below.
+      console.log("This is the user info returned from Auth0: ", user);
+    });
   }
 }
