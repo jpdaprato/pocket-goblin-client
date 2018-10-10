@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
@@ -79,7 +79,7 @@ class RouterComponent extends React.Component {
         <h1>This is the Router Component</h1>
         <Router>
           <EnterPurchase
-            path="/enter-purchase"
+            path="home/enter-purchase"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseFrequency={purchaseFrequency}
