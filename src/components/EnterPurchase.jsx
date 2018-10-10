@@ -18,7 +18,10 @@ class EnterPurchase extends React.Component {
     return (
       <div>
         <h1>Enter potential purchase</h1>
-        <InputAmount handlePurchaseInput={handlePurchaseInput} />
+        <InputAmount
+          handlePurchaseInput={handlePurchaseInput}
+          purchaseAmount={purchaseAmount}
+        />
         <div>
           <h3>Cash Flow</h3>
           <CashFlowMeter

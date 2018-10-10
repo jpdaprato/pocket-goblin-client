@@ -38,7 +38,10 @@ class SnapshotResults extends React.Component {
     return (
       <div>
         <h1>Tap to Modify</h1>
-        <InputAmount handlePurchaseInput={handlePurchaseInput} />
+        <InputAmount
+          handlePurchaseInput={handlePurchaseInput}
+          purchaseAmount={purchaseAmount}
+        />
         <h2>What if you spend the money...</h2>
         <div>
           <h3>Cash Flow</h3>

@@ -19,15 +19,17 @@ class InputAmount extends React.Component {
   viewSwitch() {
     const { input } = this.state;
     if (input === false) {
-      return <label onClick={this.changeToInput}>$ Enter amount</label>;
+      return (
+        <label onClick={this.changeToInput}>${this.props.purchaseAmount}</label>
+      );
     } else {
       return (
         <p>
-          $
+          {console.log(this.props)}$
           <input
             onChange={this.props.handlePurchaseInput}
             type="number"
-            placeholder="Purchase amount"
+            placeholder={this.props.purchaseAmount}
           />
         </p>
       );

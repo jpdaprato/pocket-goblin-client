@@ -11,7 +11,7 @@ class RouterComponent extends React.Component {
     super(props);
     this.state = {
       currentCashFlowAmount: 0,
-      purchaseAmount: 100,
+      purchaseAmount: 0,
       purchaseFrequency: "never",
       purchasePaymentType: "cash",
       totalDebtAmount: 0,
