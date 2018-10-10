@@ -13,7 +13,7 @@ class LinkItems extends React.Component {
       .post("http://localhost:8000/graphql", {
         query: `{ createItem(publicToken: "${token}") }`
       })
-      .then(response => console.log(response))
+      .then(response => console.log(response.data.data.createItem))
       .catch(error => console.log(error));
   }
 

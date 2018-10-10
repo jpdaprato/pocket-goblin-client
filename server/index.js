@@ -7,22 +7,22 @@ const dotenv = require("dotenv");
 const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const cors = require("cors");
+const request = require("request");
+const models = require("../models/index");
 
 const result = dotenv.config();
 if (result.error) {
   throw result.error;
 }
 
-//data models
-const models = require("../models/index");
-
-// PLAID API
 const APP_PORT = process.env.APP_PORT;
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
 const PLAID_ENV = process.env.PLAID_ENV;
+const AUTH0_API_TOKEN = process.env.AUTH0_API_TOKEN;
 
+// PLAID API
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
 let ACCESS_TOKEN = null;
@@ -43,6 +43,7 @@ const client = new plaid.Client(
 // Construct a schema, using GraphQL schema language
 let schema = buildSchema(`
   type Query {
+    getUserInfo(userId: String!): String
     createItem(publicToken: String!): String
     transactions: String
     cashFlow: Float
@@ -52,6 +53,27 @@ let schema = buildSchema(`
 `);
 
 // RESOLVER FUNCTIONS
+const asyncGetUserInfo = userId => {
+  return new Promise((resolve, reject) => {
+    var options = {
+      method: "GET",
+      url: `https://pocketgoblin.auth0.com/api/v2/users/${userId}`,
+      headers: {
+        authorization: `${AUTH0_API_TOKEN}`
+      }
+    };
+
+    request(options, function(error, response, body) {
+      if (error) {
+        prettyPrintResponse(error);
+        reject(error);
+      }
+      console.log("This is the user info retrieved from Auth0: ");
+      prettyPrintResponse(body);
+      resolve("User info has been retrieved from Auth0");
+    });
+  });
+};
 
 // Create Item
 const asyncCreateItem = publicToken => {
@@ -171,6 +193,9 @@ const asyncGetTransactions = () => {
 
 // The root provides a resolver function for each API endpoint
 let root = {
+  getUserInfo: ({ userId }) => {
+    return asyncGetUserInfo(userId);
+  },
   createItem: ({ publicToken }) => {
     return asyncCreateItem(publicToken);
   },

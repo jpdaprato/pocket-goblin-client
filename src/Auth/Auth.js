@@ -1,6 +1,7 @@
 import history from "../history.js";
 import auth0 from "auth0-js";
 import { AUTH_CONFIG } from "./auth0-variables.js";
+import axios from "axios";
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -27,6 +28,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         history.replace("/home");
+        this.getUserInfo(authResult, this.auth0);
       } else if (err) {
         history.replace("/home");
         console.log(err);
@@ -61,5 +63,19 @@ export default class Auth {
     // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
+  }
+
+  getUserInfo(authResult, auth0) {
+    auth0.client.userInfo(authResult.accessToken, function(err, user) {
+      // This method will make a request to the /userinfo endpoint
+      // and return the user object, which contains the user's information,
+      // similar to the response below.
+      axios
+        .post("http://localhost:8000/graphql", {
+          query: `{ getUserInfo(userId: "${user.sub}") }`
+        })
+        .then(response => console.log(response.data.data.getUserInfo))
+        .catch(error => console.log(error));
+    });
   }
 }
