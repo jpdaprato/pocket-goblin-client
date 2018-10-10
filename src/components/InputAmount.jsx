@@ -25,7 +25,7 @@ class InputAmount extends React.Component {
     } else {
       return (
         <p>
-          {console.log(this.props)}$
+          $
           <input
             onChange={this.props.handlePurchaseInput}
             type="number"
