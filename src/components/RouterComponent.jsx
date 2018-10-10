@@ -4,6 +4,7 @@ import { Router } from "@reach/router";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
+import TopSpending from "./TopSpending.jsx";
 
 class RouterComponent extends React.Component {
   constructor(props) {
@@ -99,6 +100,7 @@ class RouterComponent extends React.Component {
             purchasePaymentType={purchasePaymentType}
           />
           <GoblinAdvice path="/goblin-advice" />
+          <TopSpending path="/top-spending" />
         </Router>
       </div>
     );

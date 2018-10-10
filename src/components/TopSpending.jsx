@@ -32,7 +32,7 @@ class TopSpending extends React.Component {
           categories={categories}
           shop={shop}
         />
-        <Link path to="/">
+        <Link path to="/home/enter-purchase">
           <button>Start the Goblin without selection</button>
         </Link>
       </div>
