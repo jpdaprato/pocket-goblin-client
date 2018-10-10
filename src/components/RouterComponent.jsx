@@ -79,7 +79,7 @@ class RouterComponent extends React.Component {
         <h1>This is the Router Component</h1>
         <Router>
           <EnterPurchase
-            path="/enter-purchase"
+            path="home/enter-purchase"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseFrequency={purchaseFrequency}
@@ -89,7 +89,7 @@ class RouterComponent extends React.Component {
             purchaseAmount={purchaseAmount}
           />
           <SnapshotResults
-            path="/what-if-results"
+            path="home/what-if-results"
             handlePurchaseInput={handlePurchaseInput}
             currentCashFlowAmount={currentCashFlowAmount}
             totalDebtAmount={totalDebtAmount}
