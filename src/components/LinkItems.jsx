@@ -25,9 +25,9 @@ class LinkItems extends React.Component {
     return (
       <PlaidLink
         clientName="cygnustechnologies"
-        env="development"
+        env={process.env.PLAID_ENV}
         product={["auth", "transactions"]}
-        publicKey="88a038c0956987b0027438f7596d9e"
+        publicKey={process.env.PLAID_PUBLIC_KEY}
         onExit={this.handleOnExit}
         onSuccess={this.handleOnSuccess}
       >
