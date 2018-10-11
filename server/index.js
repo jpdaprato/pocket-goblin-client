@@ -68,9 +68,23 @@ const asyncGetUserInfo = userId => {
         prettyPrintResponse(error);
         reject(error);
       }
-      console.log("This is the user info retrieved from Auth0: ");
-      prettyPrintResponse(body);
-      resolve("User info has been retrieved from Auth0");
+
+      const parsedUser = JSON.parse(body);
+
+      models.User.findOrCreate({
+        where: { sub: userId },
+        defaults: { email: parsedUser.email, name: parsedUser.name }
+      })
+        .spread((user, created) => {
+          const userData = JSON.stringify({
+            id: user.dataValues.id,
+            name: user.dataValues.name,
+            email: user.dataValues.email,
+            wasCreated: created
+          });
+          resolve(userData);
+        })
+        .catch(error => reject(error));
     });
   });
 };
@@ -380,22 +394,17 @@ app.get("/transactions", function(request, response) {
         const txns = transactionsResponse;
 
         //Create structure and import txns
-        models.Environment.create({
-          type: process.env.PLAID_ENV,
-          secret: process.env.PLAID_SECRET
+        models.User.create({
+          name: "Test user",
+          email: "test@test.com",
+          sub: "234234lj234lj234lkj2"
         })
-          .then(environment => {
-            return models.Client.create({
-              plaid_client_id: process.env.PLAID_CLIENT_ID,
-              environment_id: environment.dataValues.id
-            });
-          })
-          .then(client => {
+          .then(user => {
             return models.Item.create({
-              access_token: process.env.ACCESS_TOKEN,
+              access_token: ACCESS_TOKEN,
               plaid_account_id: process.env.PLAID_CLIENT_ID,
               plaid_item_id: txns.item.item_id,
-              client_id: client.dataValues.id
+              user_id: user.dataValues.id
             });
           })
           .then(item => {
