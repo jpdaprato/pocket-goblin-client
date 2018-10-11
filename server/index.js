@@ -470,13 +470,13 @@ const prettyPrintResponse = response => {
   console.log(util.inspect(response, { colors: true, depth: 4 }));
 };
 
-// TODO: Consider removing this function (necessary for development environment?)
-app.post("/set_access_token", function(request, response, next) {
-  ACCESS_TOKEN = request.body.access_token;
-  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
-    response.json({
-      item_id: itemResponse.item.item_id,
-      error: false
-    });
-  });
-});
+// // TODO: Consider removing this function (necessary for development environment?)
+// app.post("/set_access_token", function(request, response, next) {
+//   ACCESS_TOKEN = request.body.access_token;
+//   client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
+//     response.json({
+//       item_id: itemResponse.item.item_id,
+//       error: false
+//     });
+//   });
+// });
