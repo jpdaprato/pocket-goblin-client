@@ -38,6 +38,7 @@ class InputAmount extends React.Component {
             type="number"
             placeholder={this.props.purchaseAmount}
             onBlur={this.changeToInputLabel}
+            autoFocus
           />
         </p>
       );
