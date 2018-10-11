@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import PlaidLink from "react-plaid-link";
 
+const API_ENDPOINT =
+  process.env.API_ENDPOINT || "http://localhost:8000/graphql";
+
 class LinkItems extends React.Component {
   handleOnSuccess(token, metadata) {
     console.log("This is the public_token returned by plaid: ", token);
@@ -10,7 +13,7 @@ class LinkItems extends React.Component {
       metadata
     );
     axios
-      .post(process.env.API_ENDPOINT, {
+      .post(API_ENDPOINT, {
         query: `{ createItem(publicToken: "${token}") }`
       })
       .then(response => console.log(response.data.data.createItem))
