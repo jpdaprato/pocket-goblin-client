@@ -212,6 +212,7 @@ let root = {
     return asyncGetTransactions();
   }
 };
+//END RESOLVER FUNCTIONS
 
 const app = express();
 
@@ -232,59 +233,6 @@ app.use(
     graphiql: true
   })
 );
-
-//PocketGoblin Queries
-app.get("/api/cashflow/", (request, response) => {
-  models.Cashflow.findAll({
-    attributes: ["client_id", "account_type", "year", "month", "sum"],
-    where: {
-      $and: [
-        {
-          client_id: {
-            $ne: null
-          }
-        },
-        {
-          account_type: {
-            $ne: null
-          }
-        }
-      ]
-    }
-  })
-    .then(cashflow => response.json(cashflow))
-    .catch(error => console.error(error));
-});
-
-app.get("/api/snapshot", (request, response) => {
-  models.Snapshot.findAll({
-    attributes: ["client_id", "total_debt", "total_savings"]
-  })
-    .then(snapshot => response.json(snapshot))
-    .catch(error => console.error(error));
-});
-
-app.get("/api/topspending", (request, response) => {
-  models.TopSpending.findAll({
-    attributes: ["client_id", "category", "sum"],
-    where: {
-      $and: [
-        {
-          client_id: {
-            $ne: null
-          }
-        },
-        {
-          category: {
-            $ne: null
-          }
-        }
-      ]
-    }
-  })
-    .then(spending => response.json(spending))
-    .catch(error => console.error(error));
-});
 
 //PLAID EXPRESS SERVER ENDPOINTS
 // Exchange token flow - exchange a Link public_token for
@@ -407,7 +355,7 @@ app.get("/item", function(request, response, next) {
 // Retrieve Transactions for an Item
 // https://plaid.com/docs/#transactions
 // NOTE: modified and used to seed database with plaid sandbox data
-app.get("/transactions", function(request, response, next) {
+app.get("/transactions", function(request, response) {
   // Pull transactions for the Item for the last 30 days
   let startDate = moment()
     .subtract(30, "days")
