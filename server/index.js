@@ -36,7 +36,6 @@ let schema = buildSchema(`
   type Query {
     getUserInfo(userId: String!): String
     createItem(publicToken: String!): String
-    transactions: String
     cashFlow: Float
     totalDebt: Float
     totalSavings: Float
@@ -167,36 +166,6 @@ const asyncGetTotalSavings = () => {
   });
 };
 
-// Transactions
-const asyncGetTransactions = () => {
-  return new Promise((resolve, reject) => {
-    let startDate = moment()
-      .subtract(30, "days")
-      .format("YYYY-MM-DD");
-    let endDate = moment().format("YYYY-MM-DD");
-    client.getTransactions(
-      ACCESS_TOKEN,
-      startDate,
-      endDate,
-      {
-        count: 250,
-        offset: 0
-      },
-      (error, transactionsResponse) => {
-        if (error != null) {
-          prettyPrintResponse(error);
-          reject(error);
-        } else {
-          prettyPrintResponse(transactionsResponse);
-          resolve(
-            JSON.stringify({ error: null, transactions: transactionsResponse })
-          );
-        }
-      }
-    );
-  });
-};
-
 // The root provides a resolver function for each API endpoint
 let root = {
   getUserInfo: ({ userId }) => {
@@ -213,9 +182,6 @@ let root = {
   },
   totalSavings: () => {
     return asyncGetTotalSavings();
-  },
-  transactions: () => {
-    return asyncGetTransactions();
   }
 };
 //END RESOLVER FUNCTIONS
@@ -266,117 +232,7 @@ app.post("/get_access_token", function(request, response) {
   });
 });
 
-// // Retrieve Identity for an Item
-// // https://plaid.com/docs/#identity
-// app.get("/identity", function(request, response, next) {
-//   client.getIdentity(ACCESS_TOKEN, function(error, identityResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     prettyPrintResponse(identityResponse);
-//     response.json({ error: null, identity: identityResponse });
-//   });
-// });
-
-// // Retrieve real-time Balances for each of an Item's accounts
-// // https://plaid.com/docs/#balance
-// app.get("/balance", function(request, response, next) {
-//   client.getBalance(ACCESS_TOKEN, function(error, balanceResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     prettyPrintResponse(balanceResponse);
-//     response.json({ error: null, balance: balanceResponse });
-//   });
-// });
-
-// // Retrieve an Item's accounts
-// // https://plaid.com/docs/#accounts
-// app.get("/accounts", function(request, response, next) {
-//   client.getAccounts(ACCESS_TOKEN, function(error, accountsResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     prettyPrintResponse(accountsResponse);
-//     response.json({ error: null, accounts: accountsResponse });
-//   });
-// });
-
-// // Retrieve ACH or ETF Auth data for an Item's accounts
-// // https://plaid.com/docs/#auth
-// app.get("/auth", function(request, response, next) {
-//   client.getAuth(ACCESS_TOKEN, function(error, authResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     prettyPrintResponse(authResponse);
-//     response.json({ error: null, auth: authResponse });
-//   });
-// });
-
-// // Retrieve information about an Item
-// // https://plaid.com/docs/#retrieve-item
-// app.get("/item", function(request, response, next) {
-//   // Pull the Item - this includes information about available products,
-//   // billed products, webhook information, and more.
-//   client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     // Also pull information about the institution
-//     client.getInstitutionById(itemResponse.item.institution_id, function(
-//       err,
-//       instRes
-//     ) {
-//       if (err != null) {
-//         const msg =
-//           "Unable to pull institution information from the Plaid API.";
-//         console.log(msg + "\n" + JSON.stringify(error));
-//         return response.json({
-//           error: msg
-//         });
-//       } else {
-//         prettyPrintResponse(itemResponse);
-//         response.json({
-//           item: itemResponse.item,
-//           institution: instRes.institution
-//         });
-//       }
-//     });
-//   });
-// });
-
-// Retrieve Transactions for an Item
-// https://plaid.com/docs/#transactions
-// NOTE: modified and used to seed database with plaid sandbox data
-
 // Create server
 app.listen(APP_PORT, function() {
   console.log("PocketGoblin server listening on port " + APP_PORT);
 });
-
-// // TODO: Consider removing this function (necessary for development environment?)
-// app.post("/set_access_token", function(request, response, next) {
-//   ACCESS_TOKEN = request.body.access_token;
-//   client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
-//     response.json({
-//       item_id: itemResponse.item.item_id,
-//       error: false
-//     });
-//   });
-// });
