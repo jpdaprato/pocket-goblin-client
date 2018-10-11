@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const TopSpending = sequelize.define(
     "topspending",
     {
-      client_id: DataTypes.UUID,
+      user_id: DataTypes.UUID,
       category: DataTypes.ARRAY(DataTypes.STRING),
       sum: DataTypes.FLOAT
     },
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       viewDefinition: `
         CREATE VIEW "topspendings" AS 
         SELECT 
-          clients.id as client_id,
+          users.id as user_id,
           transactions.category,
           SUM(transactions.amount) as sum
         FROM
@@ -25,12 +25,12 @@ module.exports = (sequelize, DataTypes) => {
         ON
           items.id = accounts.item_id
         JOIN
-          clients
+          users
         ON
-          clients.id = items.client_id
+          users.id = items.user_id
         GROUP BY
           ROLLUP (
-            clients.id,
+            users.id,
             transactions.category
             )
         ORDER BY

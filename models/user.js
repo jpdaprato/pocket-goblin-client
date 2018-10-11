@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Item = sequelize.define(
-    "item",
+  const User = sequelize.define(
+    "user",
     {
       id: {
         allowNull: false,
@@ -8,29 +8,31 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
-      access_token: {
+      name: {
         type: DataTypes.STRING
       },
-      plaid_account_id: {
-        type: DataTypes.STRING
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+        required: true
       },
-      plaid_item_id: DataTypes.STRING
+      sub: {
+        type: DataTypes.STRING,
+        unique: true,
+        required: true
+      }
     },
     {
       underscored: true
     }
   );
 
-  Item.associate = models => {
-    Item.hasMany(models.Account, {
-      foreignKey: "item_id",
-      onDelete: "CASCADE"
-    });
-    Item.belongsTo(models.User, {
+  User.associate = models => {
+    User.hasMany(models.Item, {
       foreignKey: "user_id",
       onDelete: "CASCADE"
     });
   };
 
-  return Item;
+  return User;
 };

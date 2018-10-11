@@ -15,8 +15,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 
 const models = {
   Account: sequelize.import("./account"),
-  Client: sequelize.import("./client"),
-  Environment: sequelize.import("./environment"),
+  User: sequelize.import("./user"),
   Item: sequelize.import("./item"),
   Transaction: sequelize.import("./transaction"),
   Snapshot: sequelize.import("./snapshot"),
