@@ -10,7 +10,7 @@ class LinkItems extends React.Component {
       metadata
     );
     axios
-      .post("http://localhost:8000/graphql", {
+      .post(process.env.API_ENDPOINT, {
         query: `{ createItem(publicToken: "${token}") }`
       })
       .then(response => console.log(response.data.data.createItem))
