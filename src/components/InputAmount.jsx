@@ -1,4 +1,16 @@
 import React from "react";
+import styled from "react-emotion";
+
+//Styled Components
+const Wrapper = styled("div")`
+  display: flex;
+  justify-content: center;
+  font-size: 5rem;
+`;
+
+const Input = styled("input")`
+  font-size: 36px;
+`;
 
 class InputAmount extends React.Component {
   constructor(props) {
@@ -33,7 +45,7 @@ class InputAmount extends React.Component {
       return (
         <p>
           $
-          <input
+          <Input
             onChange={this.props.handlePurchaseInput}
             type="number"
             placeholder={this.props.purchaseAmount}
@@ -47,7 +59,7 @@ class InputAmount extends React.Component {
   }
 
   render() {
-    return <div>{this.viewSwitch()}</div>;
+    return <Wrapper>{this.viewSwitch()}</Wrapper>;
   }
 }
 
