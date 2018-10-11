@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "@reach/router";
+import styled from "react-emotion";
 import InputAmount from "./InputAmount.jsx";
 import CashFlowMeter from "./CashFlowMeter.jsx";
+
+//Styled Components
+const Wrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+`;
 
 class EnterPurchase extends React.Component {
   render() {
@@ -16,7 +23,7 @@ class EnterPurchase extends React.Component {
     } = this.props;
 
     return (
-      <div>
+      <Wrapper>
         <h1>Enter potential purchase</h1>
         <InputAmount
           handlePurchaseInput={handlePurchaseInput}
@@ -60,7 +67,7 @@ class EnterPurchase extends React.Component {
         <Link to="/what-if-results">
           <button>Start the Goblin!</button>
         </Link>
-      </div>
+      </Wrapper>
     );
   }
 }
