@@ -4,23 +4,30 @@ class InputAmount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: false
+      isEditting: false
     };
-    this.changeToInput = this.changeToInput.bind(this);
+    this.changeLabelToInput = this.changeLabelToInput.bind(this);
+    this.changeToInputLabel = this.changeToInputLabel.bind(this);
   }
 
-  changeToInput() {
-    const { input } = this.state;
+  changeLabelToInput() {
     this.setState({
-      input: !input
+      isEditting: true
+    });
+  }
+  changeToInputLabel() {
+    this.setState({
+      isEditting: false
     });
   }
 
   viewSwitch() {
-    const { input } = this.state;
-    if (input === false) {
+    const { isEditting } = this.state;
+    if (isEditting === false) {
       return (
-        <label onClick={this.changeToInput}>${this.props.purchaseAmount}</label>
+        <label onClick={this.changeLabelToInput}>
+          ${this.props.purchaseAmount}
+        </label>
       );
     } else {
       return (
@@ -30,6 +37,7 @@ class InputAmount extends React.Component {
             onChange={this.props.handlePurchaseInput}
             type="number"
             placeholder={this.props.purchaseAmount}
+            onBlur={this.changeToInputLabel}
           />
         </p>
       );
