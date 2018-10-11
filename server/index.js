@@ -10,6 +10,7 @@ const models = require("../models/index");
 const prettyPrintResponse = require("./helpers");
 const client = require("./plaid"); //Plaid Client
 const appRoutes = require("./routes/pocketgoblin.routes.js");
+const ctrl = require("./controllers/pocketgoblin.controller.js");
 
 const result = dotenv.config();
 if (result.error) {
@@ -35,7 +36,7 @@ let ITEM_ID = null;
 let schema = buildSchema(`
   type Query {
     getUserInfo(userId: String!): String
-    createItem(publicToken: String!): String
+    createItem(publicToken: String!, userId: String!): String
     cashFlow: Float
     totalDebt: Float
     totalSavings: Float
@@ -81,7 +82,7 @@ const asyncGetUserInfo = userId => {
 };
 
 // Create Item
-const asyncCreateItem = publicToken => {
+const asyncCreateItem = (publicToken, userId) => {
   return new Promise((resolve, reject) => {
     client.exchangePublicToken(publicToken, function(error, tokenResponse) {
       if (error != null) {
@@ -92,9 +93,7 @@ const asyncCreateItem = publicToken => {
       ACCESS_TOKEN = tokenResponse.access_token;
       ITEM_ID = tokenResponse.item_id;
       prettyPrintResponse(tokenResponse);
-      resolve(
-        "Item successfully created: access_token and item_id have been received by the server"
-      );
+      resolve(ctrl.saveItemData(ACCESS_TOKEN, ITEM_ID, userId));
     });
   });
 };
@@ -171,7 +170,7 @@ let root = {
   getUserInfo: ({ userId }) => {
     return asyncGetUserInfo(userId);
   },
-  createItem: ({ publicToken }) => {
+  createItem: ({ publicToken, userId }) => {
     return asyncCreateItem(publicToken);
   },
   cashFlow: () => {
