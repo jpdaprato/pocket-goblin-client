@@ -76,8 +76,6 @@ class RouterComponent extends React.Component {
 
     return (
       <div>
-        {/* TODO: Remove this header */}
-        <h1>This is the Router Component</h1>
         <Router>
           <EnterPurchase
             path="home/enter-purchase"
