@@ -11,10 +11,10 @@ class SnapshotResults extends React.Component {
     super(props);
 
     this.state = {
-      payDebtOrInvestItSelection: "debt",
-      debtFreeFasterBy: 0,
-      interestSavedAmount: 0,
-      totalSavedAmount: 0,
+      payDebtOrInvestItSelection: "invest",
+      debtFreeFasterBy: 5,
+      interestSavedAmount: 876,
+      totalSavedAmount: 3276,
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };

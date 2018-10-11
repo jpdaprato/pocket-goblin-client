@@ -148,7 +148,7 @@ const calculateCashFlow = cashFlowData => {
 const asyncGetTotalDebt = () => {
   return new Promise((resolve, reject) => {
     models.Snapshot.findAll({
-      attributes: ["user_id", "total_debt", "total_savings"]
+      attributes: ["users_id", "total_debt", "total_savings"]
     })
       .then(snapshotData => resolve(snapshotData[0].total_debt))
       .catch(error => reject(error));
@@ -159,7 +159,7 @@ const asyncGetTotalDebt = () => {
 const asyncGetTotalSavings = () => {
   return new Promise((resolve, reject) => {
     models.Snapshot.findAll({
-      attributes: ["user_id", "total_debt", "total_savings"]
+      attributes: ["users_id", "total_debt", "total_savings"]
     })
       .then(snapshotData => resolve(snapshotData[0].total_savings))
       .catch(error => reject(error));
