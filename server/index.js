@@ -71,6 +71,7 @@ const asyncGetUserInfo = userId => {
 
       const parsedUser = JSON.parse(body);
 
+      //After getting the user info, find or create using that data
       models.User.findOrCreate({
         where: { sub: userId },
         defaults: { email: parsedUser.email, name: parsedUser.name }
@@ -111,11 +112,11 @@ const asyncCreateItem = publicToken => {
 const asyncGetCashFlow = () => {
   return new Promise((resolve, reject) => {
     models.Cashflow.findAll({
-      attributes: ["client_id", "account_type", "year", "month", "sum"],
+      attributes: ["user_id", "account_type", "year", "month", "sum"],
       where: {
         $and: [
           {
-            client_id: {
+            user_id: {
               $ne: null
             }
           },
@@ -157,7 +158,7 @@ const calculateCashFlow = cashFlowData => {
 const asyncGetTotalDebt = () => {
   return new Promise((resolve, reject) => {
     models.Snapshot.findAll({
-      attributes: ["client_id", "total_debt", "total_savings"]
+      attributes: ["user_id", "total_debt", "total_savings"]
     })
       .then(snapshotData => resolve(snapshotData[0].total_debt))
       .catch(error => reject(error));
@@ -168,7 +169,7 @@ const asyncGetTotalDebt = () => {
 const asyncGetTotalSavings = () => {
   return new Promise((resolve, reject) => {
     models.Snapshot.findAll({
-      attributes: ["client_id", "total_debt", "total_savings"]
+      attributes: ["user_id", "total_debt", "total_savings"]
     })
       .then(snapshotData => resolve(snapshotData[0].total_savings))
       .catch(error => reject(error));
