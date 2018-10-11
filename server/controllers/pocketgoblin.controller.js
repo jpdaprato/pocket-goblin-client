@@ -9,23 +9,27 @@ if (result.error) {
   throw result.error;
 }
 
-let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+// TODO: remove: should be passed in from React client once an item's created
+// let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 const controller = {
-  getTransactions: (request, response) => {
-    console.log("we are in the getTransactions controllers!");
-    //Check that we receive the user Id in the request
-    if (!request.query.userId) {
-      return response.status(404).end("You must provide a user id!");
-    }
+  // ORIGINAL CODE
+  // getTransactions: (request, response) => {
+  //   console.log("we are in the getTransactions controllers!");
+  //   //Check that we receive the user Id in the request
+  //   if (!request.query.userId) {
+  //     return response.status(404).end("You must provide a user id!");
+  //   }
 
+  // Will be called by createItem graphql endpoint
+  saveItemData: (accessToken, itemId, userId) => {
     // Pull transactions for the Item for the last 30 days
     let startDate = moment()
       .subtract(30, "days")
       .format("YYYY-MM-DD");
     let endDate = moment().format("YYYY-MM-DD");
     client.getTransactions(
-      ACCESS_TOKEN,
+      accessToken,
       startDate,
       endDate,
       {
@@ -35,23 +39,19 @@ const controller = {
       function(error, transactionsResponse) {
         if (error != null) {
           prettyPrintResponse(error);
-          return response.json({
-            error: error
-          });
         } else {
           //store response in lower char variable for ease-of-use
           const txns = transactionsResponse;
-          response.json({ error: null, transactions: txns });
+          console.log("Transactions fetched from Plaid API");
 
           // Create structure and import txns
           models.User.findOne({
-            id: request.query.userId
+            id: userId
           })
             .then(user => {
               return models.Item.create({
-                access_token: ACCESS_TOKEN,
-                plaid_account_id: process.env.PLAID_CLIENT_ID,
-                plaid_item_id: txns.item.item_id,
+                access_token: accessToken,
+                plaid_item_id: itemId,
                 user_id: user.dataValues.id
               });
             })
@@ -94,11 +94,9 @@ const controller = {
               });
             })
             .then(() => {
-              prettyPrintResponse(transactionsResponse);
-              response.json({
-                error: null,
-                transactions: transactionsResponse
-              });
+              console.log(
+                "New Item successfully created and all data saved to the database"
+              );
             })
             .catch(error => console.error(error));
         }
