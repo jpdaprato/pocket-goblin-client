@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Cashflow = sequelize.define(
     "cashflow",
     {
-      client_id: DataTypes.UUID,
+      user_id: DataTypes.UUID,
       account_type: DataTypes.STRING,
       year: DataTypes.INTEGER,
       month: DataTypes.INTEGER,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       viewDefinition: `
         CREATE VIEW "cashflows" AS 
         SELECT 
-          clients.id as client_id,
+          users.id as user_id,
           accounts."type" as account_type,
           EXTRACT(YEAR from transactions.post_date) "year",
           EXTRACT(MONTH from transactions.post_date) "month",
@@ -29,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         ON
           items.id = accounts.item_id
         JOIN
-          clients
+          users
         ON
-          clients.id = items.client_id
+          users.id = items.user_id
         GROUP BY
           ROLLUP (
-            clients.id,
+            users.id,
             accounts."type",
             EXTRACT(YEAR from post_date),
             EXTRACT(MONTH FROM post_date)

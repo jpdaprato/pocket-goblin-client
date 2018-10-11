@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       viewDefinition: `
         CREATE VIEW "snapshots" AS 
         SELECT
-          clients.id as "client_id",
+          users.id as "users_id",
           (SELECT SUM("current_balance")
         FROM "accounts" 
         WHERE ("type" = 'credit')) as "total_debt",
@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
             ON
               accounts.item_id = items.id
             JOIN
-              clients
+              users
             ON
-              items.client_id = clients.id
+              items.user_id = users.id
             GROUP BY 
-              clients.id
+              users.id
       `
     }
   );
