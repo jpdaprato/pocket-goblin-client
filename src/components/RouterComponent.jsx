@@ -75,7 +75,7 @@ class RouterComponent extends React.Component {
     } = this.state;
 
     return (
-      <div>
+      <main>
         <Router>
           <EnterPurchase
             path="home/enter-purchase"
@@ -100,7 +100,7 @@ class RouterComponent extends React.Component {
           <GoblinAdvice path="/goblin-advice" />
           <TopSpending path="/top-spending" />
         </Router>
-      </div>
+      </main>
     );
   }
 }
