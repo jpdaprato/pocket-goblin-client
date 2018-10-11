@@ -1,14 +1,15 @@
-const util = require("util");
 const express = require("express");
 const bodyParser = require("body-parser");
 const moment = require("moment");
-const plaid = require("plaid");
 const dotenv = require("dotenv");
 const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const cors = require("cors");
 const request = require("request");
 const models = require("../models/index");
+const prettyPrintResponse = require("./helpers");
+const client = require("./plaid"); //Plaid Client
+const appRoutes = require("./routes/pocketgoblin.routes.js");
 
 const result = dotenv.config();
 if (result.error) {
@@ -25,19 +26,9 @@ const AUTH0_API_TOKEN = process.env.AUTH0_API_TOKEN;
 // PLAID API
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
-let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+let ACCESS_TOKEN = null;
 let PUBLIC_TOKEN = null;
 let ITEM_ID = null;
-
-// Initialize the Plaid client
-// Find your API keys in the Dashboard (https://dashboard.plaid.com/account/keys)
-const client = new plaid.Client(
-  PLAID_CLIENT_ID,
-  PLAID_SECRET,
-  PLAID_PUBLIC_KEY,
-  plaid.environments[PLAID_ENV],
-  { version: "2018-05-22" }
-);
 
 // GRAPHQL API
 // Construct a schema, using GraphQL schema language
@@ -249,28 +240,31 @@ app.use(
   })
 );
 
+//Pass in the app to our routes to mount.
+appRoutes(app);
+
 // //PLAID EXPRESS SERVER ENDPOINTS
-// // Exchange token flow - exchange a Link public_token for
-// // an API access_token
-// // https://plaid.com/docs/#exchange-token-flow
-// app.post("/get_access_token", function(request, response, next) {
-//   PUBLIC_TOKEN = request.body.public_token;
-//   client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
-//     if (error != null) {
-//       prettyPrintResponse(error);
-//       return response.json({
-//         error: error
-//       });
-//     }
-//     // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
-//     ACCESS_TOKEN = tokenResponse.access_token;
-//     ITEM_ID = tokenResponse.item_id;
-//     prettyPrintResponse(tokenResponse);
-//     response.json(
-//       "Item successfully created: access_token and item_id have been received by the server"
-//     );
-//   });
-// });
+// Exchange token flow - exchange a Link public_token for
+// an API access_token
+// https://plaid.com/docs/#exchange-token-flow
+app.post("/get_access_token", function(request, response) {
+  PUBLIC_TOKEN = request.body.public_token;
+  client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
+    if (error != null) {
+      prettyPrintResponse(error);
+      return response.json({
+        error: error
+      });
+    }
+    // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
+    ACCESS_TOKEN = tokenResponse.access_token;
+    ITEM_ID = tokenResponse.item_id;
+    prettyPrintResponse(tokenResponse);
+    response.json(
+      "Item successfully created: access_token and item_id have been received by the server"
+    );
+  });
+});
 
 // // Retrieve Identity for an Item
 // // https://plaid.com/docs/#identity
@@ -370,105 +364,11 @@ app.use(
 // Retrieve Transactions for an Item
 // https://plaid.com/docs/#transactions
 // NOTE: modified and used to seed database with plaid sandbox data
-app.get("/transactions", function(request, response) {
-  //Check that we receive the user Id in the request
-  if (!request.query.userId) {
-    return response.status(404).end("You must provide a user id!");
-  }
-
-  // Pull transactions for the Item for the last 30 days
-  let startDate = moment()
-    .subtract(30, "days")
-    .format("YYYY-MM-DD");
-  let endDate = moment().format("YYYY-MM-DD");
-  client.getTransactions(
-    ACCESS_TOKEN,
-    startDate,
-    endDate,
-    {
-      count: 250,
-      offset: 0
-    },
-    function(error, transactionsResponse) {
-      if (error != null) {
-        prettyPrintResponse(error);
-        return response.json({
-          error: error
-        });
-      } else {
-        //store response in lower char variable for ease-of-use
-        const txns = transactionsResponse;
-        response.json({ error: null, transactions: txns });
-
-        // Create structure and import txns
-        models.User.findOne({
-          id: request.query.userId
-        })
-          .then(user => {
-            return models.Item.create({
-              access_token: ACCESS_TOKEN,
-              plaid_account_id: process.env.PLAID_CLIENT_ID,
-              plaid_item_id: txns.item.item_id,
-              user_id: user.dataValues.id
-            });
-          })
-          .then(item => {
-            var promises = [];
-            txns.accounts.forEach(account => {
-              promises.push(
-                models.Account.create({
-                  name: account.name,
-                  type: account.type,
-                  subtype: account.subtype,
-                  current_balance: account.balances.available
-                    ? account.balances.available
-                    : account.balances.current,
-                  plaid_account_id: account.account_id,
-                  item_id: item.dataValues.id
-                })
-              );
-            });
-            return Promise.all(promises);
-          })
-          .then(() => {
-            txns.transactions.forEach(txn => {
-              models.Account.findOne({
-                where: { plaid_account_id: txn.account_id },
-                attributes: ["id"]
-              }).then(acctId => {
-                models.Transaction.create({
-                  name: txn.name,
-                  amount: txn.amount,
-                  category: txn.category,
-                  category_id: txn.category_id,
-                  type: txn.transaction_type,
-                  post_date: txn.date,
-                  plaid_account_id: txn.account_id,
-                  plaid_transaction_id: txn.transaction_id,
-                  account_id: acctId.dataValues.id
-                });
-              });
-            });
-          })
-          .then(() => {
-            prettyPrintResponse(transactionsResponse);
-            response.json({ error: null, transactions: transactionsResponse });
-          })
-          .catch(error => console.error(error));
-      }
-    }
-  );
-});
 
 // Create server
 app.listen(APP_PORT, function() {
   console.log("PocketGoblin server listening on port " + APP_PORT);
 });
-
-// Helper function
-const prettyPrintResponse = response => {
-  console.log(util.inspect(response, { colors: true, depth: 4 }));
-};
 
 // // TODO: Consider removing this function (necessary for development environment?)
 // app.post("/set_access_token", function(request, response, next) {
