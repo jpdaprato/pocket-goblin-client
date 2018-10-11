@@ -36,7 +36,7 @@ class RouterComponent extends React.Component {
       .then(({ data: { data } }) => {
         this.setState({
           currentCashFlowAmount: data.cashFlow,
-          totalDebtAmount: data.totalDebt,
+          totalDebtAmount: data.totalDebt + 15000,
           totalSavingAmount: data.totalSavings
         });
       })
