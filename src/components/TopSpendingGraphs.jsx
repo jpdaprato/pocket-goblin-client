@@ -10,17 +10,6 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
     "rgb(244, 65, 184)"
   ];
 
-  const recurringGraph = {
-    labels: recurring.labels,
-    datasets: [
-      {
-        label: "Top Recurring",
-        backgroundColor: barGraphColors,
-        data: recurring.data
-      }
-    ]
-  };
-
   const options = {
     legend: {
       display: false
@@ -34,6 +23,17 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
         }
       ]
     }
+  };
+
+  const recurringGraph = {
+    labels: recurring.labels,
+    datasets: [
+      {
+        label: "Top Recurring",
+        backgroundColor: barGraphColors,
+        data: recurring.data
+      }
+    ]
   };
 
   const categoriesGraph = {

@@ -25,7 +25,16 @@ class SnapshotResults extends React.Component {
     this.setState({ payDebtOrInvestItSelection: event.target.value });
   };
 
-  graphColorPicker(num) {
+  DebtGraphColorPicker(num) {
+    if (num > 0.6) {
+      return "red";
+    } else if (num > 0.4) {
+      return "yellow";
+    }
+    return "green";
+  }
+
+  savingGraphColorPicker(num) {
     if (num < 100) {
       return "red";
     } else if (num < 300) {
@@ -46,18 +55,13 @@ class SnapshotResults extends React.Component {
     } = this.props;
 
     const DebtSavingGraph = {
-      labels: ["Debt to Savings Ratio", "Total Savings"],
+      labels: ["Total Debt", "Total Savings"],
       datasets: [
         {
-          data: [
-            ((totalDebtAmount / totalSavingAmount) * 100).toFixed(2),
-            totalSavingAmount
-          ],
+          data: [totalDebtAmount, totalSavingAmount],
           backgroundColor: [
-            this.graphColorPicker(
-              ((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)
-            ),
-            this.graphColorPicker(totalSavingAmount)
+            this.DebtGraphColorPicker(totalDebtAmount / totalSavingAmount),
+            this.savingGraphColorPicker(totalSavingAmount)
           ]
         }
       ]
