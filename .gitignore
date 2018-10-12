@@ -1,5 +1,8 @@
-#auth0 variables
+# auth0 variables
 auth0-variables.js
+
+# Mac only
+.DS_Store
 
 dist/
 .cache

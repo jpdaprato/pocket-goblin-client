@@ -8,8 +8,9 @@ const cors = require("cors");
 const request = require("request");
 const models = require("../models/index");
 const prettyPrintResponse = require("./helpers");
-const client = require("./plaid"); //Plaid Client
+const client = require("./plaid");
 const appRoutes = require("./routes/pocketgoblin.routes.js");
+const ctrl = require("./controllers/pocketgoblin.controller.js");
 
 const result = dotenv.config();
 if (result.error) {
@@ -17,11 +18,8 @@ if (result.error) {
 }
 
 const APP_PORT = process.env.APP_PORT;
-const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
-const PLAID_SECRET = process.env.PLAID_SECRET;
-const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
-const PLAID_ENV = process.env.PLAID_ENV;
-const AUTH0_API_TOKEN = process.env.AUTH0_API_TOKEN;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 
 // PLAID API
 // We store the access_token in memory - in production, store it in a secure
@@ -35,7 +33,7 @@ let ITEM_ID = null;
 let schema = buildSchema(`
   type Query {
     getUserInfo(userId: String!): String
-    createItem(publicToken: String!): String
+    createItem(publicToken: String!, userId: String!): String
     cashFlow: Float
     totalDebt: Float
     totalSavings: Float
@@ -45,12 +43,52 @@ let schema = buildSchema(`
 // RESOLVER FUNCTIONS
 const asyncGetUserInfo = userId => {
   return new Promise((resolve, reject) => {
+    asyncGetAuth0AccessToken().then(accessToken => {
+      var options = {
+        method: "GET",
+        url: `https://pocketgoblin.auth0.com/api/v2/users/${userId}`,
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      };
+
+      request(options, function(error, response, body) {
+        if (error) {
+          prettyPrintResponse(error);
+          reject(error);
+        }
+
+        const parsedUserData = JSON.parse(body);
+
+        models.User.findOrCreate({
+          where: { sub: userId },
+          defaults: { email: parsedUserData.email, name: parsedUserData.name }
+        })
+          .spread((user, created) => {
+            const userData = JSON.stringify({
+              id: user.dataValues.id,
+              name: user.dataValues.name,
+              email: user.dataValues.email,
+              wasCreated: created
+            });
+            resolve(userData);
+          })
+          .catch(error => {
+            prettyPrintResponse(error);
+            reject(error);
+          });
+      });
+    });
+  });
+};
+
+const asyncGetAuth0AccessToken = () => {
+  return new Promise((resolve, reject) => {
     var options = {
-      method: "GET",
-      url: `https://pocketgoblin.auth0.com/api/v2/users/${userId}`,
-      headers: {
-        authorization: `${AUTH0_API_TOKEN}`
-      }
+      method: "POST",
+      url: "https://pocketgoblin.auth0.com/oauth/token",
+      headers: { "content-type": "application/json" },
+      body: `{"client_id":"${AUTH0_CLIENT_ID}","client_secret":"${AUTH0_CLIENT_SECRET}","audience":"https://pocketgoblin.auth0.com/api/v2/","grant_type":"client_credentials"}`
     };
 
     request(options, function(error, response, body) {
@@ -58,43 +96,22 @@ const asyncGetUserInfo = userId => {
         prettyPrintResponse(error);
         reject(error);
       }
-
-      const parsedUser = JSON.parse(body);
-
-      //After getting the user info, find or create using that data
-      models.User.findOrCreate({
-        where: { sub: userId },
-        defaults: { email: parsedUser.email, name: parsedUser.name }
-      })
-        .spread((user, created) => {
-          const userData = JSON.stringify({
-            id: user.dataValues.id,
-            name: user.dataValues.name,
-            email: user.dataValues.email,
-            wasCreated: created
-          });
-          resolve(userData);
-        })
-        .catch(error => reject(error));
+      resolve(JSON.parse(body).access_token);
     });
   });
 };
 
 // Create Item
-const asyncCreateItem = publicToken => {
+const asyncCreateItem = (publicToken, userId) => {
   return new Promise((resolve, reject) => {
     client.exchangePublicToken(publicToken, function(error, tokenResponse) {
       if (error != null) {
         prettyPrintResponse(error);
         reject(error);
       }
-      // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
       ACCESS_TOKEN = tokenResponse.access_token;
       ITEM_ID = tokenResponse.item_id;
-      prettyPrintResponse(tokenResponse);
-      resolve(
-        "Item successfully created: access_token and item_id have been received by the server"
-      );
+      resolve(ctrl.saveItemData(ACCESS_TOKEN, ITEM_ID, userId));
     });
   });
 };
@@ -171,7 +188,7 @@ let root = {
   getUserInfo: ({ userId }) => {
     return asyncGetUserInfo(userId);
   },
-  createItem: ({ publicToken }) => {
+  createItem: ({ publicToken, userId }) => {
     return asyncCreateItem(publicToken);
   },
   cashFlow: () => {

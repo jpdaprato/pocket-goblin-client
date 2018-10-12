@@ -74,7 +74,10 @@ export default class Auth {
         .post("http://localhost:8000/graphql", {
           query: `{ getUserInfo(userId: "${user.sub}") }`
         })
-        .then(response => console.log(response.data.data.getUserInfo))
+        .then(response => {
+          let userData = JSON.parse(response.data.data.getUserInfo);
+          localStorage.setItem("userData", userData);
+        })
         .catch(error => console.log(error));
     });
   }
