@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@reach/router";
+import { HorizontalBar } from "react-chartjs-2";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
@@ -23,6 +24,19 @@ class SnapshotResults extends React.Component {
   handlePayDebtOrInvestSelection = event => {
     this.setState({ payDebtOrInvestItSelection: event.target.value });
   };
+
+  makeGraph() {
+    const graph = {
+      labels: ["Debt to Savings Ratio", "Total Savings"],
+      datasets: [
+        {
+          data: [12, 19],
+          backgroundColor: ["red", "yellow"]
+        }
+      ]
+    };
+    return graph;
+  }
 
   render() {
     const {
@@ -50,15 +64,41 @@ class SnapshotResults extends React.Component {
             purchaseAmount={purchaseAmount}
           />
         </div>
-        <div>
-          <h3>Debt to Savings Ratio</h3>
+        <div style={{ width: "30%", height: "30%" }}>
+          <HorizontalBar
+            data={{
+              labels: ["Debt to Savings Ratio", "Total Savings"],
+              datasets: [
+                {
+                  data: [12, 19],
+                  backgroundColor: ["red", "yellow"]
+                }
+              ]
+            }}
+            options={{
+              legend: {
+                display: false
+              },
+              scales: {
+                xAxes: [
+                  {
+                    display: false,
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }
+                ]
+              }
+            }}
+          />
+          {/* <h3>Debt to Savings Ratio</h3>
           <span>
             {((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)}%
           </span>
         </div>
         <div>
           <h3>Total Savings</h3>
-          <span>${totalSavingAmount}</span>
+          <span>${totalSavingAmount}</span> */}
         </div>
         <div>
           <div>
