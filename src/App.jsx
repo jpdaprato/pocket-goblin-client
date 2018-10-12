@@ -18,7 +18,7 @@ class App extends Component {
     const { isAuthenticated } = this.props.auth;
 
     return (
-      <div>
+      <div className="nav">
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>

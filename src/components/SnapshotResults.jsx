@@ -11,10 +11,10 @@ class SnapshotResults extends React.Component {
     super(props);
 
     this.state = {
-      payDebtOrInvestItSelection: "debt",
-      debtFreeFasterBy: 0,
-      interestSavedAmount: 0,
-      totalSavedAmount: 0,
+      payDebtOrInvestItSelection: "invest",
+      debtFreeFasterBy: 5,
+      interestSavedAmount: 876,
+      totalSavedAmount: 3276,
       rateOfReturn: 0.1,
       investmentTimeline: 20
     };
@@ -51,12 +51,14 @@ class SnapshotResults extends React.Component {
           />
         </div>
         <div>
-          <h3>Debt to Savings</h3>
-          <span>{totalDebtAmount / totalSavingAmount}</span>
+          <h3>Debt to Savings Ratio</h3>
+          <span>
+            {((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)}%
+          </span>
         </div>
         <div>
-          <h3>Savings</h3>
-          <span>{totalSavingAmount}</span>
+          <h3>Total Savings</h3>
+          <span>${totalSavingAmount}</span>
         </div>
         <div>
           <div>

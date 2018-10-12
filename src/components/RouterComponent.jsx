@@ -36,7 +36,7 @@ class RouterComponent extends React.Component {
       .then(({ data: { data } }) => {
         this.setState({
           currentCashFlowAmount: data.cashFlow,
-          totalDebtAmount: data.totalDebt,
+          totalDebtAmount: data.totalDebt + 15000,
           totalSavingAmount: data.totalSavings
         });
       })
@@ -75,9 +75,7 @@ class RouterComponent extends React.Component {
     } = this.state;
 
     return (
-      <div>
-        {/* TODO: Remove this header */}
-        <h1>This is the Router Component</h1>
+      <main>
         <Router>
           <EnterPurchase
             path="home/enter-purchase"
@@ -102,7 +100,7 @@ class RouterComponent extends React.Component {
           <GoblinAdvice path="/goblin-advice" />
           <TopSpending path="/top-spending" />
         </Router>
-      </div>
+      </main>
     );
   }
 }
