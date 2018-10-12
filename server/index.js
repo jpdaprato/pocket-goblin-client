@@ -18,12 +18,8 @@ if (result.error) {
 }
 
 const APP_PORT = process.env.APP_PORT;
-// TODO: Remove these 4 envars?
-const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
-const PLAID_SECRET = process.env.PLAID_SECRET;
-const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
-const PLAID_ENV = process.env.PLAID_ENV;
-const AUTH0_API_TOKEN = process.env.AUTH0_API_TOKEN;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 
 // PLAID API
 // We store the access_token in memory - in production, store it in a secure
@@ -92,8 +88,7 @@ const asyncGetAuth0AccessToken = () => {
       method: "POST",
       url: "https://pocketgoblin.auth0.com/oauth/token",
       headers: { "content-type": "application/json" },
-      body:
-        '{"client_id":"yXXVi3Qx1AM7AmAyJbyG1FX1cZ0ZMkwA","client_secret":"a1hH-2BGwlDA6dIuricf5wIBNnpT_2_3O590co7GYKPSOR55G1Urct_W-V-cF4th","audience":"https://pocketgoblin.auth0.com/api/v2/","grant_type":"client_credentials"}'
+      body: `{"client_id":"${AUTH0_CLIENT_ID}","client_secret":"${AUTH0_CLIENT_SECRET}","audience":"https://pocketgoblin.auth0.com/api/v2/","grant_type":"client_credentials"}`
     };
 
     request(options, function(error, response, body) {
