@@ -14,9 +14,9 @@ class LinkItems extends React.Component {
     );
     axios
       .post(API_ENDPOINT, {
-        query: `{ createItem(publicToken: "${token}", userId: "${localStorage.getItem(
-          "userId"
-        )}") }`
+        query: `{ createItem(publicToken: "${token}", userId: "${
+          localStorage.getItem("userData").id
+        }") }`
       })
       .then(response => console.log(response.data.data.createItem))
       .catch(error => console.log(error));

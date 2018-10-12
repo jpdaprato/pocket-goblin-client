@@ -1,6 +1,13 @@
 //In order to get views support with model sync, we use this library
-const Sequelize = require("sequelize-views-support");
 // const Sequelize = require("sequelize");
+const Sequelize = require("sequelize-views-support");
+const dotenv = require("dotenv");
+
+const result = dotenv.config();
+
+if (result.error) {
+  throw result.error;
+}
 
 //FIXME:Move these things into environmental variables
 const dbName = process.env.DATABASE_NAME || "pocketgoblin";

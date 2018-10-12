@@ -18,6 +18,7 @@ if (result.error) {
 }
 
 const APP_PORT = process.env.APP_PORT;
+// TODO: Remove these 4 envars?
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
@@ -46,12 +47,53 @@ let schema = buildSchema(`
 // RESOLVER FUNCTIONS
 const asyncGetUserInfo = userId => {
   return new Promise((resolve, reject) => {
+    asyncGetAuth0AccessToken().then(accessToken => {
+      var options = {
+        method: "GET",
+        url: `https://pocketgoblin.auth0.com/api/v2/users/${userId}`,
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      };
+
+      request(options, function(error, response, body) {
+        if (error) {
+          prettyPrintResponse(error);
+          reject(error);
+        }
+
+        const parsedUserData = JSON.parse(body);
+
+        models.User.findOrCreate({
+          where: { sub: userId },
+          defaults: { email: parsedUserData.email, name: parsedUserData.name }
+        })
+          .spread((user, created) => {
+            const userData = JSON.stringify({
+              id: user.dataValues.id,
+              name: user.dataValues.name,
+              email: user.dataValues.email,
+              wasCreated: created
+            });
+            resolve(userData);
+          })
+          .catch(error => {
+            prettyPrintResponse(error);
+            reject(error);
+          });
+      });
+    });
+  });
+};
+
+const asyncGetAuth0AccessToken = () => {
+  return new Promise((resolve, reject) => {
     var options = {
-      method: "GET",
-      url: `https://pocketgoblin.auth0.com/api/v2/users/${userId}`,
-      headers: {
-        authorization: `${AUTH0_API_TOKEN}`
-      }
+      method: "POST",
+      url: "https://pocketgoblin.auth0.com/oauth/token",
+      headers: { "content-type": "application/json" },
+      body:
+        '{"client_id":"yXXVi3Qx1AM7AmAyJbyG1FX1cZ0ZMkwA","client_secret":"a1hH-2BGwlDA6dIuricf5wIBNnpT_2_3O590co7GYKPSOR55G1Urct_W-V-cF4th","audience":"https://pocketgoblin.auth0.com/api/v2/","grant_type":"client_credentials"}'
     };
 
     request(options, function(error, response, body) {
@@ -59,24 +101,11 @@ const asyncGetUserInfo = userId => {
         prettyPrintResponse(error);
         reject(error);
       }
-
-      const parsedUser = JSON.parse(body);
-
-      //After getting the user info, find or create using that data
-      models.User.findOrCreate({
-        where: { sub: userId },
-        defaults: { email: parsedUser.email, name: parsedUser.name }
-      })
-        .spread((user, created) => {
-          const userData = JSON.stringify({
-            id: user.dataValues.id,
-            name: user.dataValues.name,
-            email: user.dataValues.email,
-            wasCreated: created
-          });
-          resolve(userData);
-        })
-        .catch(error => reject(error));
+      console.log(
+        "This is the Auth0 access token: ",
+        JSON.parse(body).access_token
+      );
+      resolve(JSON.parse(body).access_token);
     });
   });
 };
