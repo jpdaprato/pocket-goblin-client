@@ -7,23 +7,16 @@ const API_ENDPOINT =
 
 class LinkItems extends React.Component {
   handleOnSuccess(token, metadata) {
-    console.log("This is the public_token returned by plaid: ", token);
-    console.log(
-      "This is the metadata returned by plaid along with the public_token: ",
-      metadata
-    );
     axios
       .post(API_ENDPOINT, {
         query: `{ createItem(publicToken: "${token}", userId: "${
           localStorage.getItem("userData").id
         }") }`
       })
-      .then(response => console.log(response.data.data.createItem))
       .catch(error => console.log(error));
   }
 
   handleOnExit() {
-    // handle the case when your user exits Link
     console.log("User exited Plaid Link");
   }
   render() {

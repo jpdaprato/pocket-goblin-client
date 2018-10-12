@@ -75,15 +75,7 @@ export default class Auth {
           query: `{ getUserInfo(userId: "${user.sub}") }`
         })
         .then(response => {
-          console.log(
-            "This is the response from the getUserInfo endpoint: ",
-            response
-          );
           let userData = JSON.parse(response.data.data.getUserInfo);
-          console.log(
-            "User data for the current authenticated user: ",
-            userData
-          );
           localStorage.setItem("userData", userData);
         })
         .catch(error => console.log(error));

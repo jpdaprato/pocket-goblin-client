@@ -8,7 +8,7 @@ const cors = require("cors");
 const request = require("request");
 const models = require("../models/index");
 const prettyPrintResponse = require("./helpers");
-const client = require("./plaid"); //Plaid Client
+const client = require("./plaid");
 const appRoutes = require("./routes/pocketgoblin.routes.js");
 const ctrl = require("./controllers/pocketgoblin.controller.js");
 
@@ -101,10 +101,6 @@ const asyncGetAuth0AccessToken = () => {
         prettyPrintResponse(error);
         reject(error);
       }
-      console.log(
-        "This is the Auth0 access token: ",
-        JSON.parse(body).access_token
-      );
       resolve(JSON.parse(body).access_token);
     });
   });
@@ -114,15 +110,12 @@ const asyncGetAuth0AccessToken = () => {
 const asyncCreateItem = (publicToken, userId) => {
   return new Promise((resolve, reject) => {
     client.exchangePublicToken(publicToken, function(error, tokenResponse) {
-      console.log("This is the token response from Plaid: ", tokenResponse);
       if (error != null) {
         prettyPrintResponse(error);
         reject(error);
       }
-      // TODO: Persist ACCESS_TOKEN and ITEM_ID in db
       ACCESS_TOKEN = tokenResponse.access_token;
       ITEM_ID = tokenResponse.item_id;
-      prettyPrintResponse(tokenResponse);
       resolve(ctrl.saveItemData(ACCESS_TOKEN, ITEM_ID, userId));
     });
   });

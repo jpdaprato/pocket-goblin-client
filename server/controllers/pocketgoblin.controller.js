@@ -9,19 +9,7 @@ if (result.error) {
   throw result.error;
 }
 
-// TODO: remove: should be passed in from React client once an item's created
-// let ACCESS_TOKEN = process.env.ACCESS_TOKEN;
-
 const controller = {
-  // ORIGINAL CODE
-  // getTransactions: (request, response) => {
-  //   console.log("we are in the getTransactions controllers!");
-  //   //Check that we receive the user Id in the request
-  //   if (!request.query.userId) {
-  //     return response.status(404).end("You must provide a user id!");
-  //   }
-
-  // Will be called by createItem graphql endpoint
   saveItemData: (accessToken, itemId, userId) => {
     // Pull transactions for the Item for the last 30 days
     let startDate = moment()
@@ -42,8 +30,6 @@ const controller = {
         } else {
           //store response in lower char variable for ease-of-use
           const txns = transactionsResponse;
-          console.log("Transactions fetched from Plaid API");
-
           // Create structure and import txns
           models.User.findOne({
             id: userId
