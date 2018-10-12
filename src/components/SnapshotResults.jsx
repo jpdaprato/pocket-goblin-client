@@ -25,17 +25,13 @@ class SnapshotResults extends React.Component {
     this.setState({ payDebtOrInvestItSelection: event.target.value });
   };
 
-  makeGraph() {
-    const graph = {
-      labels: ["Debt to Savings Ratio", "Total Savings"],
-      datasets: [
-        {
-          data: [12, 19],
-          backgroundColor: ["red", "yellow"]
-        }
-      ]
-    };
-    return graph;
+  graphColorPicker(num) {
+    if (num < 100) {
+      return "red";
+    } else if (num < 300) {
+      return "yellow";
+    }
+    return "green";
   }
 
   render() {
@@ -48,6 +44,40 @@ class SnapshotResults extends React.Component {
       purchaseAmount,
       purchasePaymentType
     } = this.props;
+
+    const DebtSavingGraph = {
+      labels: ["Debt to Savings Ratio", "Total Savings"],
+      datasets: [
+        {
+          data: [
+            ((totalDebtAmount / totalSavingAmount) * 100).toFixed(2),
+            totalSavingAmount
+          ],
+          backgroundColor: [
+            this.graphColorPicker(
+              ((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)
+            ),
+            this.graphColorPicker(totalSavingAmount)
+          ]
+        }
+      ]
+    };
+
+    const DebtSavingGraphOptions = {
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [
+          {
+            display: false,
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    };
 
     return (
       <div>
@@ -66,30 +96,8 @@ class SnapshotResults extends React.Component {
         </div>
         <div style={{ width: "30%", height: "30%" }}>
           <HorizontalBar
-            data={{
-              labels: ["Debt to Savings Ratio", "Total Savings"],
-              datasets: [
-                {
-                  data: [12, 19],
-                  backgroundColor: ["red", "yellow"]
-                }
-              ]
-            }}
-            options={{
-              legend: {
-                display: false
-              },
-              scales: {
-                xAxes: [
-                  {
-                    display: false,
-                    ticks: {
-                      beginAtZero: true
-                    }
-                  }
-                ]
-              }
-            }}
+            data={DebtSavingGraph}
+            options={DebtSavingGraphOptions}
           />
           {/* <h3>Debt to Savings Ratio</h3>
           <span>

@@ -1,27 +1,32 @@
 import React from "react";
-// import { HorizontalBar } from "react-chartjs-2";
-import { Bar } from "react-chartjs-2";
+import { HorizontalBar } from "react-chartjs-2";
+// import { Bar } from "react-chartjs-2";
 
 const TopSpendingGraphs = ({ recurring, categories, shop }) => {
+  const barGraphColors = [
+    "rgb(146, 66, 244)",
+    "rgb(65, 86, 244)",
+    "rgb(235, 244, 65)",
+    "rgb(244, 65, 184)"
+  ];
+
   const recurringGraph = {
     labels: recurring.labels,
     datasets: [
       {
         label: "Top Recurring",
-        backgroundColor: [
-          "rgb(146, 66, 244)",
-          "rgb(65, 86, 244)",
-          "rgb(235, 244, 65)",
-          "rgb(244, 65, 184)"
-        ],
+        backgroundColor: barGraphColors,
         data: recurring.data
       }
     ]
   };
 
   const options = {
+    legend: {
+      display: false
+    },
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true
@@ -36,12 +41,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
     datasets: [
       {
         label: "Top Categories",
-        backgroundColor: [
-          "rgb(146, 66, 244)",
-          "rgb(65, 86, 244)",
-          "rgb(235, 244, 65)",
-          "rgb(244, 65, 184)"
-        ],
+        backgroundColor: barGraphColors,
         data: categories.data
       }
     ]
@@ -52,12 +52,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
     datasets: [
       {
         label: "Top Shop",
-        backgroundColor: [
-          "rgb(146, 66, 244)",
-          "rgb(65, 86, 244)",
-          "rgb(235, 244, 65)",
-          "rgb(244, 65, 184)"
-        ],
+        backgroundColor: barGraphColors,
         data: shop.data
       }
     ]
@@ -69,7 +64,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       <select>
         <option value="monthly">Monthly</option>
       </select>
-      <Bar data={recurringGraph} options={options} />
+      <HorizontalBar data={recurringGraph} options={options} />
       <p>
         Recurring expenses add up! Click on one to analyze how reducting it
         would help imporve your financial health.
@@ -78,7 +73,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       <select>
         <option value="monthly">Monthly</option>
       </select>
-      <Bar data={categoriesGraph} options={options} />
+      <HorizontalBar data={categoriesGraph} options={options} />
       <p>
         Category spending shows you genral trends. Most people can save tons of
         money be reducing the amount of money they spend at bars and
@@ -88,7 +83,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
       <select>
         <option value="monthly">Monthly</option>
       </select>
-      <Bar data={shopGraph} options={options} />
+      <HorizontalBar data={shopGraph} options={options} />
       <p>
         {`Watch out! That daily latte or impulsive Amazon purchase adds up! If you
         used that money to pay down debt or top up savings, you will be in far
