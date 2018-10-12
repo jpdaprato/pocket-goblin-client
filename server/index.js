@@ -114,6 +114,7 @@ const asyncGetAuth0AccessToken = () => {
 const asyncCreateItem = (publicToken, userId) => {
   return new Promise((resolve, reject) => {
     client.exchangePublicToken(publicToken, function(error, tokenResponse) {
+      console.log("This is the token response from Plaid: ", tokenResponse);
       if (error != null) {
         prettyPrintResponse(error);
         reject(error);
