@@ -42,9 +42,8 @@ const controller = {
               });
             })
             .then(item => {
-              var promises = [];
-              txns.accounts.forEach(account => {
-                promises.push(
+              return Promise.all(
+                txns.accounts.map(account => {
                   models.Account.create({
                     name: account.name,
                     type: account.type,
@@ -54,10 +53,9 @@ const controller = {
                       : account.balances.current,
                     plaid_account_id: account.account_id,
                     item_id: item.dataValues.id
-                  })
-                );
-              });
-              return Promise.all(promises);
+                  });
+                })
+              );
             })
             .then(() => {
               txns.transactions.forEach(txn => {
