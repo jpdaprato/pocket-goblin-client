@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "@reach/router";
+import { Link } from "react-router-dom";
 import TopSpendingGraphs from "./TopSpendingGraphs.jsx";
 
 class TopSpending extends React.Component {
@@ -32,7 +32,7 @@ class TopSpending extends React.Component {
           categories={categories}
           shop={shop}
         />
-        <Link path to="/home/enter-purchase">
+        <Link to="/enter-purchase">
           <button>Start the Goblin without selection</button>
         </Link>
       </div>
