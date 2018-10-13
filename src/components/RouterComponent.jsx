@@ -133,10 +133,10 @@ const RouterComponent = props => {
           path="/top-spending"
           render={props => <TopSpending auth={auth} {...props} />}
         />
-        <Route
+        {/* <Route
           path="/link-items"
           render={props => <LinkItems auth={auth} {...props} />}
-        />
+        /> */}
       </Wrapper>
     </Router>
   );
