@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import goblin from "../images/goblin.png";
+import goblin from "../images/goblin.png";
 
 class Callback extends Component {
   render() {
@@ -16,7 +16,11 @@ class Callback extends Component {
       backgroundColor: "white"
     };
 
-    return <div style={style}>{/* <img src={goblin} alt="loading" /> */}</div>;
+    return (
+      <div style={style}>
+        <img src={goblin} alt="loading" />
+      </div>
+    );
   }
 }
 
