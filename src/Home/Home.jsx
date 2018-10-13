@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import RouterComponent from "../components/RouterComponent.jsx";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   login() {
@@ -10,7 +10,16 @@ class Home extends Component {
     const { isAuthenticated } = this.props.auth;
     return (
       <div className="container">
-        {isAuthenticated() && <RouterComponent />}
+        {isAuthenticated() && (
+          <div>
+            <Link to="/link-items">
+              <button>Link Your Bank Accounts</button>
+            </Link>
+            <Link to="/enter-purchase">
+              <button>Consider a Puchase</button>
+            </Link>
+          </div>
+        )}
         {!isAuthenticated() && (
           <h4>
             You are not logged in! Please{" "}

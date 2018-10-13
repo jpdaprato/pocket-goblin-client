@@ -1,11 +1,18 @@
 import React from "react";
-import axios from "axios";
-import { Router } from "@reach/router";
+import { Route, Router } from "react-router-dom";
+import styled from "react-emotion";
+import history from "../history";
+import Auth from "../Auth/Auth";
+import App from "../App.jsx";
+import Home from "../Home/Home.jsx";
+import Callback from "../Callback/Callback.jsx";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
 import TopSpending from "./TopSpending.jsx";
+import LinkItems from "./LinkItems.jsx";
 
+<<<<<<< HEAD
 class RouterComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -43,66 +50,96 @@ class RouterComponent extends React.Component {
       /* eslint-disable-next-line */
       .catch(error => console.log(error));
   }
+=======
+// Grid Wrapper for entire app since this component
+// creates the outermost div
+const Wrapper = styled("div")`
+  display: grid;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+>>>>>>> Route user using one routing system: react-router-dom; pass on history and authentication information throughout the app; repurpose homepage to display buttons that route to LinkItems and EnterPurchase, respectively
 
-  handlePurchaseInput(e) {
-    this.setState({
-      purchaseAmount: Number(e.target.value)
-    });
+const auth = new Auth();
+
+const handleAuthentication = ({ location }) => {
+  if (/access_token|id_token|error/.test(location.hash)) {
+    auth.handleAuthentication();
   }
+};
 
-  handlePurchaseFrequencyChange(e) {
-    this.setState({ purchaseFrequency: e.target.value });
-  }
+const RouterComponent = props => {
+  const {
+    handlePurchaseInput,
+    handlePurchaseFrequencyChange,
+    handlePaymentTypeChange,
+    currentCashFlowAmount,
+    purchaseFrequency,
+    purchasePaymentType,
+    totalDebtAmount,
+    totalSavingAmount,
+    purchaseAmount
+  } = props;
 
-  handlePaymentTypeChange(e) {
-    this.setState({ purchasePaymentType: e.target.value });
-  }
-
-  render() {
-    const {
-      handlePurchaseInput,
-      handlePurchaseFrequencyChange,
-      handlePaymentTypeChange
-    } = this;
-
-    const {
-      currentCashFlowAmount,
-      purchaseFrequency,
-      purchasePaymentType,
-      totalDebtAmount,
-      totalSavingAmount,
-      purchaseAmount
-    } = this.state;
-
-    return (
-      <main>
-        <Router>
-          <EnterPurchase
-            path="home/enter-purchase"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            purchaseFrequency={purchaseFrequency}
-            handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
-            purchasePaymentType={purchasePaymentType}
-            handlePaymentTypeChange={handlePaymentTypeChange}
-            purchaseAmount={purchaseAmount}
-          />
-          <SnapshotResults
-            path="/what-if-results"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            totalDebtAmount={totalDebtAmount}
-            totalSavingAmount={totalSavingAmount}
-            purchaseAmount={purchaseAmount}
-            purchaseFrequency={purchaseFrequency}
-            purchasePaymentType={purchasePaymentType}
-          />
-          <GoblinAdvice path="/goblin-advice" />
-          <TopSpending path="/top-spending" />
-        </Router>
-      </main>
-    );
-  }
-}
+  return (
+    <Router history={history}>
+      <Wrapper className="routes-component">
+        <Route path="/" render={props => <App auth={auth} {...props} />} />
+        <Route path="/home" render={props => <Home auth={auth} {...props} />} />
+        <Route
+          path="/callback"
+          render={props => {
+            handleAuthentication(props);
+            return <Callback {...props} />;
+          }}
+        />
+        <Route
+          path="/enter-purchase"
+          render={props => (
+            <EnterPurchase
+              auth={auth}
+              handlePurchaseInput={handlePurchaseInput}
+              currentCashFlowAmount={currentCashFlowAmount}
+              purchaseFrequency={purchaseFrequency}
+              handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
+              purchasePaymentType={purchasePaymentType}
+              handlePaymentTypeChange={handlePaymentTypeChange}
+              purchaseAmount={purchaseAmount}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/snapshot-results"
+          render={props => (
+            <SnapshotResults
+              auth={auth}
+              handlePurchaseInput={handlePurchaseInput}
+              currentCashFlowAmount={currentCashFlowAmount}
+              totalDebtAmount={totalDebtAmount}
+              totalSavingAmount={totalSavingAmount}
+              purchaseAmount={purchaseAmount}
+              purchaseFrequency={purchaseFrequency}
+              purchasePaymentType={purchasePaymentType}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/goblin-advice"
+          render={props => <GoblinAdvice auth={auth} {...props} />}
+        />
+        <Route
+          path="/top-spending"
+          render={props => <TopSpending auth={auth} {...props} />}
+        />
+        <Route
+          path="/link-items"
+          render={props => <LinkItems auth={auth} {...props} />}
+        />
+      </Wrapper>
+    </Router>
+  );
+};
 
 export default RouterComponent;
