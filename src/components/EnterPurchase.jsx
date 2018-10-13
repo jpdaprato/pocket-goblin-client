@@ -8,6 +8,8 @@ import CashFlowMeter from "./CashFlowMeter.jsx";
 const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 class EnterPurchase extends React.Component {
@@ -34,22 +36,25 @@ class EnterPurchase extends React.Component {
           purchaseAmount={purchaseAmount}
         />
         <div>
-          <h3>Cash Flow</h3>
+          <h2>Cash Flow</h2>
           <CashFlowMeter
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseAmount={purchaseAmount}
           />
         </div>
-        Repeat:
-        <select
-          value={purchaseFrequency}
-          onBlur={handlePurchaseFrequencyChange}
-          onChange={handlePurchaseFrequencyChange}
-        >
-          <option value="never">Never</option>
-          <option value="monthly">Monthly</option>
-        </select>
-        <div>
+        <div style={{ margin: "2%" }}>
+          Repeat:
+          <select
+            value={purchaseFrequency}
+            onBlur={handlePurchaseFrequencyChange}
+            onChange={handlePurchaseFrequencyChange}
+          >
+            <option value="never">Never</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+
+        <div style={{ margin: "2%", marginBottom: "2%" }}>
           <input
             name="paymentType"
             type="radio"

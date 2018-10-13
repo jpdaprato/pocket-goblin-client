@@ -1,10 +1,25 @@
 import React from "react";
 import { HorizontalBar } from "react-chartjs-2";
 import { Link } from "react-router-dom";
+import styled from "react-emotion";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
 import PayDebtOrInvestIt from "./PayDebtOrInvestIt.jsx";
+
+//Styled Components
+const Wrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+const WhatIfContainer = styled("div")`
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+`;
 
 class SnapshotResults extends React.Component {
   constructor(props) {
@@ -83,7 +98,7 @@ class SnapshotResults extends React.Component {
     };
 
     return (
-      <div>
+      <Wrapper>
         <h1>Tap to Modify</h1>
         <InputAmount
           handlePurchaseInput={handlePurchaseInput}
@@ -103,7 +118,7 @@ class SnapshotResults extends React.Component {
             options={DebtSavingGraphOptions}
           />
         </div>
-        <div>
+        <WhatIfContainer>
           <div>
             {purchasePaymentType === "credit" ? (
               <RealCostOfCredit
@@ -111,7 +126,7 @@ class SnapshotResults extends React.Component {
                 purchaseAmount={purchaseAmount}
               />
             ) : null}
-            <div>
+            <div style={{ textAlign: "center" }}>
               <h2>Or, what if you instead...</h2>
               <button
                 value="debt"
@@ -125,7 +140,6 @@ class SnapshotResults extends React.Component {
               >
                 Invest it
               </button>
-              {/* {this.renderPayDebtOrInvestItInfo()} */}
 
               <PayDebtOrInvestIt
                 debtFreeFasterBy={this.state.debtFreeFasterBy}
@@ -141,11 +155,11 @@ class SnapshotResults extends React.Component {
               />
             </div>
           </div>
-        </div>
+        </WhatIfContainer>
         <Link to="/goblin-advice">
           <button>What Would the Goblin Do?</button>
         </Link>
-      </div>
+      </Wrapper>
     );
   }
 }
