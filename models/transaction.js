@@ -15,9 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       post_date: DataTypes.DATE,
       plaid_account_id: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        required: true
       },
-      plaid_transaction_id: DataTypes.STRING
+      plaid_transaction_id: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true
+      }
     },
     {
       underscored: true

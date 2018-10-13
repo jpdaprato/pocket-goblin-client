@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       subtype: DataTypes.STRING,
       current_balance: DataTypes.FLOAT,
       plaid_account_id: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        required: true,
+        unique: true
       }
     },
     {
