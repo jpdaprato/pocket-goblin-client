@@ -2,24 +2,24 @@ import React from "react";
 
 const CashFlowMeter = props => {
   let redCircle = {
-    height: "25px",
-    width: "25px",
+    height: "50px",
+    width: "50px",
     backgroundColor: "rgba(255, 0, 0, 0.3)",
     borderRadius: "50%",
     display: "inline-block"
   };
 
   let yellowCircle = {
-    height: "25px",
-    width: "25px",
+    height: "50px",
+    width: "50px",
     backgroundColor: "rgba(255, 255, 0, 0.3)",
     borderRadius: "50%",
     display: "inline-block"
   };
 
   let greenCircle = {
-    height: "25px",
-    width: "25px",
+    height: "50px",
+    width: "50px",
     backgroundColor: "rgba(0, 255, 0, 0.3)",
     borderRadius: "50%",
     display: "inline-block"
@@ -47,7 +47,9 @@ const CashFlowMeter = props => {
   };
 
   return (
-    <div>{stopLight(props.currentCashFlowAmount - props.purchaseAmount)}</div>
+    <div style={{ marginBottom: "2%" }}>
+      {stopLight(props.currentCashFlowAmount - props.purchaseAmount)}
+    </div>
   );
 };
 

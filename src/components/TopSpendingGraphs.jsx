@@ -1,5 +1,11 @@
 import React from "react";
 import { HorizontalBar } from "react-chartjs-2";
+import styled from "react-emotion";
+
+//Styled Components
+const Titles = styled("h1")`
+  text-align: center;
+`;
 
 const TopSpendingGraphs = ({ recurring, categories, shop }) => {
   const barGraphColors = [
@@ -59,7 +65,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
 
   return (
     <div style={{ height: "50%", width: "50%" }}>
-      <h1>Top Recurring </h1>
+      <Titles>Top Recurring </Titles>
       <select>
         <option value="monthly">Monthly</option>
       </select>
@@ -68,7 +74,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
         Recurring expenses add up! Click on one to analyze how reducting it
         would help imporve your financial health.
       </p>
-      <h1>Top Categories </h1>
+      <Titles>Top Categories </Titles>
       <select>
         <option value="monthly">Monthly</option>
       </select>
@@ -78,7 +84,7 @@ const TopSpendingGraphs = ({ recurring, categories, shop }) => {
         money be reducing the amount of money they spend at bars and
         restaurants.
       </p>
-      <h1>Top Shop </h1>
+      <Titles>Top Shop </Titles>
       <select>
         <option value="monthly">Monthly</option>
       </select>

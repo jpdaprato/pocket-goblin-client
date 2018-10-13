@@ -1,6 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import styled from "react-emotion";
 import TopSpendingGraphs from "./TopSpendingGraphs.jsx";
+
+//Styled Components
+const Wrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 class TopSpending extends React.Component {
   constructor(props) {
@@ -12,7 +20,7 @@ class TopSpending extends React.Component {
       },
       categories: {
         labels: ["Rent", "Car Payment", "Groceries", "Dining Out"],
-        data: [58, 42, 29, 20]
+        data: [300, 263, 164, 75]
       },
       shop: {
         labels: ["Amazon", "Starbucks", "My Dive Bar", "McDonalds"],
@@ -25,8 +33,8 @@ class TopSpending extends React.Component {
     const { recurring, categories, shop } = this.state;
 
     return (
-      <div>
-        <h2>Tap an item to Analyze</h2>
+      <Wrapper>
+        <h1>Spending Breakdown</h1>
         <TopSpendingGraphs
           recurring={recurring}
           categories={categories}
@@ -35,7 +43,7 @@ class TopSpending extends React.Component {
         <Link to="/enter-purchase">
           <button>Start the Goblin without selection</button>
         </Link>
-      </div>
+      </Wrapper>
     );
   }
 }
