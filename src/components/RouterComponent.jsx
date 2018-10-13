@@ -1,108 +1,98 @@
 import React from "react";
-import axios from "axios";
-import { Router } from "@reach/router";
+import { Route, Router } from "react-router-dom";
+import styled from "react-emotion";
+import history from "../history";
+import Auth from "../Auth/Auth";
+import App from "../App.jsx";
+import Home from "../Home/Home.jsx";
+import Callback from "../Callback/Callback.jsx";
 import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
 import TopSpending from "./TopSpending.jsx";
 
-class RouterComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCashFlowAmount: 0,
-      purchaseAmount: 0,
-      purchaseFrequency: "never",
-      purchasePaymentType: "cash",
-      totalDebtAmount: 1500,
-      totalSavingAmount: 3000
-    };
-    this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
-    this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
-      this
-    );
-    this.handlePaymentTypeChange = this.handlePaymentTypeChange.bind(this);
+const Wrapper = styled("div")`
+  display: grid;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
+const auth = new Auth();
+
+const handleAuthentication = ({ location }) => {
+  if (/access_token|id_token|error/.test(location.hash)) {
+    auth.handleAuthentication();
   }
+};
 
-  componentDidMount() {
-    this.getItemData();
-  }
+const RouterComponent = props => {
+  const {
+    handlePurchaseInput,
+    handlePurchaseFrequencyChange,
+    handlePaymentTypeChange,
+    currentCashFlowAmount,
+    purchaseFrequency,
+    purchasePaymentType,
+    totalDebtAmount,
+    totalSavingAmount,
+    purchaseAmount
+  } = props;
 
-  getItemData() {
-    axios
-      .post("http://localhost:8000/graphql", {
-        query: "{ cashFlow totalDebt totalSavings }"
-      })
-      .then(({ data: { data } }) => {
-        this.setState({
-          currentCashFlowAmount: data.cashFlow,
-          totalDebtAmount: data.totalDebt + 15000,
-          totalSavingAmount: data.totalSavings
-        });
-      })
-      /* eslint-disable-next-line */
-      .catch(error => console.log(error));
-  }
-
-  handlePurchaseInput(e) {
-    this.setState({
-      purchaseAmount: Number(e.target.value)
-    });
-  }
-
-  handlePurchaseFrequencyChange(e) {
-    this.setState({ purchaseFrequency: e.target.value });
-  }
-
-  handlePaymentTypeChange(e) {
-    this.setState({ purchasePaymentType: e.target.value });
-  }
-
-  render() {
-    const {
-      handlePurchaseInput,
-      handlePurchaseFrequencyChange,
-      handlePaymentTypeChange
-    } = this;
-
-    const {
-      currentCashFlowAmount,
-      purchaseFrequency,
-      purchasePaymentType,
-      totalDebtAmount,
-      totalSavingAmount,
-      purchaseAmount
-    } = this.state;
-
-    return (
-      <main>
-        <Router>
-          <EnterPurchase
-            path="home/enter-purchase"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            purchaseFrequency={purchaseFrequency}
-            handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
-            purchasePaymentType={purchasePaymentType}
-            handlePaymentTypeChange={handlePaymentTypeChange}
-            purchaseAmount={purchaseAmount}
-          />
-          <SnapshotResults
-            path="/what-if-results"
-            handlePurchaseInput={handlePurchaseInput}
-            currentCashFlowAmount={currentCashFlowAmount}
-            totalDebtAmount={totalDebtAmount}
-            totalSavingAmount={totalSavingAmount}
-            purchaseAmount={purchaseAmount}
-            purchaseFrequency={purchaseFrequency}
-            purchasePaymentType={purchasePaymentType}
-          />
-          <GoblinAdvice path="/goblin-advice" />
-          <TopSpending path="/top-spending" />
-        </Router>
-      </main>
-    );
-  }
-}
+  return (
+    <Router history={history}>
+      <Wrapper className="routes-component">
+        <Route path="/" render={props => <App auth={auth} {...props} />} />
+        <Route path="/home" render={props => <Home auth={auth} {...props} />} />
+        <Route
+          path="/callback"
+          render={props => {
+            handleAuthentication(props);
+            return <Callback {...props} />;
+          }}
+        />
+        <Route
+          path="/enter-purchase"
+          render={props => (
+            <EnterPurchase
+              auth={auth}
+              handlePurchaseInput={handlePurchaseInput}
+              currentCashFlowAmount={currentCashFlowAmount}
+              purchaseFrequency={purchaseFrequency}
+              handlePurchaseFrequencyChange={handlePurchaseFrequencyChange}
+              purchasePaymentType={purchasePaymentType}
+              handlePaymentTypeChange={handlePaymentTypeChange}
+              purchaseAmount={purchaseAmount}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/snapshot-results"
+          render={props => (
+            <SnapshotResults
+              auth={auth}
+              handlePurchaseInput={handlePurchaseInput}
+              currentCashFlowAmount={currentCashFlowAmount}
+              totalDebtAmount={totalDebtAmount}
+              totalSavingAmount={totalSavingAmount}
+              purchaseAmount={purchaseAmount}
+              purchaseFrequency={purchaseFrequency}
+              purchasePaymentType={purchasePaymentType}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/goblin-advice"
+          render={props => <GoblinAdvice auth={auth} {...props} />}
+        />
+        <Route
+          path="/top-spending"
+          render={props => <TopSpending auth={auth} {...props} />}
+        />
+      </Wrapper>
+    </Router>
+  );
+};
 
 export default RouterComponent;

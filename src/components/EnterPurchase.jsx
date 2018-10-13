@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "@reach/router";
+import { Link } from "react-router-dom";
 import styled from "react-emotion";
 import InputAmount from "./InputAmount.jsx";
 import CashFlowMeter from "./CashFlowMeter.jsx";
@@ -11,6 +11,10 @@ const Wrapper = styled("div")`
 `;
 
 class EnterPurchase extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     const {
       handlePurchaseInput,
@@ -63,7 +67,7 @@ class EnterPurchase extends React.Component {
           />
           Pay with Credit
         </div>
-        <Link to="/what-if-results">
+        <Link to="/snapshot-results">
           <button>Start the Goblin!</button>
         </Link>
       </Wrapper>

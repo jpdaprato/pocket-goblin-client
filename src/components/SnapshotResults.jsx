@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "@reach/router";
 import { HorizontalBar } from "react-chartjs-2";
+import { Link } from "react-router-dom";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
