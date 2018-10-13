@@ -32,7 +32,7 @@ const controller = {
           const txns = transactionsResponse;
           // Create structure and import txns
           models.User.findOne({
-            id: userId
+            where: { id: userId }
           })
             .then(user => {
               return models.Item.create({

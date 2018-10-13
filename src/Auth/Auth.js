@@ -75,8 +75,7 @@ export default class Auth {
           query: `{ getUserInfo(userId: "${user.sub}") }`
         })
         .then(response => {
-          let userData = JSON.parse(response.data.data.getUserInfo);
-          localStorage.setItem("userData", userData);
+          localStorage.setItem("userData", response.data.data.getUserInfo);
         })
         .catch(error => console.log(error));
     });
