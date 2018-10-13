@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       plaid_account_id: {
         type: DataTypes.STRING
       },
-      plaid_item_id: DataTypes.STRING
+      plaid_item_id: {
+        type: DataTypes.STRING,
+        required: true,
+        unique: true
+      }
     },
     {
       underscored: true

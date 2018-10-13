@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const moment = require("moment");
 const dotenv = require("dotenv");
 const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
@@ -189,7 +188,7 @@ let root = {
     return asyncGetUserInfo(userId);
   },
   createItem: ({ publicToken, userId }) => {
-    return asyncCreateItem(publicToken);
+    return asyncCreateItem(publicToken, userId);
   },
   cashFlow: () => {
     return asyncGetCashFlow();

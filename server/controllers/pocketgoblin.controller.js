@@ -32,32 +32,36 @@ const controller = {
           const txns = transactionsResponse;
           // Create structure and import txns
           models.User.findOne({
-            id: userId
+            where: { id: userId }
           })
             .then(user => {
-              return models.Item.create({
-                access_token: accessToken,
-                plaid_item_id: itemId,
-                user_id: user.dataValues.id
+              return models.Item.findOrCreate({
+                where: { user_id: user.dataValues.id },
+                defaults: {
+                  access_token: accessToken,
+                  plaid_item_id: itemId
+                }
               });
             })
             .then(item => {
-              var promises = [];
-              txns.accounts.forEach(account => {
-                promises.push(
-                  models.Account.create({
-                    name: account.name,
-                    type: account.type,
-                    subtype: account.subtype,
-                    current_balance: account.balances.available
-                      ? account.balances.available
-                      : account.balances.current,
-                    plaid_account_id: account.account_id,
-                    item_id: item.dataValues.id
-                  })
-                );
-              });
-              return Promise.all(promises);
+              return Promise.all(
+                txns.accounts.map(account => {
+                  models.Account.findOrCreate({
+                    where: {
+                      plaid_account_id: account.account_id,
+                      item_id: item[0].dataValues.id
+                    },
+                    defaults: {
+                      name: account.name,
+                      type: account.type,
+                      subtype: account.subtype,
+                      current_balance: account.balances.available
+                        ? account.balances.available
+                        : account.balances.current
+                    }
+                  });
+                })
+              );
             })
             .then(() => {
               txns.transactions.forEach(txn => {
@@ -65,16 +69,20 @@ const controller = {
                   where: { plaid_account_id: txn.account_id },
                   attributes: ["id"]
                 }).then(acctId => {
-                  models.Transaction.create({
-                    name: txn.name,
-                    amount: txn.amount,
-                    category: txn.category,
-                    category_id: txn.category_id,
-                    type: txn.transaction_type,
-                    post_date: txn.date,
-                    plaid_account_id: txn.account_id,
-                    plaid_transaction_id: txn.transaction_id,
-                    account_id: acctId.dataValues.id
+                  models.Transaction.findOrCreate({
+                    where: {
+                      plaid_transaction_id: txn.transaction_id
+                    },
+                    defaults: {
+                      name: txn.name,
+                      amount: txn.amount,
+                      category: txn.category,
+                      category_id: txn.category_id,
+                      type: txn.transaction_type,
+                      post_date: txn.date,
+                      plaid_account_id: txn.account_id,
+                      account_id: acctId.dataValues.id
+                    }
                   });
                 });
               });
