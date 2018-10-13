@@ -5,11 +5,12 @@ import styled from "react-emotion";
 const Wrapper = styled("div")`
   display: flex;
   justify-content: center;
-  font-size: 5rem;
+  font-size: 3rem;
 `;
 
 const Input = styled("input")`
-  font-size: 36px;
+  font-size: 25px;
+  width: 55%;
 `;
 
 class InputAmount extends React.Component {
@@ -20,6 +21,7 @@ class InputAmount extends React.Component {
     };
     this.changeLabelToInput = this.changeLabelToInput.bind(this);
     this.changeToInputLabel = this.changeToInputLabel.bind(this);
+    this.handleEnterKeyup = this.handleEnterKeyup.bind(this);
   }
 
   changeLabelToInput() {
@@ -31,6 +33,12 @@ class InputAmount extends React.Component {
     this.setState({
       isEditting: false
     });
+  }
+
+  handleEnterKeyup(e) {
+    if (e.key === "Enter" || e.key === "Escape") {
+      this.changeToInputLabel();
+    }
   }
 
   viewSwitch() {
@@ -49,6 +57,7 @@ class InputAmount extends React.Component {
             onChange={this.props.handlePurchaseInput}
             type="number"
             placeholder={this.props.purchaseAmount}
+            onKeyUp={this.handleEnterKeyup}
             onBlur={this.changeToInputLabel}
             /* eslint-disable-next-line */
             autoFocus

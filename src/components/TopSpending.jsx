@@ -8,6 +8,7 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 `;
 
 class TopSpending extends React.Component {

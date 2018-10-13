@@ -9,6 +9,7 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 `;
 
 class EnterPurchase extends React.Component {
@@ -35,7 +36,7 @@ class EnterPurchase extends React.Component {
           purchaseAmount={purchaseAmount}
         />
         <div>
-          <h3>Cash Flow</h3>
+          <h2>Cash Flow</h2>
           <CashFlowMeter
             currentCashFlowAmount={currentCashFlowAmount}
             purchaseAmount={purchaseAmount}

@@ -11,7 +11,7 @@ const Wrapper = styled("div")`
 `;
 
 const PWrapper = styled("p")`
-  width: 30%;
+  width: 45%;
 `;
 
 class GoblinAdvice extends React.Component {
