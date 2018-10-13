@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "@reach/router";
+import { HorizontalBar } from "react-chartjs-2";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
-// import PayDebtNonRecurring from "./PayDebtNonRecurring.jsx";
 import PayDebtOrInvestIt from "./PayDebtOrInvestIt.jsx";
 
 class SnapshotResults extends React.Component {
@@ -24,6 +24,24 @@ class SnapshotResults extends React.Component {
     this.setState({ payDebtOrInvestItSelection: event.target.value });
   };
 
+  DebtGraphColorPicker(num) {
+    if (num > 0.6) {
+      return "red";
+    } else if (num > 0.4) {
+      return "yellow";
+    }
+    return "green";
+  }
+
+  savingGraphColorPicker(num) {
+    if (num < 100) {
+      return "red";
+    } else if (num < 300) {
+      return "yellow";
+    }
+    return "green";
+  }
+
   render() {
     const {
       handlePurchaseInput,
@@ -34,6 +52,35 @@ class SnapshotResults extends React.Component {
       purchaseAmount,
       purchasePaymentType
     } = this.props;
+
+    const DebtSavingGraph = {
+      labels: ["Total Debt", "Total Savings"],
+      datasets: [
+        {
+          data: [totalDebtAmount, totalSavingAmount],
+          backgroundColor: [
+            this.DebtGraphColorPicker(totalDebtAmount / totalSavingAmount),
+            this.savingGraphColorPicker(totalSavingAmount)
+          ]
+        }
+      ]
+    };
+
+    const DebtSavingGraphOptions = {
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [
+          {
+            display: false,
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
+    };
 
     return (
       <div>
@@ -50,15 +97,11 @@ class SnapshotResults extends React.Component {
             purchaseAmount={purchaseAmount}
           />
         </div>
-        <div>
-          <h3>Debt to Savings Ratio</h3>
-          <span>
-            {((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)}%
-          </span>
-        </div>
-        <div>
-          <h3>Total Savings</h3>
-          <span>${totalSavingAmount}</span>
+        <div style={{ width: "30%", height: "30%" }}>
+          <HorizontalBar
+            data={DebtSavingGraph}
+            options={DebtSavingGraphOptions}
+          />
         </div>
         <div>
           <div>

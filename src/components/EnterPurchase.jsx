@@ -46,7 +46,6 @@ class EnterPurchase extends React.Component {
           <option value="monthly">Monthly</option>
         </select>
         <div>
-          {/* https://techblog.commercetools.com/seven-patterns-by-example-the-many-ways-to-type-radio-in-react-bfe14322bb6f */}
           <input
             name="paymentType"
             type="radio"
