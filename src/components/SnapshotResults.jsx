@@ -4,7 +4,6 @@ import { HorizontalBar } from "react-chartjs-2";
 import CashFlowMeter from "./CashFlowMeter.jsx";
 import InputAmount from "./InputAmount.jsx";
 import RealCostOfCredit from "./RealCostOfCredit.jsx";
-// import PayDebtNonRecurring from "./PayDebtNonRecurring.jsx";
 import PayDebtOrInvestIt from "./PayDebtOrInvestIt.jsx";
 
 class SnapshotResults extends React.Component {
@@ -103,14 +102,6 @@ class SnapshotResults extends React.Component {
             data={DebtSavingGraph}
             options={DebtSavingGraphOptions}
           />
-          {/* <h3>Debt to Savings Ratio</h3>
-          <span>
-            {((totalDebtAmount / totalSavingAmount) * 100).toFixed(2)}%
-          </span>
-        </div>
-        <div>
-          <h3>Total Savings</h3>
-          <span>${totalSavingAmount}</span> */}
         </div>
         <div>
           <div>
