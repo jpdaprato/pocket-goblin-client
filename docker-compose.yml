@@ -10,14 +10,14 @@ services:
     ports:
       - "5432:5432"
   web:
-    build: .
+    build: ./server
     command: nodemon --inspect server.js
     env_file:
       - '.env'
     ports:
       - '8000:8000'
     volumes:
-      - '.:/app'
+      - './server:/app'
 
 volumes:
   db-data:
