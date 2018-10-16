@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { prettyPrintResponse } = require("../helpers");
-const models = require("../../models/index");
+const models = require("../models/index");
 const client = require("../plaid");
 const dotenv = require("dotenv");
 

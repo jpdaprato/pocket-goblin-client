@@ -1,4 +1,4 @@
-const models = require("./models/index");
+const models = require("./models/index.js");
 const dotenv = require("dotenv");
 const result = dotenv.config();
 
