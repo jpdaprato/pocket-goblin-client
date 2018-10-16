@@ -11,7 +11,7 @@ services:
       - "5432:5432"
   web:
     build: ./server
-    command: nodemon --inspect server.js
+    command: nodemon --inspect index.js
     env_file:
       - '.env'
     ports:
