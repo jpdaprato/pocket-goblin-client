@@ -1,5 +1,14 @@
 import React, { Component } from "react";
 import { Navbar, Button } from "react-bootstrap";
+import styled from "react-emotion";
+
+//Styled Components
+const Wrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3%;
+`;
 
 class App extends Component {
   goTo(route) {
@@ -18,7 +27,7 @@ class App extends Component {
     const { isAuthenticated } = this.props.auth;
 
     return (
-      <div className="nav">
+      <Wrapper className="nav">
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
@@ -53,7 +62,7 @@ class App extends Component {
             )}
           </Navbar.Header>
         </Navbar>
-      </div>
+      </Wrapper>
     );
   }
 }
