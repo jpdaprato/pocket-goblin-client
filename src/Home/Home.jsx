@@ -18,14 +18,14 @@ class Home extends Component {
   render() {
     const { isAuthenticated } = this.props.auth;
     return (
-      <Wrapper className="container">
+      <div className="container">
         {isAuthenticated() && (
-          <div>
+          <Wrapper>
             <LinkItems />
             <Link to="/enter-purchase">
               <button>Enter a Purchase</button>
             </Link>
-          </div>
+          </Wrapper>
         )}
         {!isAuthenticated() && (
           <h4>
@@ -36,7 +36,7 @@ class Home extends Component {
             to continue.
           </h4>
         )}
-      </Wrapper>
+      </div>
     );
   }
 }
