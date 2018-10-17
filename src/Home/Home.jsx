@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import LinkItems from "../components/LinkItems.jsx";
+import styled from "react-emotion";
+
+const Wrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
 class Home extends Component {
   login() {
     this.props.auth.login();
@@ -11,12 +20,12 @@ class Home extends Component {
     return (
       <div className="container">
         {isAuthenticated() && (
-          <div>
+          <Wrapper>
             <LinkItems />
             <Link to="/enter-purchase">
               <button>Enter a Purchase</button>
             </Link>
-          </div>
+          </Wrapper>
         )}
         {!isAuthenticated() && (
           <h4>

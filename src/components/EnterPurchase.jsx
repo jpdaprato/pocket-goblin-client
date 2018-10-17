@@ -30,7 +30,7 @@ class EnterPurchase extends React.Component {
 
     return (
       <Wrapper>
-        <h1>Enter potential purchase</h1>
+        <h1>Purchase Amount</h1>
         <InputAmount
           handlePurchaseInput={handlePurchaseInput}
           purchaseAmount={purchaseAmount}
