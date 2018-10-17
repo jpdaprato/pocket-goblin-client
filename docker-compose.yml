@@ -20,9 +20,17 @@ services:
       - './server:/app'
     networks: 
       - back-tier
+  react:
+    build: ./client
+    ports:
+      - '80:80'
+    networks:
+      - front-tier
+      - back-tier
 
 volumes:
   db-data:
 
 networks:
   back-tier:
+  front-tier:
