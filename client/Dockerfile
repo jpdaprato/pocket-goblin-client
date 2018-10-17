@@ -1,4 +1,4 @@
-#Buidld the frontend client 
+#build the frontend client 
 FROM tiangolo/node-frontend:10 AS build-stage
 
 ENV NPM_CONFIG_LOGLEVEL warn
