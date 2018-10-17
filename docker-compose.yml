@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10-alpine
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    networks:
+      - back-tier
+    ports:
+      - "5432:5432"
+  web:
+    build: ./server
+    command: nodemon --inspect index.js
+    env_file:
+      - '.env'
+    ports:
+      - '8000:8000'
+    volumes:
+      - './server:/app'
+    networks: 
+      - back-tier
+  react:
+    build: ./client
+    ports:
+      - '80:80'
+    networks:
+      - front-tier
+      - back-tier
+
+volumes:
+  db-data:
+
+networks:
+  back-tier:
+  front-tier:

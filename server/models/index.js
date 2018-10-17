@@ -13,12 +13,18 @@ if (result.error) {
 const dbName = process.env.DATABASE_NAME || "pocketgoblin";
 const dbUser = process.env.DATABASE_USER || "postgres";
 const dbPassword = process.env.DATABASE_PASSWORD || "";
-const dbHost = process.env.HOST || "localhost";
+const dbHost = process.env.DATABASE_HOST || "localhost";
 
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-  dialect: "postgres",
-  host: dbHost
-});
+var sequelize;
+
+if (process.env.DATABASE_HOST) {
+  sequelize = new Sequelize(dbHost);
+} else {
+  sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+    dialect: "postgres",
+    host: dbHost
+  });
+}
 
 const models = {
   Account: sequelize.import("./account"),

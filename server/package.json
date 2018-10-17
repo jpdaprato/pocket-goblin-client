@@ -1,0 +1,31 @@
+{
+  "name": "pocket-goblin-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deduced/pocket-goblin-client/issues"
+  },
+  "homepage": "https://github.com/deduced/pocket-goblin-client#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^14.0.2",
+    "moment": "^2.22.2",
+    "pg": "^7.4.3",
+    "plaid": "2.x.x",
+    "request": "^2.88.0",
+    "sequelize": "^4.39.0",
+    "sequelize-views-support": "^1.2.2"
+  }
+}
