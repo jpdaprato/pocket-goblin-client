@@ -16,7 +16,7 @@ if (result.error) {
   throw result.error;
 }
 
-const APP_PORT = process.env.APP_PORT;
+const APP_PORT = process.env.APP_PORT || 8000;
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 

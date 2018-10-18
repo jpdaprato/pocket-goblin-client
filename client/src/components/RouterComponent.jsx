@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Router } from "react-router-dom";
-import styled from "react-emotion";
+import styled, { injectGlobal } from "react-emotion";
 import history from "../history";
 import Auth from "../Auth/Auth";
 import App from "../App.jsx";
@@ -10,6 +10,18 @@ import EnterPurchase from "./EnterPurchase.jsx";
 import SnapshotResults from "./SnapshotResults.jsx";
 import GoblinAdvice from "./GoblinAdvice.jsx";
 import TopSpending from "./TopSpending.jsx";
+
+injectGlobal`
+  @font-face {
+    font-family: 'Arsenal', sans-serif;
+    src: url('https://fonts.googleapis.com/css?family=Arsenal:400,700');
+  }
+  
+  body {
+    font-family: 'Arsenal', sans-serif; 
+  }
+
+`;
 
 const Wrapper = styled("div")`
   display: grid;
