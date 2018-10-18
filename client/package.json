@@ -9,7 +9,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,css,json}\"",
     "lint": "eslint \"**/*.{js,jsx}\" --quiet",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --no-source-maps ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
