@@ -9,9 +9,9 @@ class RouterContainer extends React.Component {
       currentCashFlowAmount: 0,
       purchaseAmount: 0,
       purchaseFrequency: "never",
-      purchasePaymentType: "cash",
-      totalDebtAmount: 1500,
-      totalSavingAmount: 3000
+      purchasePaymentType: "credit",
+      totalDebtAmount: 0,
+      totalSavingAmount: 0
     };
     this.handlePurchaseInput = this.handlePurchaseInput.bind(this);
     this.handlePurchaseFrequencyChange = this.handlePurchaseFrequencyChange.bind(
@@ -31,7 +31,7 @@ class RouterContainer extends React.Component {
       })
       .then(({ data: { data } }) => {
         this.setState({
-          currentCashFlowAmount: data.cashFlow,
+          currentCashFlowAmount: data.cashFlow - 3500,
           totalDebtAmount: data.totalDebt + 15000,
           totalSavingAmount: data.totalSavings
         });
